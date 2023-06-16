@@ -36,12 +36,11 @@ export const userUpdateCall = async (userCredintial, dispatch) =>{
 
 export const userDeleteCall = async (userCredintial, dispatch) =>{
     dispatch(UpdateStart());
-    try{
-        const res = await axios.delete(`${API_URL}${userCredintial.user_id}`, {data : userCredintial});
+    axios.delete(`${API_URL}${userCredintial.user_id}`, {data : userCredintial}).then(res => {
         dispatch(LogOut());
-    }catch(err){
+    }).catch(err =>{
         dispatch(UpdateFailure(err.response.data));
-    } 
+    });
 }
 
 export const logOutCall = (userCredintial, dispatch) =>{

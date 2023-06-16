@@ -48,7 +48,7 @@ export default function Home() {
             <section className="users">
                 <header>
                     <div className="content">
-                        <img src={user.profil_pic && PF + user.profil_pic } />
+                        <img src={user.profil_pic && PF + user.profil_pic } alt="proPic" />
                         <div className="details">
                             <span>{user.fname +" "+ user.lname}</span>
                             <p>{user.status ? "Online" : "Offline"}</p>
@@ -58,16 +58,16 @@ export default function Home() {
                         <div className="dropbtn"><MoreVert onClick={() => setShow(!show)} style={{fontSize: "1.8rem"}} /></div>
                         <div id="myDropdown" className={show ? "dropdown-content show" : "dropdown-content"}>
                             <Link to={"/profile"}>
-                                <a className="prof">Proflie</a>
+                                <div className="prof">Proflie</div>
                             </Link>
-                            <a onClick={() => logOutCall({user_id: user.user_id, status: false}, dispatch)} className="logout">Logout</a>
+                            <div onClick={() => logOutCall({user_id: user.user_id, status: false}, dispatch)} className="logout">Logout</div>
                         </div>
                     </div>
                 </header>
                 <div className="search">
                     <span className="text">Select an user to start chat</span>
                     <input type="text" autoFocus value={searchInput} onChange={(e) => setSearch(e.target.value)} ref={inputElement} className={active ? "active" : ""} placeholder="Enter name to search..." />
-                    <button className={active ? "active" : ""} onClick={activeSearch} ><i className="fas fa-search">icon</i></button>
+                    <button className={active ? "active" : ""} onClick={activeSearch} ><i className="fas fa-search"></i></button>
                 </div>
                 <div className="users-list">
                     {friends.map((f) =>(

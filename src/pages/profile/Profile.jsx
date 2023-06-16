@@ -6,8 +6,6 @@ import Update from '../../component/Update';
 import Warnnig from '../../component/Warnnig';
 import './profile.css';
 
-const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-
 export default function Profile() {
 
     const {dispatch} = useContext(AuthContext);

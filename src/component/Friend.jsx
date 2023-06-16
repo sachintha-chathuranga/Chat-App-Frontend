@@ -16,18 +16,18 @@ export default function Friend({friend}) {
             }).catch(err => console.log(err));
         }
         getLastMsg();
-    }, []);
+    }, [friend.user_id, user.user_id]);
 
     return (
         <div className="friend">
             <div className="content">
-                <img src={PF+friend.profil_pic}/>
+                <img src={PF+friend.profil_pic} alt="proPic" />
                 <div className="details">
                     <span>{friend.fname+ " "+friend.lname}</span>
                     <p>{msg.message}</p>
                 </div>
             </div>
-            <div className={friend.status ? "status-dot" : "status-dot offline"}><i className="fas fa-circle"> icon</i></div>
+            <div className={friend.status ? "status-dot" : "status-dot offline"}><i className="fas fa-circle"></i></div>
         </div>
     )
 }

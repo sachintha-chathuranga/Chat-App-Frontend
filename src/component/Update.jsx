@@ -1,13 +1,10 @@
 
 import { CircularProgress } from '@material-ui/core';
 import { PermMedia } from '@material-ui/icons';
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import { clearError, userUpdateCall } from '../apiCalls';
+import React, { useContext, useRef, useState } from 'react'
+import { userUpdateCall } from '../apiCalls';
 import { AuthContext } from '../context/AuthContext';
 import Header from './Header';
-
-
-const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
 export default function Update({toggleFrame, toggleWarning}) {
 
@@ -32,7 +29,7 @@ export default function Update({toggleFrame, toggleWarning}) {
 
         userUpdateCall(data, dispatch).catch(err =>{
             alert(err);
-            // window.location.reload();
+            window.location.reload();
         });
     }
     return (
@@ -58,7 +55,7 @@ export default function Update({toggleFrame, toggleWarning}) {
                 <div className="field input">
                     <label>Password</label>
                     <input type={isActive ? "text" : "password"} ref={password} placeholder="Enter new password" />
-                    <i className={isActive ? "fas fa-eye active" : "fas fa-eye"} onClick={() => setisActive(!isActive)} >icon</i>
+                    <i className={isActive ? "fas fa-eye active" : "fas fa-eye"} onClick={() => setisActive(!isActive)} ></i>
                 </div>
                 <div className="field image">
                     <label>Change Profile picture</label>

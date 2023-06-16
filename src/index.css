@@ -95,12 +95,7 @@ form .name-details .field:last-child{
     margin: 10px 0;
     font-size: 17px;
 }
-.form .link a{
-    color: #333;
-}
-.form .link a:hover{
-    text-decoration: underline;
-}
+
 :is(.users-list, .chat-box)::-webkit-scrollbar{
     width: 10px;
 }

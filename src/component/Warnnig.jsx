@@ -39,7 +39,7 @@ export default function Warnnig({toggleWarning}) {
                 {isNext && <form id="step-2" onSubmit={handleDelete}>
                     <label>Pleas Enter your password.</label>
                     <input readOnly={isFetching} type={isActive ? "text" : "password"} ref={password} placeholder="password" required/>
-                    <i className={isActive ? "fas fa-eye active" : "fas fa-eye"} onClick={() => setisActive(!isActive)} >icon</i>
+                    <i className={isActive ? "fas fa-eye active" : "fas fa-eye"} onClick={() => setisActive(!isActive)} ></i>
                     <div id="foot">
                         <button onClick={() => {toggleWarning(); clearError(dispatch)}} className="cancel-btn" disabled={isFetching}>
                             {isFetching ? <CircularProgress style={{color:"black", width: "13px", height: "13px"}}/> : "Cancel"}

@@ -2,6 +2,8 @@ import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useParams } from 'react-router-dom/cjs/react-router-dom.min';
+import Incoming from '../../component/Incoming';
+import Outgoing from '../../component/Outgoing';
 import { AuthContext } from '../../context/AuthContext';
 import './chat.css';
 const API_URL = process.env.REACT_APP_API_URL;
@@ -44,7 +46,7 @@ export default function Chat() {
         }, 500);
         fetchUser();
         return () => clearInterval(interval);
-    }, [params.friend_id, user.user_id]);
+    }, [params.friend_id, user.user_id, active]);
     
     const handleSubmit = (e) =>{
         e.preventDefault();
@@ -73,24 +75,24 @@ export default function Chat() {
         <div className="wrapper">
             <section className="chat-area">
                 <header>
-                    <a className="back-icon" onClick={() => history.goBack() }><i className="fas fa-arrow-left">icon</i></a>
-                    <img src={PF + friend.profil_pic} />
+                    <div className="back-icon" onClick={() => history.goBack() }><i className="fas fa-arrow-left"></i></div>
+                    <img src={PF + friend.profil_pic} alt="pro" />
                     <div className="details">
                         <span>{friend.fname + " " + friend.lname}</span>
                         <p>{friend.status ? "Online" : "Offline"}</p>
                     </div>
                 </header>
-                <div className="chat-box" ref={chatBox} onmouseenter={handleMousSeenter} onmouseleave={handleMouseLeave} >
+                <div className="chat-box" ref={chatBox} onMouseEnter={handleMousSeenter} onMouseLeave={handleMouseLeave} >
                    {messages.length!==0 ? messages.map((msg) => (msg.sender_id===user.user_id ?
-                        <div className="chat outgoing"><div className="details"><p>{msg.message}</p></div></div> : 
-                        <div className="chat incoming"><img src={PF+friend.profil_pic} alt="" /><div className="details"><p>{msg.message}</p></div></div>)
+                        <Outgoing key={msg.id} msg={msg.message} /> : 
+                        <Incoming key={msg.id} msg={msg.message} profil_pic={friend.profil_pic} /> )
                     ) : <div style={{display: 'flex', alignItems: 'center',textAlign: 'center',height: '500px',overflowY: 'auto',background: '#f7f7f7',color: '#8a8a8a'}}>
                             No messages are available. Once you send message they will appear here.
                         </div>}
                 </div>
                 <form onSubmit={handleSubmit} className="typing-area" autoComplete="off">
                     <input type="text" value={inputMsg} onChange={(e) => setinputMsg(e.target.value)} className="input-field" placeholder="Type a message here..." />
-                    <button type="submit" ><i className="fab fa-telegram-plane">icon</i></button>
+                    <button type="submit" ><i className="fab fa-telegram-plane"></i></button>
                 </form>
             </section>
         </div>

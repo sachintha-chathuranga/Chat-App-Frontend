@@ -33,21 +33,20 @@
     transition: 0.5s;
 }
 .show {display:block;}
-.dropdown-content a {
-    color: black;
-    text-decoration: none;
-    display: block;
-}
+
 .dropdown-content .prof{
     padding-bottom: 5px;
     border-bottom: 1px solid #e6e6e6;
+    color: black;
 }
 .dropdown-content .logout{
     padding-top: 5px;
     cursor: pointer;
+    color: black;
 }
 /* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: #ddd}
+.dropdown-content .logout:hover {background-color: #ddd}
+.dropdown-content .prof:hover {background-color: #ddd}
 
 :is(.users, .users-list) .content{
     display: flex;

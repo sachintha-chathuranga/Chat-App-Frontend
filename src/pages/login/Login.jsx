@@ -38,7 +38,7 @@ export default function Login() {
                         <div className="field input">
                             <label>Password</label>
                             <input type={isActive ? "text" : "password"} ref={password} placeholder="Enter your password" required/>
-                            <i className={isActive ? "fas fa-eye active" : "fas fa-eye"} onClick={() => setisActive(!isActive)} >icon</i>
+                            <i className={isActive ? "fas fa-eye active" : "fas fa-eye"} onClick={() => setisActive(!isActive)} ></i>
                         </div>
                         <div className="field button">
                             <button type="submit"  className="loginBtn" disabled={isFetching}>

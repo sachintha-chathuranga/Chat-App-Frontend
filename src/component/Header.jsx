@@ -1,4 +1,3 @@
-import React, { useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
@@ -17,8 +16,8 @@ export default function Header(props) {
     return (
         <header>
             <div className="content">
-                <a className="back-icon" onClick={handleBack}><i className="fas fa-arrow-left">icon</i></a>
-                <img src={props.user.profil_pic && PF + props.user.profil_pic } />
+                <div className="back-icon" onClick={handleBack}><i className="fas fa-arrow-left"></i></div>
+                <img src={props.user.profil_pic && PF + props.user.profil_pic } alt="proPic" />
                 <div className="details">
                     <span>{props.user.fname +" "+ props.user.lname}</span>
                     <p>{props.user.status ? "Online" : "Offline"}</p>
