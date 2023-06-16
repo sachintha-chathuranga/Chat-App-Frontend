@@ -1,0 +1,229 @@
+.profile{
+    position: relative;
+    padding: 25px 30px;
+}
+.profile header{
+    display: flex;
+    align-items: center;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e6e6e6;
+    justify-content: space-between;
+}
+.profile .content{
+    display: flex;
+    align-items: center;
+}
+.profile header .content img{
+    height: 50px;
+    width: 50px;
+    margin: 0px 15px;
+}
+.profile header .back-icon{
+    font-size: 18px;
+    color: #333;
+    cursor: pointer;
+}
+.profile header .delete{
+    color: #333;
+    font-size: 17px;
+    padding: 7px 15px;
+    background: #fff;
+    border: 1px solid #333;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.profile header .delete:hover{
+    background-color: rgb(209, 25, 25);
+    border: 1px solid rgb(209, 25, 25);
+    color: #fff;
+}
+
+.profile span strong{
+    display: block;
+    text-align: center;
+    padding: 10px 0 10px 0;
+    margin: 0 0 10px 0;
+    font-size: large;
+    border-bottom: 1px solid rgb(206, 204, 204);
+}
+
+.profile form .name-details{
+    display: flex;
+}
+.profile form .field{
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+.profile form .field label{
+    margin-bottom: 3px;
+}
+.profile form .field input{
+    outline: none;
+}
+.profile form .input input{
+    height: 40px;
+    width: 100%;
+    font-size: 16px;
+    padding: 0 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.profile form .image input{
+    font-size: 17px;
+}
+.profile form .button button{
+    margin-top: 10px;
+    height: 45px;
+    border: none;
+    font-size: 17px;
+    font-weight: 400;
+    background: #333;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.profile form .button button:hover{
+    background: rgb(78, 78, 78);
+}
+.profile form .field i{
+    position: absolute;
+    right: 15px;
+    color: #ccc;
+    top: 70%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+.profile form .field i.active::before{
+    color: #333;
+    content: "\f070";
+}
+.profile .account-details{
+    padding: 12px 0px 20px 0px;
+
+}
+.profile .account-details .field{
+    padding: 8px;
+    background-color: #f1f1f1;
+}
+.profile .account-details .field label{
+    display: inline-block;
+    width: 85px;
+}
+.profile .account-details .field span{
+    color: rgb(129, 129, 129);
+    margin-left: 5px;
+    user-select: none;
+}
+
+.profile footer .change-btn{
+    text-align: center;
+    background-color: rgb(34, 82, 185);
+    color: cornsilk;
+    padding: 10px;
+    border-radius: 5px;
+    user-select: none;
+}
+.profile footer .change-btn:hover{
+    background-color: rgb(56, 112, 233);
+    cursor: pointer;
+}
+
+.profile .shareOption{
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.profile .shareIcon{
+    font-size: 28px;
+    margin-right: 11px;
+}
+
+.profile .shareOptionText{
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.profile .msg-wrapper{
+    position: absolute;
+    top: -200%;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    background: #ffffff;
+    border-radius: 5px;
+    text-align: center;
+}
+.profile .msg-wrapper h3{
+    background: #2b2828;
+    width: 100%;
+    border-radius: 5px 5px 0 0;
+    padding: 9px;
+    font-size: 24px;
+    font-weight: 600;
+    color: rgb(255, 255, 255);
+    letter-spacing: 1.4px;
+}
+.profile .msg-wrapper .msg-body{
+    padding: 20px 30px 0 30px;
+    width: 100%;
+}
+.profile .msg-wrapper .msg-body button{
+    padding: 6px 17px;
+    width: 102px;
+    margin: 10px;
+    border: 1px solid #333;
+    cursor: pointer;
+    border-radius: 3px;
+}
+.profile .msg-wrapper .msg-body #foot{
+    padding: 8px;
+}
+.profile .msg-wrapper .msg-body #foot .cancel-btn:hover{
+    color: white;
+    background-color: black;
+    border: none;
+}
+.profile .msg-wrapper .msg-body #foot .yes-btn:hover{
+    color: white;
+    background-color: rgb(150, 8, 8);
+    border: none;
+}
+
+.profile .msg-wrapper .msg-body div p{
+    margin-bottom: 10px;
+}
+.profile .msg-wrapper .msg-body #step-2{
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+.profile .msg-wrapper .msg-body #step-2 label{
+    margin-bottom: 3px;
+}
+.profile .msg-wrapper .msg-body #step-2 input{
+    outline: none;
+    height: 40px;
+    width: 100%;
+    font-size: 16px;
+    padding: 0 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+.profile .msg-wrapper .msg-body #step-2 i{
+    position: absolute;
+    right: 15px;
+    color: #ccc;
+    top: 37%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+.profile .msg-wrapper .msg-body #step-2 i.active::before{
+    color: #333;
+    content: "\f070";
+}
