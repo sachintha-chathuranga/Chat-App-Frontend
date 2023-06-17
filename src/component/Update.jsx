@@ -21,10 +21,10 @@ export default function Update({toggleFrame, toggleWarning}) {
         const data =  {
             user_id: user.user_id
         }
-        fname.current.value && (data.fname = fname.current.value);
-        lname.current.value && (data.lname = lname.current.value);
-        email.current.value && (data.email = email.current.value);
-        password.current.value && (data.password = password.current.value);
+        fname.current.value && (data.fname = fname.current.value.trim());
+        lname.current.value && (data.lname = lname.current.value.trim());
+        email.current.value && (data.email = email.current.value.trim());
+        password.current.value && (data.password = password.current.value.trim());
         file && (data.profil_pic = file.name);
 
         userUpdateCall(data, dispatch).catch(err =>{

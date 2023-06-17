@@ -21,10 +21,10 @@ function SignUp() {
     const handleSubmit = (e) =>{
         e.preventDefault();
         const user =  {
-            fname: fname.current.value,
-            lname: lname.current.value,
-            email: email.current.value,
-            password: password.current.value
+            fname: fname.current.value.trim(),
+            lname: lname.current.value.trim(),
+            email: email.current.value.trim(),
+            password: password.current.value.trim()
         }
         signUpCall(user, dispatch).then(res =>{
             !res && history.push('/login');

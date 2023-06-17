@@ -8,6 +8,7 @@ export const loginCall = async (userCredintial, dispatch) =>{
     try{
         const res = await axios.post(`${API_URL}login`, userCredintial);
         dispatch(LoginSuccess(res.data));
+        sessionStorage.setItem("user", JSON.stringify(res.data));
     }catch(err){
         dispatch(LoginFailure(err.response.data));
     }
@@ -46,6 +47,7 @@ export const userDeleteCall = async (userCredintial, dispatch) =>{
 export const logOutCall = (userCredintial, dispatch) =>{
         axios.put(`${API_URL}${userCredintial.user_id}`, userCredintial).then(() =>{
             dispatch(LogOut());
+            sessionStorage.removeItem("user");
         }).catch(err =>{
             dispatch(UpdateFailure(err.response.data));
         });

@@ -9,14 +9,12 @@ import Chat from "./pages/chat/Chat";
 import Profile from "./pages/profile/Profile";
 
 function App() {
-  
   const {user} = useContext(AuthContext);
   return (
-    
       <Router>
         <Switch>
           <Route exact path="/">
-              {user ? <Home /> : <Redirect to="/login" /> }
+              {user ? <Home /> : <Redirect to="/login" />}
           </Route>
           
           <Route path="/login">

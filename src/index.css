@@ -16,7 +16,7 @@ body{
 }
 .wrapper{
     background: #fff;
-    width: 100%;
+    width: 450px;
     border-radius: 16px;
     box-shadow: 0 0 128px 0 rgba(0,0,0,0.1),
                 0 32px 64px -48px rgba(0,0,0,0.5);
@@ -115,6 +115,7 @@ form .name-details .field:last-child{
 
 @media only screen and (max-width: 500px){
     .wrapper{
+        width: 100vw;
         border-radius: 8px;
     }
     .form{
