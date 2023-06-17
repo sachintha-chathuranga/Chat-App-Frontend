@@ -113,12 +113,51 @@ form .name-details .field:last-child{
     border-radius: 50%;
 }
 
-@media only screen and (min-width: 500px){
+@media only screen and (max-width: 500px){
     .wrapper{
-        background: #fff;
-        width: 450px;
-        border-radius: 16px;
-        box-shadow: 0 0 128px 0 rgba(0,0,0,0.1),
-                    0 32px 64px -48px rgba(0,0,0,0.5);
-    } 
+        border-radius: 8px;
+    }
+    .form{
+        padding: 15px 18px;
+    }
+    .form form {
+        margin: 15px 0;
+    }
+    .form header{
+        font-size: 20px;
+        text-align: center;
+        padding-bottom: 5px;
+    }
+    form .name-details .field:first-child{
+        margin-right: 6px;
+    }
+    form .name-details .field:last-child{
+        margin-left: 6px;
+    }
+    .form form .field label {
+        margin-bottom: 5px;
+        font-size: 15px;
+    }
+    .form form .input input{
+        height: 33px;
+        font-size: 14px;
+        border-radius: 3px;
+    }
+    .form form button.loginBtn{
+        margin-top: 6px;
+        height: 35px;
+        font-size: 15px;
+        border-radius: 3px;
+    }
+    .form .link{
+        margin: 6px 0;
+        font-size: 15px;
+    }
+    :is(.users-list, .chat-box)::-webkit-scrollbar{
+        width: 10px;
+    }
+    .error-txt{
+        padding: 6px 8px;
+        border-radius: 3px;
+    }
 }

@@ -23,7 +23,7 @@ export default function Header(props) {
                     <p>{props.user.status ? "Online" : "Offline"}</p>
                 </div>
             </div>
-            <button onClick={() => props.toggleWarning()} className="delete">Delete</button>
+            <button onClick={() => props.toggleWarning()} className="delete">Delete Account</button>
             
         </header>
     )

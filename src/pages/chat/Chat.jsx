@@ -86,7 +86,7 @@ export default function Chat() {
                    {messages.length!==0 ? messages.map((msg) => (msg.sender_id===user.user_id ?
                         <Outgoing key={msg.id} msg={msg.message} /> : 
                         <Incoming key={msg.id} msg={msg.message} profil_pic={friend.profil_pic} /> )
-                    ) : <div style={{display: 'flex', alignItems: 'center',textAlign: 'center',height: '500px',overflowY: 'auto',background: '#f7f7f7',color: '#8a8a8a'}}>
+                    ) : <div className="empty-chat">
                             No messages are available. Once you send message they will appear here.
                         </div>}
                 </div>

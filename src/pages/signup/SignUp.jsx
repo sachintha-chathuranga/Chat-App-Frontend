@@ -66,7 +66,7 @@ function SignUp() {
                             </button>
                         </div>
                 </form>
-                <div className="link">Already signed up? <Link to="/login">Login now</Link></div>
+                <div className="link">Already signed up? <Link to="/login">Login </Link>now</div>
             </section>
         </div>
     );

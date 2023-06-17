@@ -227,3 +227,64 @@
     color: #333;
     content: "\f070";
 }
+
+@media only screen and (max-width: 500px){
+    .profile{
+        padding: 18px 20px;
+        width: 100vw;
+    }
+    .profile header .content img{
+        margin: 0px;
+    }
+    .profile header .back-icon{
+        font-size: 16px;
+    }
+    .profile header .delete{
+        font-size: 12px;
+        padding: 7px 0px;
+    }
+    .profile form .field label{
+        margin-bottom: 5px;
+        font-size: 15px;
+    }
+    .profile form .input input{
+        height: 33px;
+        font-size: 14px;
+        border-radius: 3px;
+    }
+    .profile form .button button{
+        margin-top: 6px;
+        height: 35px;
+        font-size: 15px;
+        border-radius: 3px;
+    }
+    .profile .account-details .field label{
+        font-size: 15px;
+        width: 73px;
+    }
+    .profile .account-details .field span{
+        font-size: 14px;
+    }
+    
+    .profile footer .change-btn{
+        border-radius: 3px;
+    }
+    .profile .shareIcon{
+        font-size: 23px;
+    }
+    
+    .profile .shareOptionText{
+        font-size: 15px;
+    }
+    .profile .msg-wrapper{
+        top: -321%;
+    }
+    .profile .msg-wrapper .msg-body{
+        padding: 20px 20px 0 20px;
+    }
+    .profile .msg-wrapper .msg-body #step-2 input{
+        height: 35px;
+        font-size: 15px;
+        border-radius: 3px;
+    }
+}

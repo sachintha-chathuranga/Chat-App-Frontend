@@ -29,9 +29,10 @@
     display: flex;
     align-items: center;
     text-align: center;
-    height: 500px;
-    overflow-y: auto;
+    height: 100%;
     background: #f7f7f7;
+    color: #8a8a8a;
+    padding-right: 10px;
 }
 .chat-box .chat{
     margin: 15px 0;
@@ -95,4 +96,43 @@
     font-size: 19px;
     cursor: pointer;
     border-radius: 0 5px 5px 0;
+}
+
+@media only screen and (max-width: 500px){
+    .chat-area{
+        width: 100vw;
+        height: 100vh;
+    }
+    .chat-area header{
+        padding: 15px 20px;
+    }
+    .chat-area header .back-icon{
+        font-size: 16px;
+    }
+    .chat-area header p{
+        font-size: 15px;
+    }
+    .chat-box{
+        height: calc(100% - 132px);
+        padding: 12px 6px 12px 17px;
+    }
+    .outgoing .details{
+        max-width: calc(100% - 102px);
+    }
+    .incoming .details{
+        max-width: calc(100% - 102px);
+    }
+    .chat-area .typing-area{
+        padding: 11px 18px;
+    }
+    .typing-area input{
+        height: 35px;
+        width: 100%;
+        font-size: 14px;
+        border-radius: 3px 0 0 3px;
+    }
+    .typing-area button{
+        font-size: 17px;
+        border-radius: 0 3px 3px 0;
+    }
 }

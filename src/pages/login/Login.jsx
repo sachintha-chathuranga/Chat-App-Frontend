@@ -46,7 +46,7 @@ export default function Login() {
                             </button>
                         </div>
                 </form>
-                <div className="link">Not yet signed up? <Link to="/signUp">Signedup now</Link></div>
+                <div className="link">Not yet signed up? <Link to="/signUp">Signup </Link>now</div>
             </section>
         </div> 
     )
