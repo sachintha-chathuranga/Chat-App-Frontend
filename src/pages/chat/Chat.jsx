@@ -8,6 +8,7 @@ import { AuthContext } from '../../context/AuthContext';
 import './chat.css';
 const API_URL = process.env.REACT_APP_API_URL;
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+const imageUrl = process.env.REACT_APP_AWS_URL;
 
 export default function Chat() {
 
@@ -76,7 +77,7 @@ export default function Chat() {
             <section className="chat-area">
                 <header>
                     <div className="back-icon" onClick={() => history.goBack() }><i className="fas fa-arrow-left"></i></div>
-                    <img src={PF + friend.profil_pic} alt="pro" />
+                    <img src={friend.profil_pic ? imageUrl+friend.profil_pic : PF+"default.png"} alt="pro" />
                     <div className="details">
                         <span>{friend.fname + " " + friend.lname}</span>
                         <p>{friend.status ? "Online" : "Offline"}</p>

@@ -4,6 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 
 const API_URL = process.env.REACT_APP_API_URL;
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+const imageUrl = process.env.REACT_APP_AWS_URL;
 
 export default function Friend({friend}) {
     const {user} = useContext(AuthContext);
@@ -21,7 +22,7 @@ export default function Friend({friend}) {
     return (
         <div className="friend">
             <div className="content">
-                <img src={PF+friend.profil_pic} alt="proPic" />
+                <img src={friend.profil_pic ? imageUrl+friend.profil_pic : PF+"default.png"} alt="proPic" />
                 <div className="details">
                     <span>{friend.fname+ " "+friend.lname}</span>
                     <p>{msg.message}</p>

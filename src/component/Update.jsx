@@ -2,14 +2,15 @@
 import { CircularProgress } from '@material-ui/core';
 import { PermMedia } from '@material-ui/icons';
 import React, { useContext, useRef, useState } from 'react'
-import { userUpdateCall } from '../apiCalls';
+import { getSignRequest, uploadFile, userUpdateCall } from '../apiCalls';
 import { AuthContext } from '../context/AuthContext';
 import Header from './Header';
 
 export default function Update({toggleFrame, toggleWarning}) {
 
     const { user, isFetching, error, dispatch} = useContext(AuthContext);
-    const [file, setFile] = useState({});
+    const [file, setFile] = useState(null);
+    const [signedRequest, setsignedRequest] = useState("");
     const fname = useRef();
     const lname = useRef();
     const email = useRef();
@@ -25,13 +26,26 @@ export default function Update({toggleFrame, toggleWarning}) {
         lname.current.value && (data.lname = lname.current.value.trim());
         email.current.value && (data.email = email.current.value.trim());
         password.current.value && (data.password = password.current.value.trim());
-        file && (data.profil_pic = file.name);
+        file && (data.profil_pic = encodeURIComponent(file.name));
 
         userUpdateCall(data, dispatch).catch(err =>{
             alert(err);
             window.location.reload();
         });
+        file && uploadFile(file, signedRequest);
     }
+
+    const handleFile = (file) =>{
+        if(file){
+            setFile(file);
+            getSignRequest(file).then(res =>{
+                setsignedRequest(res.signedRequest);
+            }).catch(err =>{
+                console.log(err);
+            });
+        }
+    }
+
     return (
         <> 
             <Header user={user} toggleFrame={toggleFrame} toggleWarning={toggleWarning}/>
@@ -62,7 +76,7 @@ export default function Update({toggleFrame, toggleWarning}) {
                     <label htmlFor="file" className="shareOption">
                         <PermMedia htmlColor="tomato" className="shareIcon" />
                         <span className="shareOptionText">Photo</span>
-                        <input style={{display:"none"}} type="file" id="file" accept=".png, .jpeg, .jpg" onChange={(e) => setFile(e.target.files[0])} />
+                        <input style={{display:"none"}} type="file" id="file" accept=".png, .jpeg, .jpg" onChange={(e) => handleFile(e.target.files[0])} />
                     </label>
                 </div>
                 <div className="field button">

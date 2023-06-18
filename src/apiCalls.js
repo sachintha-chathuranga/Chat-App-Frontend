@@ -2,6 +2,7 @@ import axios from "axios";
 import { LoginFailure, LoginStart, LoginSuccess, LogOut, UpdateStart, UpdateFailure, ClearError } from "./context/AuthActions";
 
 const API_URL = process.env.REACT_APP_API_URL;
+const API_AWS_URL = process.env.REACT_APP_API_URL_AWS;
 
 export const loginCall = async (userCredintial, dispatch) =>{
     dispatch(LoginStart(userCredintial));
@@ -44,7 +45,7 @@ export const userDeleteCall = async (userCredintial, dispatch) =>{
     });
 }
 
-export const logOutCall = (userCredintial, dispatch) =>{
+export const logOutCall = async (userCredintial, dispatch) =>{
         axios.put(`${API_URL}${userCredintial.user_id}`, userCredintial).then(() =>{
             dispatch(LogOut());
             sessionStorage.removeItem("user");
@@ -54,4 +55,22 @@ export const logOutCall = (userCredintial, dispatch) =>{
 }
 export const clearError = (dispatch) =>{
     dispatch(ClearError());
+}
+
+export const getSignRequest = async (file) =>{
+    try{
+        const res = await axios.get(`${API_AWS_URL}sign-s3?file_name=${encodeURIComponent(file.name)}&file_type=${file.type}`);
+        return res.data;
+    }catch(err){
+        return err.response.data;
+    }
+}
+
+export const uploadFile = async (file, signReq) =>{
+    try{
+        const res = await axios.put(signReq, file);
+        console.log(res.data);
+    }catch(err){
+        console.log(err);
+    }
 }

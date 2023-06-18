@@ -9,6 +9,7 @@ import './home.css';
 
 const API_URL = process.env.REACT_APP_API_URL;
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+const imageUrl = process.env.REACT_APP_AWS_URL;
 
 export default function Home() {
 
@@ -48,7 +49,7 @@ export default function Home() {
             <section className="users">
                 <header>
                     <div className="content">
-                        <img src={user.profil_pic && PF + user.profil_pic } alt="proPic" />
+                        <img src={user.profil_pic ? imageUrl+user.profil_pic : PF + "default.png" } alt="proPic" />
                         <div className="details">
                             <span>{user.fname +" "+ user.lname}</span>
                             <p>{user.status ? "Online" : "Offline"}</p>
