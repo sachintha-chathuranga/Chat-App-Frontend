@@ -109,7 +109,7 @@
 }
 .profile .account-details .field label{
     display: inline-block;
-    width: 85px;
+    width: 54px;
 }
 .profile .account-details .field span{
     color: rgb(129, 129, 129);
@@ -132,11 +132,12 @@
 
 .profile .shareOption{
     display: flex;
+}
+.profile .buttonImg{
+    display: flex;
     align-items: center;
-    margin-right: 15px;
     cursor: pointer;
 }
-
 .profile .shareIcon{
     font-size: 28px;
     margin-right: 11px;
@@ -145,6 +146,21 @@
 .profile .shareOptionText{
     font-size: 17px;
     font-weight: 500;
+}
+.profile .uploadPhoto{
+    margin-left: 14px;
+    position: relative;
+    transition: 0.4s;
+}
+.profile .uploadPhoto img{
+    width: 50px;
+    border-radius: 1px;
+}
+.profile .cancelImg{
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    cursor: pointer;
 }
 
 .profile .msg-wrapper{
@@ -234,7 +250,8 @@
         width: 100vw;
     }
     .profile header .content img{
-        margin: 0px 15px;
+        margin-left: 15px;
+        margin-right: 0;
     }
     .profile header .back-icon{
         font-size: 16px;
@@ -260,7 +277,6 @@
     }
     .profile .account-details .field label{
         font-size: 15px;
-        width: 73px;
     }
     .profile .account-details .field span{
         font-size: 14px;

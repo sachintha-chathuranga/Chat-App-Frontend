@@ -8,7 +8,7 @@ export const INITIAL_STATE = {
     //     fname: "Sachintha",
     //     lname: "Chathuranga",
     //     email: "sachintha@gmail.com",
-    //     profil_pic: "default.png",
+    //     profil_pic: null,
     //     status: true
     // },
     user: JSON.parse(sessionStorage.getItem("user")),

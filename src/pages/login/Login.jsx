@@ -9,17 +9,23 @@ export default function Login() {
     const email = useRef();
     const password = useRef();
     const [isActive, setisActive] = useState(false);
+    const [severError, setSeverError] = useState(null);
     const { isFetching, error, dispatch} = useContext(AuthContext);
-
-    useEffect(() => {
-        clearError(dispatch);
-    }, [dispatch]);
     
     const handleSubmit = (e) =>{
         e.preventDefault();
-        loginCall({email: email.current.value.trim(), password: password.current.value.trim()}, dispatch).catch(err =>{
-            alert(err);
-            window.location.reload();
+        loginCall({email: email.current.value.trim(), password: password.current.value.trim()}, dispatch).then(res =>{
+            if(res!==200){
+                setTimeout(() =>{
+                    clearError(dispatch);
+                },5000);
+            }
+        }).catch(err =>{
+            setSeverError("Sever does not give any response!");
+            setTimeout(() =>{
+                setSeverError(null);
+            },5000);
+            clearError(dispatch);
         });
         
     }
@@ -30,6 +36,7 @@ export default function Login() {
                 <header>Bliss Talk</header>
                 <form onSubmit={handleSubmit} autoComplete="off">
                     {error && <div className="error-txt">{error}</div>}
+                    {severError && <div className="error-txt">{severError}</div>}
                     
                         <div className="field input">
                             <label>Email Address</label>

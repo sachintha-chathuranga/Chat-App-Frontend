@@ -13,7 +13,7 @@ export default function Details({toggleFrame, toggleWarning}) {
             <div id="info" >
                 <div className="account-details">
                     <div className="field">
-                        <label >Full Name </label>:
+                        <label>Name </label>:
                         <span> {user.fname +" "+ user.lname}</span>
                     </div>
                     <div className="field">

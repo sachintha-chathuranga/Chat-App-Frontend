@@ -10,8 +10,10 @@ export const loginCall = async (userCredintial, dispatch) =>{
         const res = await axios.post(`${API_URL}login`, userCredintial);
         dispatch(LoginSuccess(res.data));
         sessionStorage.setItem("user", JSON.stringify(res.data));
+        return res.status;
     }catch(err){
         dispatch(LoginFailure(err.response.data));
+        return err.response.status;
     }
 }
 
@@ -20,10 +22,10 @@ export const signUpCall = async (userCredintial, dispatch) =>{
     try{
         const res = await axios.post(`${API_URL}signUp`, userCredintial);
         dispatch(LoginSuccess(res.data));
-        return res.data;
+        return res.status;
     }catch(err){
         dispatch(LoginFailure(err.response.data));
-        return err.response.data;
+        return err.response.status;
     }
 }
 export const userUpdateCall = async (userCredintial, dispatch) =>{
@@ -31,8 +33,10 @@ export const userUpdateCall = async (userCredintial, dispatch) =>{
     try{
         const res = await axios.put(`${API_URL}${userCredintial.user_id}`, userCredintial);
         dispatch(LoginSuccess(res.data));
+        return null;
     }catch(err){
         dispatch(UpdateFailure(err.response.data));
+        return err;
     } 
 }
 
@@ -66,11 +70,13 @@ export const getSignRequest = async (file) =>{
     }
 }
 
-export const uploadFile = async (file, signReq) =>{
+export const uploadFile = async (file, signReq, dispatch) =>{
+    dispatch(UpdateStart());
     try{
         const res = await axios.put(signReq, file);
-        console.log(res.data);
+        dispatch(ClearError());
+        return res.status;
     }catch(err){
-        console.log(err);
+        return err;
     }
 }

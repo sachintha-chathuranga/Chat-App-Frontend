@@ -13,10 +13,7 @@ function SignUp() {
     const password = useRef();
     const [isActive, setisActive] = useState(false);
     const history = useHistory();
-
-    useEffect(() => {
-        clearError(dispatch);
-    }, [dispatch]);
+    const [severError, setSeverError] = useState(null);
 
     const handleSubmit = (e) =>{
         e.preventDefault();
@@ -27,10 +24,18 @@ function SignUp() {
             password: password.current.value.trim()
         }
         signUpCall(user, dispatch).then(res =>{
-            !res && history.push('/login');
+            if(res===200){history.push('/login')}
+            else{
+                setTimeout(() =>{
+                    clearError(dispatch);
+                },5000);
+            }
         }).catch(err =>{
-            alert(err);
-            window.location.reload();
+            setSeverError("Sever does not give any response!");
+            setTimeout(() =>{
+                setSeverError(null);
+            },5000);
+            clearError(dispatch);
         });
     }
 
@@ -40,6 +45,7 @@ function SignUp() {
                 <header>Bliss Talk</header>
                 <form onSubmit={handleSubmit} autoComplete="off">
                     {error && <div className="error-txt">{error}</div>}
+                    {severError && <div className="error-txt">{severError}</div>}
                     <div className="name-details">
                             <div className="field input">
                                 <label>First Name</label>

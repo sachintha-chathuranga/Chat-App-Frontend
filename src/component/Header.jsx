@@ -4,9 +4,9 @@ const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 const imageUrl = process.env.REACT_APP_AWS_URL;
 
 export default function Header(props) {
-    
-    
+
     const history = useHistory();
+
     const handleBack = () =>{
         if(props.hasOwnProperty('toggleFrame')){
             props.toggleFrame();
@@ -14,6 +14,7 @@ export default function Header(props) {
             history.push('/');
         }
     }
+    
     return (
         <header>
             <div className="content">
