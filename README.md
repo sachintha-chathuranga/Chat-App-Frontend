@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 This is a frontend code for chat app. if you want to run this app on your local envirement, follow the following
 instruction.
 
-## Instruction for the run the application in local envirement.
+## Instructions to run the application in local envirement.
 
 1.clone the repository into your local computer.
 
