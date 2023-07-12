@@ -107,7 +107,7 @@ export const userUpdateCall = async (axiosPrivate, userCredintial, dispatch) =>{
 export const userDeleteCall = async (axiosPrivate, userCredintial, dispatch) =>{
     dispatch(UpdateStart());
     try {
-        const res = axiosPrivate.delete(`users/`, {data : userCredintial});
+        const res = await axiosPrivate.delete(`users/`, {data : userCredintial});
         dispatch(LogOut());
         sessionStorage.removeItem("user");
         return res.status;

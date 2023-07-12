@@ -31,7 +31,7 @@ export default function Chat() {
             res.fname && setFriend(res);
             scrollToBottom();
         });
-    }, [params.friend_id, scrollToBottom, axiosPrivate]);
+    }, [params.friend_id, scrollToBottom, axiosPrivate, dispatch]);
     
     const handleSubmit = (e) =>{
         e.preventDefault();
