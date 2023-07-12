@@ -7,6 +7,7 @@ import Friend from '../../component/Friend';
 import { clearError, logOutCall } from '../../apiCalls';
 import useFriend from '../../hooks/useFriend';
 import './home.css';
+import { useEffect } from "react";
 
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 const imageUrl = process.env.REACT_APP_AWS_URL;
@@ -18,6 +19,7 @@ const Home = () =>{
     const [searchInput, setSearch] = useState("");
     const inputElement = useRef();
     const [show, setShow] = useState(false);
+    const [fullName, setFullName] = useState(`${user.fname} ${user.lname}`);
     
     const [index, setindex] = useState(1);
     const { friends, setfriend, isLoading, error, hasMore } = useFriend(index, active, searchInput);
@@ -34,6 +36,15 @@ const Home = () =>{
         if(friend) intObserver.current.observe(friend);
     },[isLoading, hasMore]);
 
+    useEffect(() => {
+        const updateString = () =>{
+            if(window.innerWidth <= 400 && fullName.length > 14){
+                setFullName(fullName.substring(0, 14)+"...");
+            }
+        }
+        updateString();
+    }, [fullName]);
+    
     const activeSearch = () =>{
         setfriend([]);
         setActive(!active);
@@ -58,7 +69,7 @@ const Home = () =>{
                     <div className="content">
                         <img src={user.profil_pic ? imageUrl+user.profil_pic : PF + "default.png" } alt="proPic" />
                         <div className="details">
-                            <span>{user.fname +" "+ user.lname}</span>
+                            <span>{fullName}</span>
                             <p>{user.status ? "Online" : "Offline"}</p>
                         </div>
                     </div>

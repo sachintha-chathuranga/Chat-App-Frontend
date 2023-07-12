@@ -123,6 +123,7 @@ header .delete:hover{
     padding: 18px 30px;
     display: flex;
     justify-content: space-between;
+    background-color: white;
 }
 .typing-area input{
     height: 45px;
@@ -173,7 +174,7 @@ header .delete:hover{
     }
     .chat-box{
         overflow-y: auto;
-        height: calc(100% - 132px);
+        height: calc(100% - 88px);
         padding: 12px 6px 12px 17px;
     }
     .outgoing .details{
