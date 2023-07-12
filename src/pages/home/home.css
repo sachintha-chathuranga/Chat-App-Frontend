@@ -23,6 +23,7 @@
 }
     /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
+    text-align: center;
     display: none;
     position: absolute;
     width: 87px;

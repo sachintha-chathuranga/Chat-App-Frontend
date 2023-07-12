@@ -1,37 +1,37 @@
 import { CircularProgress } from '@material-ui/core';
-import axios from 'axios';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom/cjs/react-router-dom.min';
+import { getFriend } from '../../apiCalls';
 import Header from '../../component/Header';
 import Incoming from '../../component/Incoming';
 import Outgoing from '../../component/Outgoing';
 import { AuthContext } from '../../context/AuthContext';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useMessage from '../../hooks/useMessage';
 import './chat.css';
-const API_URL = process.env.REACT_APP_API_URL;
+
 export default function Chat() {
-    const {user} = useContext(AuthContext);
+    const {user, dispatch} = useContext(AuthContext);
     const [friend, setFriend] = useState({});
     const params = useParams();
     const [inputMsg, setinputMsg] = useState("");
     const chatBox = useRef();
     const [active, setActive] = useState(false);
+    const axiosPrivate = useAxiosPrivate();
+    const [isFetching, setisFetching] = useState(false);
 
     const scrollToBottom = useCallback(() =>{
         chatBox.current.scrollTop = chatBox.current.scrollHeight;
     },[]);
 
-    const { messages, isLoading, error} = useMessage(user.user_id, params.friend_id, active, scrollToBottom);
+    const { messages, error } = useMessage(params.friend_id, active, scrollToBottom);
     
     useEffect(() => {
-        const fetchUser = async () => {
-            axios.get(`${API_URL}users/${params.friend_id}`).then(res =>{
-                setFriend(res.data);
-                scrollToBottom();
-            }).catch(err => console.log(err));
-        }
-        fetchUser();
-    }, [params.friend_id, scrollToBottom]);
+        getFriend(axiosPrivate, params.friend_id, dispatch).then(res =>{
+            res.fname && setFriend(res);
+            scrollToBottom();
+        });
+    }, [params.friend_id, scrollToBottom, axiosPrivate]);
     
     const handleSubmit = (e) =>{
         e.preventDefault();
@@ -41,10 +41,13 @@ export default function Chat() {
             message : inputMsg
         }
         const sendMessage = async () =>{
+            setisFetching(true);
             try{
-                await axios.post(`${API_URL}messages/message`, msg);
+                await axiosPrivate.post(`messages/message`, msg);
+                setisFetching(false);
                 setinputMsg("");
             }catch(err){
+                setisFetching(false);
                 console.log(err);
             }
             scrollToBottom();
@@ -67,15 +70,10 @@ export default function Chat() {
                     ) : <div className="empty-chat">
                             No messages are available. Once you send message they will appear here.
                         </div>}
-                        
-                        {isLoading && <div className="loading-wrap">
-                        <CircularProgress  style={{color: "#c2c2c9", width: "30px", height: "30px"}}/>
-                    </div>}
-
                 </div>
                 <form onSubmit={handleSubmit} className="typing-area" autoComplete="off">
                     <input type="text" value={inputMsg} onChange={(e) => setinputMsg(e.target.value)} className="input-field" placeholder="Type a message here..." />
-                    <button type="submit" ><i className="fab fa-telegram-plane"></i></button>
+                    <button type="submit" disabled={isFetching} >{isFetching ? <CircularProgress style={{color: "white", width: "15px", height: "15px"}} /> : <i className="fab fa-telegram-plane"></i>}</button>
                 </form>
             </section>
         </div>

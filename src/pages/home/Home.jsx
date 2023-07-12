@@ -13,14 +13,14 @@ const imageUrl = process.env.REACT_APP_AWS_URL;
 const Home = () =>{
 
     const history = useHistory();
-    const {user, dispatch} = useContext(AuthContext);
+    const {user, isFetching, dispatch} = useContext(AuthContext);
     const [active, setActive] = useState(false);
     const [searchInput, setSearch] = useState("");
     const inputElement = useRef();
     const [show, setShow] = useState(false);
-
+    
     const [index, setindex] = useState(1);
-    const { friends, setfriend, isLoading, error, hasMore } = useFriend(index, user.user_id, active, searchInput);
+    const { friends, setfriend, isLoading, error, hasMore } = useFriend(index, active, searchInput);
     
     const intObserver = useRef();
     const lastfriendRef = useCallback(friend => {
@@ -43,7 +43,7 @@ const Home = () =>{
     }
 
     const handleLogout = () => {
-        logOutCall({user_id: user.user_id, status: false}, dispatch)
+        logOutCall(dispatch)
         .then(res => {
             res===200 ? history.push('/login') : setTimeout(() =>{
                 clearError(dispatch);
@@ -68,7 +68,7 @@ const Home = () =>{
                             <Link to={"/profile"}>
                                 <div className="prof">Proflie</div>
                             </Link>
-                            <div onClick={handleLogout} className="logout">Logout</div>
+                            <div onClick={handleLogout} className="logout">{isFetching ? <CircularProgress  style={{color: "#2740c9", width: "15px", height: "15px"}}/> : "Logout"}</div>
                         </div>
                     </div>
                 </header>

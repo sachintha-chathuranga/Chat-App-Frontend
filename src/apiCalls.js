@@ -1,12 +1,35 @@
 import axios from "axios";
+import { axiosPrivate } from "./axios";
 import { LoginFailure, LoginStart, LoginSuccess, LogOut, UpdateStart, UpdateFailure, ClearError } from "./context/AuthActions";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
+
+export const getNewToken = async (dispatch) =>{
+    try {
+        const res = await axiosPrivate.get(`tokens/update`);
+        dispatch(LoginSuccess(res.data));
+        sessionStorage.setItem("user", JSON.stringify(res.data));
+        return  res.data.access_token;
+    } catch (err) {
+        if(!err?.response){
+            dispatch(LoginFailure("No Sever Response"));
+            return 500;
+        }else if(err.response?.data){
+            dispatch(LogOut());
+            sessionStorage.removeItem("user");
+            return err.response.status;
+        }else{
+            dispatch(LoginFailure("You are currently offline. Check your internet Connection!"));
+            return 500;
+        }
+       
+    }       
+}
 export const loginCall = async (userCredintial, dispatch) =>{
     dispatch(LoginStart(userCredintial));
     try{
-        const res = await axios.post(`${API_URL}users/login`, userCredintial);
+        const res = await axiosPrivate.post(`users/login`, userCredintial);
         dispatch(LoginSuccess(res.data));
         sessionStorage.setItem("user", JSON.stringify(res.data));
         return res.status;
@@ -23,7 +46,6 @@ export const loginCall = async (userCredintial, dispatch) =>{
         }
     }
 }
-
 export const signUpCall = async (userCredintial, dispatch) =>{
     dispatch(LoginStart());
     try{
@@ -43,10 +65,30 @@ export const signUpCall = async (userCredintial, dispatch) =>{
         }
     }
 }
-export const userUpdateCall = async (userCredintial, dispatch) =>{
+export const logOutCall = async (dispatch) =>{
+    dispatch(UpdateStart());
+    try {
+        const res = await axiosPrivate.put(`users/logout`);
+        dispatch(LogOut());
+        sessionStorage.removeItem("user");
+        return res.status;
+    } catch (err) {
+        if(!err?.response){
+            dispatch(UpdateFailure("No Sever Response"));
+            return 500;
+        }else if(err.response?.data){
+            dispatch(UpdateFailure(err.response.data));
+            return err.response.status;
+        }else{
+            dispatch(UpdateFailure("You are currently offline. Check your internet Connection!"));
+            return 500;
+        };
+    }
+}
+export const userUpdateCall = async (axiosPrivate, userCredintial, dispatch) =>{
     dispatch(UpdateStart());
     try{
-        const res = await axios.put(`${API_URL}users/${userCredintial.user_id}`, userCredintial);
+        const res = await axiosPrivate.put(`users/`, userCredintial);
         dispatch(LoginSuccess(res.data));
         return res.status;
     }catch(err){
@@ -62,11 +104,10 @@ export const userUpdateCall = async (userCredintial, dispatch) =>{
         }
     } 
 }
-
-export const userDeleteCall = async (userCredintial, dispatch) =>{
+export const userDeleteCall = async (axiosPrivate, userCredintial, dispatch) =>{
     dispatch(UpdateStart());
     try {
-        const res = axios.delete(`${API_URL}users/${userCredintial.user_id}`, {data : userCredintial});
+        const res = axiosPrivate.delete(`users/`, {data : userCredintial});
         dispatch(LogOut());
         sessionStorage.removeItem("user");
         return res.status;
@@ -83,39 +124,62 @@ export const userDeleteCall = async (userCredintial, dispatch) =>{
         }
     }
 }
-
-export const logOutCall = async (userCredintial, dispatch) =>{
-        try {
-            const res = await axios.put(`${API_URL}users/${userCredintial.user_id}`, userCredintial);
-            dispatch(LogOut());
-            sessionStorage.removeItem("user");
-            return res.status;
-        } catch (err) {
-            if(!err?.response){
-                dispatch(UpdateFailure("No Sever Response"));
-                return 500;
-            }else if(err.response?.data){
-                dispatch(UpdateFailure(err.response.data));
-                return err.response.status;
-            }else{
-                dispatch(UpdateFailure("You are currently offline. Check your internet Connection!"));
-                return 500;
-            };
-        }
+export const fetchFriend = async (axiosPrivate, index=1) => {
+    const res = await axiosPrivate.get(`users/friends?index=${index}`);
+    return res.data;
 }
+export const getFriend = async (axiosPrivate, friend_id, dispatch) => {
+    dispatch(UpdateStart());
+    try {
+        const res = await axiosPrivate.get(`users/${friend_id}`);
+        dispatch(ClearError());
+        return res.data;
+    } catch (err) {
+        if(!err?.response){
+            dispatch(UpdateFailure("No Sever Response"));
+            return 500;
+        }else if(err.response?.data){
+            dispatch(UpdateFailure(err.response.data));
+            return err.response.status;
+        }else{
+            dispatch(UpdateFailure("You are currently offline. Check your internet Connection!"));
+            return 500;
+        }
+    }
+}
+export const searchFriend = async (axiosPrivate, index, searchInput) => {
+    const res = await axiosPrivate.post(index ? `users/search?index=${index}` : `users/search`, {name: searchInput});
+    return res.data;
+}
+
+export const fetchMessages = async (axiosPrivate, friend_id) => {
+    const res = await axiosPrivate.get(`messages/message?friend_id=${friend_id}`);
+    return res.data;
+}
+export const clearMessages = async (axiosPrivate, friend_id, dispatch) =>{
+    dispatch(UpdateStart());
+    axiosPrivate.delete(`messages/messages/clear?friend_id=${friend_id}`).then(res => {
+        dispatch(ClearError());
+        console.log(res.data);
+    }).catch(err =>{
+        dispatch(ClearError())
+        console.log(err.response);
+    });
+}
+
+
 export const clearError = (dispatch) =>{
     dispatch(ClearError());
 }
 
-export const getSignRequest = async (file) =>{
+export const getSignRequest = async (axiosPrivate, file) =>{
     try{
-        const res = await axios.get(`${API_URL}aws/sign-s3?file_name=${encodeURIComponent(file.name)}&file_type=${file.type}`);
+        const res = await axiosPrivate.get(`aws/sign-s3?file_name=${encodeURIComponent(file.name)}&file_type=${file.type}`);
         return res.data;
     }catch(err){
         return err.response.data;
     }
 }
-
 export const uploadFile = async (file, signReq, dispatch) =>{
     dispatch(UpdateStart());
     try{
@@ -134,26 +198,5 @@ export const uploadFile = async (file, signReq, dispatch) =>{
             return 500;
         };
     }
-}
-export const clearMessages = async (friend_id, user_id) =>{
-    axios.delete(`${API_URL}messages/messages/clear/${user_id}?friend_id=${friend_id}`).then(res => {
-        console.log(res.data);
-    }).catch(err =>{
-        console.log(err.response);
-    });
-}
-
-export const fetchFriend = async (index=1, user_id) => {
-    const res = await axios.get(`${API_URL}users/friends/?index=${index}&user_id=${user_id}`);
-    return res.data;
-}
-
-export const searchFriend = async (index, user_id, searchInput) => {
-    const res = await axios.post(index ? `${API_URL}users/search/${user_id}?index=${index}` : `${API_URL}users/search/${user_id}`, {name: searchInput});
-    return res.data;
-}
-export const fetchMessages = async (user_id, friend_id) => {
-    const res = await axios.get(`${API_URL}messages/message?user_id=${user_id}&friend_id=${friend_id}`);
-    return res.data;
 }
 

@@ -3,6 +3,7 @@ import { Cancel, PermMedia } from '@material-ui/icons';
 import React, { useContext, useRef, useState, memo } from 'react';
 import { getSignRequest, uploadFile, userUpdateCall, clearError } from '../apiCalls';
 import { AuthContext } from '../context/AuthContext';
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
 import Header from './Header';
 
 const validFileType = ["image/png", "image/jpg", "image/jpeg"];
@@ -17,6 +18,8 @@ const Update = ({toggleFrame, toggleWarning}) =>{
     const password = useRef();
     const [isActive, setisActive] = useState(false);
     const [severError, setSeverError] = useState(null);
+    const axiosPrivate = useAxiosPrivate();
+
 
     const handleSubmit = (e) =>{
         e.preventDefault();
@@ -32,7 +35,7 @@ const Update = ({toggleFrame, toggleWarning}) =>{
         if(signedRequest!==null && file!==null){
             uploadFile(file, signedRequest, dispatch).then((res) =>{
                 if(res===200){
-                    userUpdateCall(data, dispatch).then((res) =>{
+                    userUpdateCall(axiosPrivate, data, dispatch).then((res) =>{
                         res===200 ? toggleFrame() :
                         setTimeout(() =>{
                             clearError(dispatch)
@@ -47,7 +50,7 @@ const Update = ({toggleFrame, toggleWarning}) =>{
                 }
             });
         }else if(data.email || data.password || data.fname || data.lname){
-            userUpdateCall(data, dispatch).then((res) =>{
+            userUpdateCall(axiosPrivate, data, dispatch).then((res) =>{
                 res===200 ? toggleFrame() :
                 setTimeout(() =>{
                     clearError(dispatch)
@@ -66,7 +69,7 @@ const Update = ({toggleFrame, toggleWarning}) =>{
                 return;
             }
             setFile(file);
-            getSignRequest(file).then(res =>{
+            getSignRequest(axiosPrivate, file).then(res =>{
                 setsignedRequest(res.signedRequest);
             }).catch(err =>{
                 setSeverError("Sever does not give any response!");

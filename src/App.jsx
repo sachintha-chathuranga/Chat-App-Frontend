@@ -1,4 +1,3 @@
-// import { useEffect, useState } from 'react';
 import { useContext } from "react";
 import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 import { AuthContext } from "./context/AuthContext";
@@ -24,7 +23,7 @@ function App() {
           <Route path="/signUp">
               {user ? <Redirect to="/" /> : <SignUp />}
           </Route>
-      
+
           <Route path="/profile">
             {user ? <Profile /> : <Redirect to="/login" />}
           </Route>

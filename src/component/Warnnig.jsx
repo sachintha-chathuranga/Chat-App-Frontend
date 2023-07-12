@@ -3,6 +3,7 @@ import { clearError, userDeleteCall } from '../apiCalls';
 import { AuthContext } from '../context/AuthContext';
 import { CircularProgress } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
 
 function Warnnig({toggleWarning}) {
 
@@ -11,6 +12,7 @@ function Warnnig({toggleWarning}) {
     const [isActive, setisActive] = useState(false);
     const [isNext, setIsNext] = useState(false);
     const {user, isFetching, error, dispatch} = useContext(AuthContext);
+    const axiosPrivate = useAxiosPrivate();
     
     const handleDelete = (e) =>{
         e.preventDefault();
@@ -19,7 +21,7 @@ function Warnnig({toggleWarning}) {
         }
         password.current.value && (data.password = password.current.value.trim());
 
-        userDeleteCall(data, dispatch).then(res =>{
+        userDeleteCall(axiosPrivate, data, dispatch).then(res =>{
             res===200 ? history.push('/login') : setTimeout(() =>{
                 clearError(dispatch)
             },5000);

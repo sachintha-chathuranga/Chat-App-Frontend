@@ -1,16 +1,20 @@
 import { useState, useEffect } from 'react';
 import { fetchFriend, searchFriend } from '../apiCalls';
+import useAxiosPrivate from './useAxiosPrivate';
 
-const useFriend = (index, user_id, active, searchInput) => {
+const useFriend = (index, active, searchInput) => {
+    
     const [friends, setfriend] = useState([]);
     const [isLoading, setisLoading] = useState(false);
     const [error, seterror] = useState(null);
     const [hasMore, sethasMore] = useState(true);
+    const axiosPrivate = useAxiosPrivate();
+    
     
     useEffect(() => {
         setisLoading(true);
         seterror(null);
-        active ? searchFriend(index, user_id, searchInput)
+        active ? searchFriend(axiosPrivate, index, searchInput)
         .then(d =>{
             setfriend(prev => [...prev, ...d]);
             sethasMore(Boolean(d.length));
@@ -26,7 +30,7 @@ const useFriend = (index, user_id, active, searchInput) => {
             };
             setisLoading(false);
         }) :
-        fetchFriend(index, user_id)
+        fetchFriend(axiosPrivate, index)
         .then(d => {
             setfriend(prev => [...prev, ...d]);
             sethasMore(Boolean(d.length === 15));
@@ -49,7 +53,7 @@ const useFriend = (index, user_id, active, searchInput) => {
         sethasMore(true);
         setisLoading(true);
         seterror(null);
-        active && searchFriend(null, user_id, searchInput)
+        active && searchFriend(axiosPrivate, null, searchInput)
         .then(d => {
             setfriend(d);
             setisLoading(false);
@@ -63,7 +67,7 @@ const useFriend = (index, user_id, active, searchInput) => {
             };
             setisLoading(false);
         });    
-    }, [searchInput, active, user_id]);
+    }, [searchInput, active, axiosPrivate]);
 
     return { friends, setfriend, isLoading, error, hasMore};
 }

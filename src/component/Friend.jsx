@@ -1,25 +1,24 @@
-import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import { memo } from "react";
-
-const API_URL = process.env.REACT_APP_API_URL;
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 const imageUrl = process.env.REACT_APP_AWS_URL;
 
 const Friend = ({friend}) => {
     const {user} = useContext(AuthContext);
     const [msg, setMsg] = useState({});
-    
+    const axiosPrivate = useAxiosPrivate();
+
     useEffect(() => {
         const getLastMsg = async () =>{
-            axios.get(`${API_URL}messages/msg?user_id=${user.user_id}&friend_id=${friend.user_id}`).then(res =>{
+            axiosPrivate.get(`messages/msg?friend_id=${friend.user_id}`).then(res =>{
                 setMsg(res.data);
             }).catch(err => console.log(err));
         }
         getLastMsg();
-    }, [friend.user_id, user.user_id]);
+    }, [friend.user_id, user.user_id, axiosPrivate]);
 
 
     return (
