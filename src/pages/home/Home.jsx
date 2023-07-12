@@ -8,11 +8,12 @@ import { clearError, logOutCall } from '../../apiCalls';
 import useFriend from '../../hooks/useFriend';
 import './home.css';
 import { useEffect } from "react";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 const imageUrl = process.env.REACT_APP_AWS_URL;
 const Home = () =>{
-
+    
     const history = useHistory();
     const {user, isFetching, dispatch} = useContext(AuthContext);
     const [active, setActive] = useState(false);
@@ -20,6 +21,7 @@ const Home = () =>{
     const inputElement = useRef();
     const [show, setShow] = useState(false);
     const [fullName, setFullName] = useState(`${user.fname} ${user.lname}`);
+    const axiosPrivate = useAxiosPrivate();
     
     const [index, setindex] = useState(1);
     const { friends, setfriend, isLoading, error, hasMore } = useFriend(index, active, searchInput);
@@ -54,7 +56,7 @@ const Home = () =>{
     }
 
     const handleLogout = () => {
-        logOutCall(dispatch)
+        logOutCall(axiosPrivate, dispatch)
         .then(res => {
             res===200 ? history.push('/login') : setTimeout(() =>{
                 clearError(dispatch);
