@@ -69,8 +69,8 @@ export const logOutCall = async (dispatch) =>{
     dispatch(UpdateStart());
     try {
         const res = await axiosPrivate.put(`users/logout`);
-        sessionStorage.removeItem("user");
         dispatch(LogOut());
+        sessionStorage.removeItem("user");
         return res.status;
     } catch (err) {
         if(!err?.response){
