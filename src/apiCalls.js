@@ -14,14 +14,14 @@ export const getNewToken = async (dispatch) =>{
     } catch (err) {
         if(!err?.response){
             dispatch(LoginFailure("No Sever Response"));
-            return 500;
+            return null;
         }else if(err.response?.data){
             dispatch(LogOut());
             sessionStorage.removeItem("user");
-            return err.response.status;
+            return null;
         }else{
             dispatch(LoginFailure("You are currently offline. Check your internet Connection!"));
-            return 500;
+            return null;
         }
        
     }       

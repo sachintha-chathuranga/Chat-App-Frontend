@@ -24,10 +24,13 @@ const useAxiosPrivate = () => {
                 if(err?.response?.status === 403 && !prevRequest?.sent){
                     prevRequest.sent = true;
                     const token = await getNewToken(dispatch);
-                    prevRequest.headers['Authorization'] = `Bearer ${token}`;
-                    return axiosPrivate(prevRequest);
+                    if(token){
+                        prevRequest.headers['Authorization'] = `Bearer ${token}`;
+                        return axiosPrivate(prevRequest);
+                    }
+                    return Promise.reject(err);
                 }
-                return Promise.reject(err)
+                return Promise.reject(err);
             }
         )
 
