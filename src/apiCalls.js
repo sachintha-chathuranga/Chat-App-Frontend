@@ -71,6 +71,7 @@ export const logOutCall = async (axiosPrivate, dispatch) =>{
         const res = await axiosPrivate.put(`users/logout`);
         dispatch(LogOut());
         sessionStorage.removeItem("user");
+        console.log("sucsess");
         return res.status;
     } catch (err) {
         if(!err?.response){
@@ -79,6 +80,7 @@ export const logOutCall = async (axiosPrivate, dispatch) =>{
         }else if(err.response?.data){
             dispatch(UpdateFailure(err.response.data));
             return err.response.status;
+            console.log("error");
         }else{
             dispatch(UpdateFailure("You are currently offline. Check your internet Connection!"));
             return 500;
