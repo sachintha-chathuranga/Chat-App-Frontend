@@ -21,7 +21,6 @@ const Home = () =>{
     const inputElement = useRef();
     const [show, setShow] = useState(false);
     const [fullName, setFullName] = useState(`${user.fname} ${user.lname}`);
-    const axiosPrivate = useAxiosPrivate();
     
     const [index, setindex] = useState(1);
     const { friends, setfriend, isLoading, error, hasMore } = useFriend(index, active, searchInput);
@@ -56,7 +55,7 @@ const Home = () =>{
     }
 
     const handleLogout = () => {
-        logOutCall(axiosPrivate, dispatch)
+        logOutCall(dispatch)
         .then(res => {
             res===200 ? history.push('/login') : setTimeout(() =>{
                 clearError(dispatch);
