@@ -65,7 +65,7 @@ export const signUpCall = async (userCredintial, dispatch) =>{
         }
     }
 }
-export const logOutCall = async (axiosPrivate, dispatch) =>{
+export const logOutCall = async (dispatch) =>{
     dispatch(UpdateStart());
     try {
         const res = await axiosPrivate.put(`users/logout`);
@@ -79,8 +79,8 @@ export const logOutCall = async (axiosPrivate, dispatch) =>{
             return 500;
         }else if(err.response?.data){
             dispatch(UpdateFailure(err.response.data));
+            console.log(err.response.data);
             return err.response.status;
-            console.log("error");
         }else{
             dispatch(UpdateFailure("You are currently offline. Check your internet Connection!"));
             return 500;
