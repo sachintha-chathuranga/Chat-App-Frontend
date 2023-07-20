@@ -7,6 +7,7 @@ import SignUp from "./pages/signup/SignUp";
 import Chat from "./pages/chat/Chat";
 import Profile from "./pages/profile/Profile";
 
+
 function App() {
   const {user} = useContext(AuthContext);
   return (

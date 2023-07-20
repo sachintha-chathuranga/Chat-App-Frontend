@@ -8,12 +8,12 @@ import { clearError, logOutCall } from '../../apiCalls';
 import useFriend from '../../hooks/useFriend';
 import './home.css';
 import { useEffect } from "react";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 const imageUrl = process.env.REACT_APP_AWS_URL;
 const Home = () =>{
     
+   
     const history = useHistory();
     const {user, isFetching, dispatch} = useContext(AuthContext);
     const [active, setActive] = useState(false);
@@ -36,6 +36,8 @@ const Home = () =>{
         });
         if(friend) intObserver.current.observe(friend);
     },[isLoading, hasMore]);
+
+   
 
     useEffect(() => {
         const updateString = () =>{

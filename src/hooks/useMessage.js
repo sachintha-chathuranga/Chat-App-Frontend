@@ -2,18 +2,17 @@ import { useState, useEffect } from 'react';
 import { fetchMessages} from '../apiCalls';
 import useAxiosPrivate from './useAxiosPrivate';
 
-const useMessage = (friend_id, active, scrolltoBottom) => {
+const useMessage = (friend_id, scrolltoBottom) => {
     const [isMount, setisMount] = useState(true);
     const [messages, setMessages] = useState([]);
     const [error, seterror] = useState(null);
     const axiosPrivate = useAxiosPrivate();
     
     useEffect(() => {
-        const interval = setInterval(() => {
             fetchMessages(axiosPrivate, friend_id)
             .then(d => {
                 isMount && setMessages(d);
-                !active && scrolltoBottom();
+                scrolltoBottom();
             })
             .catch(e => {
                 if(!e?.response){
@@ -24,13 +23,12 @@ const useMessage = (friend_id, active, scrolltoBottom) => {
                     isMount && seterror("You are currently offline. Check your internet Connection!");
                 };
             });
-        }, 500);
         return () => {
             setisMount(false);
-            clearInterval(interval)};
-    }, [friend_id, active, scrolltoBottom, axiosPrivate, isMount]);
+        };
+    }, [friend_id, scrolltoBottom, axiosPrivate, isMount]);
 
-    return { messages, error};
+    return { messages, setMessages, error};
 }
 
 export default useMessage;

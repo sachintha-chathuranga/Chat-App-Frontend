@@ -38,7 +38,9 @@ const Header = (props) => {
         if(props.hasOwnProperty('toggleWarning')){
             props.toggleWarning();
         }else{
-            props.isEmpty && clearMessages(axiosPrivate, props.user.user_id, dispatch);
+            props.isEmpty && clearMessages(axiosPrivate, props.user.user_id, dispatch).then(() => {
+                props.setMessages([]);
+            });
         }
     }
     

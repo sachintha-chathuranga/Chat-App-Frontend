@@ -162,10 +162,8 @@ export const clearMessages = async (axiosPrivate, friend_id, dispatch) =>{
     dispatch(UpdateStart());
     axiosPrivate.delete(`messages/messages/clear?friend_id=${friend_id}`).then(res => {
         dispatch(ClearError());
-        console.log(res.data);
     }).catch(err =>{
         dispatch(ClearError())
-        console.log(err.response);
     });
 }
 
