@@ -147,6 +147,8 @@ header .delete:hover{
 
 @media only screen and (max-width: 500px){
     .chat-area{
+        display: flex;
+        flex-direction: column;
         width: 100vw;
         height: 100vh;
     }
@@ -174,7 +176,7 @@ header .delete:hover{
     }
     .chat-box{
         overflow-y: auto;
-        height: calc(100% - 88px);
+        flex: 1;
         padding: 12px 6px 12px 17px;
     }
     .outgoing .details{
@@ -185,8 +187,6 @@ header .delete:hover{
     }
     .chat-area .typing-area{
         padding: 5px 18px;
-        position:sticky;
-        bottom: 0;
     }
     .typing-area input{
         height: 35px;
