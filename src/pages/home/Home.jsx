@@ -1,19 +1,22 @@
 import { MoreVert } from "@material-ui/icons";
 import { CircularProgress } from '@material-ui/core';
-import React, { useContext, useRef, useState, useCallback, memo } from 'react'
+import React, { useContext, useEffect, useRef, useState, useCallback, memo } from 'react'
 import { Link, useHistory } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import Friend from '../../component/Friend';
-import { clearError, logOutCall } from '../../apiCalls';
+import { clearError, fetchAllNotification, logOutCall } from '../../apiCalls';
 import useFriend from '../../hooks/useFriend';
+import io from "socket.io-client";
 import './home.css';
-import { useEffect } from "react";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+
 
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 const imageUrl = process.env.REACT_APP_AWS_URL;
 const Home = () =>{
-    
-   
+
+    const axiosPrivate = useAxiosPrivate();
+    const socket = useRef(null);
     const history = useHistory();
     const {user, isFetching, dispatch} = useContext(AuthContext);
     const [active, setActive] = useState(false);
@@ -21,7 +24,8 @@ const Home = () =>{
     const inputElement = useRef();
     const [show, setShow] = useState(false);
     const [fullName, setFullName] = useState(`${user.fname} ${user.lname}`);
-    
+    const [notification, setNotification] = useState([]);
+    const [isMount, setisMount] = useState(true);
     const [index, setindex] = useState(1);
     const { friends, setfriend, isLoading, error, hasMore } = useFriend(index, active, searchInput);
     
@@ -37,6 +41,22 @@ const Home = () =>{
         if(friend) intObserver.current.observe(friend);
     },[isLoading, hasMore]);
 
+    useEffect(() => {
+        fetchAllNotification(axiosPrivate).then(data =>{
+            (isMount && data) && setNotification(data);
+        });
+        socket.current = io.connect("http://localhost:5000/");
+        socket?.current.on('connect', () =>{
+            socket?.current?.on("getMessage", data => {
+                isMount && setNotification(prev => [...prev, data]);
+            });
+        });
+        return () =>{
+            setisMount(false);
+            socket?.current.off();
+            socket?.current.disconnect();
+        };
+    }, [user, isMount, axiosPrivate]);
    
 
     useEffect(() => {
@@ -94,11 +114,12 @@ const Home = () =>{
                 <div className="users-list">
                     {error && <div className="error-txt">{error}</div>}
 
-                    {friends.map((f, i) =>{
+                    {!isLoading && friends.map((f, i) =>{
+                        socket?.current.emit("joinRoom", user.user_id+Number(f.user_id));
                         if(friends.length === i+1){
-                            return (<div key={f.user_id} ref={lastfriendRef} ><Friend friend={f} /></div>) 
+                            return (<div key={f.user_id} ref={lastfriendRef} ><Friend notifi={notification} friend={f} /></div>) 
                         }
-                         return (<Friend key={f.user_id} friend={f} />);
+                         return (<Friend key={f.user_id} notifi={notification} friend={f} />);
                     })}
 
                     {isLoading && <div className="loading-wrap">

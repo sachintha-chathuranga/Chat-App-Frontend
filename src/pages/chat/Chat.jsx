@@ -1,7 +1,7 @@
 // import { CircularProgress } from '@material-ui/core';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom/cjs/react-router-dom.min';
-import { getFriend } from '../../apiCalls';
+import { getFriend, readAllMessages } from '../../apiCalls';
 import Header from '../../component/Header';
 import Incoming from '../../component/Incoming';
 import Outgoing from '../../component/Outgoing';
@@ -27,10 +27,14 @@ export default function Chat() {
     },[]);
 
     const { messages, setMessages, error } = useMessage(params.friend_id, scrollToBottom);
+
+    useEffect(() => {
+        readAllMessages(axiosPrivate, params.friend_id);
+    }, [axiosPrivate, params.friend_id, messages]);
     
     useEffect(() => {
         getFriend(axiosPrivate, params.friend_id, dispatch).then(res =>{
-            res.fname && setFriend(res);
+            res && setFriend(res);
             scrollToBottom();
         });
     }, [params.friend_id, scrollToBottom, axiosPrivate, dispatch]);
@@ -38,7 +42,6 @@ export default function Chat() {
     useEffect(() => {
         socket.current = io.connect("http://localhost:5000/");
         socket?.current.on('connect', () =>{
-            console.log('connected');
             socket?.current.emit("joinRoom", user.user_id+Number(params.friend_id));
             socket?.current?.on("getMessage", data => {
                 isMount && setMessages(prev => [...prev, data]);
@@ -50,9 +53,10 @@ export default function Chat() {
         return () =>{
             setisMount(false);
             socket?.current.emit("leaveRoom", user.user_id+Number(params.friend_id));
+            socket.current?.off();
             socket?.current.disconnect();
         };
-    }, [user]);
+    }, [user, params.friend_id, isMount, setMessages]);
 
      useEffect(() => {
          scrollToBottom();
@@ -65,9 +69,8 @@ export default function Chat() {
             receiver_id : friend.user_id,
             message : inputMsg
         }
-        socket?.current.emit("sendMessage", msg);
-        // socket?.current.emit("sendMessage", msg);
         const sendMessage = async () =>{
+            socket?.current.emit("sendMessage", msg);
             try{
                 setMessages(prev => [...prev, msg]);
                 await axiosPrivate.post(`messages/message`, msg);

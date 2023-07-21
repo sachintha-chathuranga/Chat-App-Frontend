@@ -50,6 +50,7 @@
 .dropdown-content .prof:hover {background-color: #ddd}
 
 :is(.users, .users-list) .content{
+    position: relative;
     display: flex;
     align-items: center;
 }
@@ -130,6 +131,21 @@
 .users-list .friend .content img{
     height: 40px;
     width: 40px;
+}
+.users-list .friend .content .notification{
+    position: absolute;
+    top: 0;
+    left: 30px;
+    background: #08af08;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    color: white;
+    font-size: 12px;
+    text-align: center;
+    line-height: 1.4;
+    align-items: center;
+    justify-content: cee;
 }
 .users-list .friend .content p{
     color: #67676a;

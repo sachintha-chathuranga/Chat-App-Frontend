@@ -4,7 +4,6 @@ import { LoginFailure, LoginStart, LoginSuccess, LogOut, UpdateStart, UpdateFail
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-
 export const getNewToken = async (dispatch) =>{
     try {
         const res = await axiosPrivate.get(`tokens/update`);
@@ -79,7 +78,6 @@ export const logOutCall = async (dispatch) =>{
             return 500;
         }else if(err.response?.data){
             dispatch(UpdateFailure(err.response.data));
-            console.log(err.response.data);
             return err.response.status;
         }else{
             dispatch(UpdateFailure("You are currently offline. Check your internet Connection!"));
@@ -126,8 +124,8 @@ export const userDeleteCall = async (axiosPrivate, userCredintial, dispatch) =>{
         }
     }
 }
-export const fetchFriend = async (axiosPrivate, index=1) => {
-    const res = await axiosPrivate.get(`users/friends?index=${index}`);
+export const fetchFriend = async (axiosPrivate, index) => {
+    const res = await axiosPrivate.get(index ? `users/friends?index=${index}` : `users/friends`);
     return res.data;
 }
 export const getFriend = async (axiosPrivate, friend_id, dispatch) => {
@@ -139,13 +137,13 @@ export const getFriend = async (axiosPrivate, friend_id, dispatch) => {
     } catch (err) {
         if(!err?.response){
             dispatch(UpdateFailure("No Sever Response"));
-            return 500;
+            return null;
         }else if(err.response?.data){
             dispatch(UpdateFailure(err.response.data));
-            return err.response.status;
+            return null;
         }else{
             dispatch(UpdateFailure("You are currently offline. Check your internet Connection!"));
-            return 500;
+            return null;
         }
     }
 }
@@ -165,6 +163,22 @@ export const clearMessages = async (axiosPrivate, friend_id, dispatch) =>{
     }).catch(err =>{
         dispatch(ClearError())
     });
+}
+export const readAllMessages = async (axiosPrivate, friend_id) =>{
+    try{
+        axiosPrivate.put(`messages/messages/update?friend_id=${friend_id}`);
+    }catch(err){
+        console.log(err);
+    }
+}
+export const fetchAllNotification = async (axiosPrivate) =>{
+    try{
+        const res = await axiosPrivate.get(`messages/messages/notifications`);
+        return  res.data;
+    }catch(err){
+        console.log(err);
+        return null;
+    }
 }
 
 
