@@ -4,6 +4,8 @@ import { clearError, signUpCall } from "../../apiCalls";
 import { AuthContext } from "../../context/AuthContext";
 import { CircularProgress } from "@material-ui/core";
 
+const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+
 function SignUp() {
     const {isFetching, error, dispatch} = useContext(AuthContext);
     const fname = useRef();
@@ -34,7 +36,10 @@ function SignUp() {
     return (
         <div className="wrapper">
             <section className="form signup">
-                <header>Bliss Talk</header>
+                <header>
+                    <img className="logo" src={PF + "favicon.ico"} alt="Logo"/>
+                    <h3>Bliss Talk </h3>
+                </header>
                 <form onSubmit={handleSubmit} autoComplete="off">
                     {error && <div className="error-txt">{error}</div>}
                     <div className="name-details">

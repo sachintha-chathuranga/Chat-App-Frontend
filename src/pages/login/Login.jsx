@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { clearError, loginCall } from "../../apiCalls";
 import { AuthContext } from "../../context/AuthContext";
 
+const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+
 export default function Login() {
     const email = useRef();
     const password = useRef();
@@ -24,7 +26,10 @@ export default function Login() {
     return (
         <div className="wrapper">
             <section className="form login">
-                <header>Bliss Talk</header>
+                <header>
+                    <img className="logo" src={PF + "favicon.ico"} alt="Logo"/>
+                    <h3>Bliss Talk </h3>
+                </header>
                 <form onSubmit={handleSubmit} autoComplete="off">
                     {error && <div className="error-txt">{error}</div>}
                         <div className="field input">

@@ -27,8 +27,14 @@ body{
 .form header{
     font-size: 25px;
     font-weight: 600;
+    display: flex;
+    align-items: center;
     padding-bottom: 10px;
     border-bottom: 1px solid #e6e6e6;
+}
+.form header .logo{
+    width: 75px;
+    margin-right: 10px;
 }
 .form form{
     margin: 20px 0;
@@ -126,7 +132,12 @@ background: #dbdbdb87;
 @media only screen and (max-width: 500px){
     .wrapper{
         width: 100vw;
+        min-height: 100vh;
         border-radius: 8px;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
     }
     .form{
         padding: 15px 18px;
@@ -137,7 +148,10 @@ background: #dbdbdb87;
     .form header{
         font-size: 20px;
         text-align: center;
-        padding-bottom: 5px;
+        flex-direction: column;
+    }
+    .form header .logo{
+        margin-bottom: 16px;
     }
     form .name-details .field:first-child{
         margin-right: 6px;
