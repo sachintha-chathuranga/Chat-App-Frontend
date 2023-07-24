@@ -3,6 +3,7 @@
 }
 .users header{
     background-color: white;
+    z-index: 5;
 }
 .users header,
 .users-list .friend{
