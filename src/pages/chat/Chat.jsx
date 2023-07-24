@@ -11,6 +11,7 @@ import useMessage from '../../hooks/useMessage';
 import io from "socket.io-client";
 import './chat.css';
 
+const API_URL = process.env.REACT_APP_API_SOCKET_URL;
 
 export default function Chat() {
     const {user, dispatch} = useContext(AuthContext);
@@ -40,7 +41,7 @@ export default function Chat() {
     }, [params.friend_id, scrollToBottom, axiosPrivate, dispatch]);
 
     useEffect(() => {
-        socket.current = io.connect("http://localhost:5000/");
+        socket.current = io.connect(API_URL);
         socket?.current.on('connect', () =>{
             socket?.current.emit("joinRoom", user.user_id+Number(params.friend_id));
             socket?.current?.on("getMessage", data => {

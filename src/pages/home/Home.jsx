@@ -10,7 +10,7 @@ import io from "socket.io-client";
 import './home.css';
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
-
+const API_URL = process.env.REACT_APP_API_SOCKET_URL;
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 const imageUrl = process.env.REACT_APP_AWS_URL;
 const Home = () =>{
@@ -45,7 +45,7 @@ const Home = () =>{
         fetchAllNotification(axiosPrivate).then(data =>{
             (isMount && data) && setNotification(data);
         });
-        socket.current = io.connect("http://localhost:5000/");
+        socket.current = io.connect(API_URL);
         socket?.current.on('connect', () =>{
             socket?.current?.on("getMessage", data => {
                 isMount && setNotification(prev => [...prev, data]);
