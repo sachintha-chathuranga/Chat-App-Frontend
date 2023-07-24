@@ -63,7 +63,7 @@ header .delete:hover{
     width: 112px;
 }
 .chat-box{
-    min-height: 500px;
+    height: 500px;
     overflow-y: scroll;
     background: #f7f7f7;
     padding: 10px 23px 20px 30px;
@@ -120,8 +120,6 @@ header .delete:hover{
     border-radius: 18px 18px 18px 0;
 }
 .chat-area .typing-area{
-    position: sticky;
-    bottom: 0;
     padding: 18px 30px;
     display: flex;
     justify-content: space-between;
@@ -132,9 +130,9 @@ header .delete:hover{
     width: calc(100% - 50px);
     font-size: 17px;
     border: 1px solid #ccc;
-    padding: 0 13px;
     border-radius: 5px 0 0 5px;
     outline: none;
+    padding-left: 12px;
 }
 .typing-area button{
     width: 55px;
@@ -153,8 +151,9 @@ header .delete:hover{
     }
     .chat-area header{
         padding: 15px 20px;
-        position: sticky;
+        position: fixed;
         top: 0;
+        width: 100vw;
     }
     .chat-area header .back-icon{
         font-size: 16px;
@@ -177,7 +176,7 @@ header .delete:hover{
     }
     .chat-box{
         overflow-y: auto;
-        min-height: calc(100vh - 127px);
+        height: calc(100vh - 87px);
         padding: 12px 6px 12px 17px;
     }
     .empty-chat{
@@ -190,7 +189,10 @@ header .delete:hover{
         max-width: calc(100% - 102px);
     }
     .chat-area .typing-area{
+        position: fixed;
+        bottom: 0;
         padding: 5px 18px;
+        width: 100vw;
     }
     .typing-area input{
         height: 35px;
