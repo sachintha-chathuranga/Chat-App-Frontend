@@ -49,6 +49,7 @@ const Home = () =>{
         socket?.current.on('connect', () =>{
             socket?.current?.on("getMessage", data => {
                 isMount && setNotification(prev => [...prev, data]);
+                console.log("msg ccome" + isMount);
             });
         });
         return () =>{

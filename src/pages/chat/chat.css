@@ -4,6 +4,8 @@
     padding: 25px 30px;
     border-bottom: 1px solid #e6e6e6;
     justify-content: space-between;
+    position: sticky;
+    top: 0;
 }
 .content{
     display: flex;
@@ -120,6 +122,8 @@ header .delete:hover{
     border-radius: 18px 18px 18px 0;
 }
 .chat-area .typing-area{
+    position: sticky;
+    bottom: 0;
     padding: 18px 30px;
     display: flex;
     justify-content: space-between;
