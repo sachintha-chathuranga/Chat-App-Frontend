@@ -50,8 +50,8 @@ const Header = (props) => {
                 <div className="back-icon" onClick={handleBack}><i className="fas fa-arrow-left"></i></div>
                 <img src={props.user?.profil_pic ? imageUrl+props.user?.profil_pic : PF + "default.png" } alt="proPic" />
                 <div className="details">
-                    <span className={isFetching && 'skelton'}>{!isFetching && (fullName)}</span>
-                    <p className={isFetching && 'skelton'}>{!isFetching && (props.user?.status ? "Online" : "Offline")}</p>
+                    <span className={isFetching ? 'skelton' : ""}>{!isFetching && (fullName ? fullName : (props.user?.fname + " " + props.user?.lname))}</span>
+                    <p className={isFetching ? 'skelton' : ""}>{!isFetching && (props.user?.status ? "Online" : "Offline")}</p>
                 </div>
             </div>
             <button onClick={() => handleButton()} className="delete">{props.hasOwnProperty('logUserId') ? (isFetching ? <CircularProgress  style={{color: "#2740c9", width: "15px", height: "15px"}}/> : "Clear Chat") : "Delete"}</button>

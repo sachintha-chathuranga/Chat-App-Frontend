@@ -18,10 +18,10 @@ const Friend = ({notifi, friend}) => {
     useEffect(() => {
         const getLastMsg = async () =>{
             axiosPrivate.get(`messages/msg?friend_id=${friend.user_id}`).then(res =>{
-                setMsg(res.data);
+                isMount && setMsg(res.data);
             }).catch(err => console.log(err));
         }
-        isMount && getLastMsg() ;
+        getLastMsg() ;
         return setisMount(false);
     }, [friend.user_id, axiosPrivate, isMount]);
 
