@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { fetchFriend, searchFriend } from '../apiCalls';
 import useAxiosPrivate from './useAxiosPrivate';
 
-const useFriend = (index, active, searchInput) => {
+const useFriend = (index, active, searchInput, notification) => {
     const [friends, setfriend] = useState([]);
     const [isLoading, setisLoading] = useState(false);
     const [error, seterror] = useState(null);
@@ -13,36 +13,37 @@ const useFriend = (index, active, searchInput) => {
         setisLoading(true);
         active ? searchFriend(axiosPrivate, index, searchInput)
         .then(d =>{
-                setfriend(prev => [...prev, ...d]);
-                sethasMore(Boolean(d.length));
-                setisLoading(false);
+            setfriend(prev => [...prev, ...d]);
+            sethasMore(Boolean(d.length));
+            setisLoading(false);
         })
         .catch(e => {
-                if(!e?.response){
-                    seterror("No Sever Response");
-                }else if(e.response?.data){
-                    seterror(e.response.data);
-                }else{
-                    seterror("You are currently offline. Check your internet Connection!");
-                };
-                setisLoading(false);
+            if(!e?.response){
+                seterror("No Sever Response");
+            }else if(e.response?.data){
+                seterror(e.response.data);
+            }else{
+                seterror("You are currently offline. Check your internet Connection!");
+            };
+            setisLoading(false);
         }) :
-        fetchFriend(axiosPrivate, index)
+        (friends.length!==0 && fetchFriend(axiosPrivate, index)
         .then(d => {
-                setfriend(prev => [...prev, ...d]);
-                sethasMore(Boolean(d.length === 15));
-                setisLoading(false);
+            console.log('scroll Fetching');
+            setfriend(prev => [...prev, ...d]);
+            sethasMore(Boolean(d.length === 15));
+            setisLoading(false);
         })
         .catch(e => {
-                if(!e?.response){
-                    seterror("No Sever Response");
-                }else if(e.response?.data){
-                    seterror(e.response.data);
-                }else{
-                    seterror("You are currently offline. Check your internet Connection!");
-                };
-                setisLoading(false);
-        });
+            if(!e?.response){
+                seterror("No Sever Response");
+            }else if(e.response?.data){
+                seterror(e.response.data);
+            }else{
+                seterror("You are currently offline. Check your internet Connection!");
+            };
+            setisLoading(false);
+        }));
 
     }, [index]);
 
@@ -50,35 +51,36 @@ const useFriend = (index, active, searchInput) => {
         setisLoading(true);
         active ? searchFriend(axiosPrivate, null, searchInput)
         .then(d => {
-                setfriend(d);
-                setisLoading(false);
+            setfriend(d);
+            setisLoading(false);
         }).catch(e =>{
-                if(!e?.response){
-                    seterror("No Sever Response");
-                }else if(e.response?.data){
-                    seterror(e.response.data);
-                }else{
-                    seterror("You are currently offline. Check your internet Connection!");
-                };
-                setisLoading(false);
+            if(!e?.response){
+                seterror("No Sever Response");
+            }else if(e.response?.data){
+                seterror(e.response.data);
+            }else{
+                seterror("You are currently offline. Check your internet Connection!");
+            };
+            setisLoading(false);
         }) :
         fetchFriend(axiosPrivate, null)
         .then(d => {
-                setfriend(d);
-                setisLoading(false);
+            console.log("normal fetching");
+            setfriend(d);
+            setisLoading(false);
         })
         .catch(e => {
-                if(!e?.response){
-                    seterror("No Sever Response");
-                }else if(e.response?.data){
-                    seterror(e.response.data);
-                }else{
-                    seterror("You are currently offline. Check your internet Connection!");
-                };
-                setisLoading(false);
+            if(!e?.response){
+                seterror("No Sever Response");
+            }else if(e.response?.data){
+                seterror(e.response.data);
+            }else{
+                seterror("You are currently offline. Check your internet Connection!");
+            };
+            setisLoading(false);
         });
 
-    }, [searchInput, active, axiosPrivate]);
+    }, [searchInput, active, axiosPrivate, notification]);
 
     return { friends, setfriend, isLoading, error, hasMore};
 }
