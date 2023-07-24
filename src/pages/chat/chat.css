@@ -63,7 +63,7 @@ header .delete:hover{
     width: 112px;
 }
 .chat-box{
-    height: 500px;
+    min-height: 500px;
     overflow-y: scroll;
     background: #f7f7f7;
     padding: 10px 23px 20px 30px;
@@ -177,7 +177,7 @@ header .delete:hover{
     }
     .chat-box{
         overflow-y: auto;
-        height: calc(100vh - 127px);
+        min-height: calc(100vh - 127px);
         padding: 12px 6px 12px 17px;
     }
     .empty-chat{
