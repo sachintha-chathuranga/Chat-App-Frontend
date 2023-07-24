@@ -27,7 +27,7 @@ const Home = () =>{
     const [notification, setNotification] = useState([]);
     const [isMount, setisMount] = useState(true);
     const [index, setindex] = useState(1);
-    const { friends, setfriend, isLoading, error, hasMore } = useFriend(index, active, searchInput, notification);
+    const { friends, setfriend, isLoading, error, hasMore } = useFriend(index, active, searchInput);
     
     const intObserver = useRef();
     const lastfriendRef = useCallback(friend => {

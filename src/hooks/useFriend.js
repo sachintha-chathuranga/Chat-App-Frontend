@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { fetchFriend, searchFriend } from '../apiCalls';
 import useAxiosPrivate from './useAxiosPrivate';
 
-const useFriend = (index, active, searchInput, notification) => {
+const useFriend = (index, active, searchInput) => {
     const [friends, setfriend] = useState([]);
     const [isLoading, setisLoading] = useState(false);
     const [error, seterror] = useState(null);
@@ -14,7 +14,6 @@ const useFriend = (index, active, searchInput, notification) => {
             setisLoading(true);
             active ? searchFriend(axiosPrivate, index, searchInput)
             .then(d =>{
-                console.log('scroll searching');
                 setfriend(prev => [...prev, ...d]);
                 sethasMore(Boolean(d.length));
                 setisLoading(false);
@@ -31,7 +30,6 @@ const useFriend = (index, active, searchInput, notification) => {
             }) :
             fetchFriend(axiosPrivate, index)
             .then(d => {
-                console.log('scroll Fetching');
                 setfriend(prev => [...prev, ...d]);
                 sethasMore(Boolean(d.length === 15));
                 setisLoading(false);
@@ -54,7 +52,6 @@ const useFriend = (index, active, searchInput, notification) => {
         setisLoading(true);
         active ? searchFriend(axiosPrivate, null, searchInput)
         .then(d => {
-            console.log('norrmal searching');
             setfriend(d);
             setisLoading(false);
         }).catch(e =>{
@@ -69,7 +66,6 @@ const useFriend = (index, active, searchInput, notification) => {
         }) :
         fetchFriend(axiosPrivate, null)
         .then(d => {
-            console.log("normal fetching");
             setfriend(d);
             setisLoading(false);
         })
@@ -84,7 +80,7 @@ const useFriend = (index, active, searchInput, notification) => {
             setisLoading(false);
         });
 
-    }, [searchInput, active, axiosPrivate, notification]);
+    }, [searchInput, active, axiosPrivate]);
 
     return { friends, setfriend, isLoading, error, hasMore};
 }

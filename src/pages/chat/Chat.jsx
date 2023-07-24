@@ -75,8 +75,8 @@ export default function Chat() {
             socket?.current.emit("sendMessage", msg);
             try{
                 setMessages(prev => [...prev, msg]);
-                await axiosPrivate.post(`messages/message`, msg);
                 setinputMsg("");
+                await axiosPrivate.post(`messages/message`, msg);
             }catch(err){
             }
         }
