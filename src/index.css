@@ -133,7 +133,7 @@ background: #dbdbdb87;
     .wrapper{
         width: 100vw;
         min-height: 100vh;
-        border-radius: 8px;
+        border-radius: 0;
         justify-content: center;
         align-items: center;
         display: flex;

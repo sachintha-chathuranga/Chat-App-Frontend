@@ -10,40 +10,43 @@ const useFriend = (index, active, searchInput, notification) => {
     const axiosPrivate = useAxiosPrivate();
     
     useEffect(() => {
-        setisLoading(true);
-        active ? searchFriend(axiosPrivate, index, searchInput)
-        .then(d =>{
-            setfriend(prev => [...prev, ...d]);
-            sethasMore(Boolean(d.length));
-            setisLoading(false);
-        })
-        .catch(e => {
-            if(!e?.response){
-                seterror("No Sever Response");
-            }else if(e.response?.data){
-                seterror(e.response.data);
-            }else{
-                seterror("You are currently offline. Check your internet Connection!");
-            };
-            setisLoading(false);
-        }) :
-        (friends.length!==0 && fetchFriend(axiosPrivate, index)
-        .then(d => {
-            console.log('scroll Fetching');
-            setfriend(prev => [...prev, ...d]);
-            sethasMore(Boolean(d.length === 15));
-            setisLoading(false);
-        })
-        .catch(e => {
-            if(!e?.response){
-                seterror("No Sever Response");
-            }else if(e.response?.data){
-                seterror(e.response.data);
-            }else{
-                seterror("You are currently offline. Check your internet Connection!");
-            };
-            setisLoading(false);
-        }));
+        if(friends.length>=15){
+            setisLoading(true);
+            active ? searchFriend(axiosPrivate, index, searchInput)
+            .then(d =>{
+                console.log('scroll searching');
+                setfriend(prev => [...prev, ...d]);
+                sethasMore(Boolean(d.length));
+                setisLoading(false);
+            })
+            .catch(e => {
+                if(!e?.response){
+                    seterror("No Sever Response");
+                }else if(e.response?.data){
+                    seterror(e.response.data);
+                }else{
+                    seterror("You are currently offline. Check your internet Connection!");
+                };
+                setisLoading(false);
+            }) :
+            fetchFriend(axiosPrivate, index)
+            .then(d => {
+                console.log('scroll Fetching');
+                setfriend(prev => [...prev, ...d]);
+                sethasMore(Boolean(d.length === 15));
+                setisLoading(false);
+            })
+            .catch(e => {
+                if(!e?.response){
+                    seterror("No Sever Response");
+                }else if(e.response?.data){
+                    seterror(e.response.data);
+                }else{
+                    seterror("You are currently offline. Check your internet Connection!");
+                };
+                setisLoading(false);
+            });
+        }
 
     }, [index]);
 
@@ -51,6 +54,7 @@ const useFriend = (index, active, searchInput, notification) => {
         setisLoading(true);
         active ? searchFriend(axiosPrivate, null, searchInput)
         .then(d => {
+            console.log('norrmal searching');
             setfriend(d);
             setisLoading(false);
         }).catch(e =>{

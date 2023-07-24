@@ -43,7 +43,7 @@ const Home = () =>{
 
     useEffect(() => {
         fetchAllNotification(axiosPrivate).then(data =>{
-            (isMount && data) && setNotification(data);
+            (isMount && data.length!==0) && setNotification(data);
         });
         socket.current = io.connect(API_URL);
         socket?.current.on('connect', () =>{
@@ -91,7 +91,7 @@ const Home = () =>{
 
     return (
         <div className="wrapper" >
-            <section className="users">
+            <section className="users" onClick={() => show && setShow(false)} >
                 <header>
                     <div className="content">
                         <img src={user.profil_pic ? imageUrl+user.profil_pic : PF + "default.png" } alt="proPic" />
