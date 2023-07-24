@@ -49,7 +49,8 @@ export default function Chat() {
             });
         });
         socket?.current.on('error', (error) => {
-            console.log(error);
+            socket.current?.off();
+            socket?.current.disconnect();
         });
         return () =>{
             setisMount(false);

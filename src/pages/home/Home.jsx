@@ -51,6 +51,10 @@ const Home = () =>{
                 isMount && setNotification(prev => [...prev, data]);
             });
         });
+        socket?.current.on('error', (error) => {
+            socket.current?.off();
+            socket?.current.disconnect();
+        });
         return () =>{
             setisMount(false);
             socket?.current.off();
