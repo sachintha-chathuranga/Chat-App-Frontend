@@ -99,6 +99,16 @@ form .name-details .field:last-child{
 :is(.users-list, .chat-box)::-webkit-scrollbar{
     width: 10px;
 }
+:is(.users-list, .chat-box)::-webkit-scrollbar-track{
+background: #dbdbdb87;
+}
+:is(.users-list, .chat-box)::-webkit-scrollbar-thumb{
+    background: #888;
+    border-radius: 10px;
+}
+:is(.users-list, .chat-box)::-webkit-scrollbar-thumb:hover{
+    background: #555;
+}
 .error-txt{
     color: #721c24;
     background: #f8d7da;
@@ -155,7 +165,7 @@ form .name-details .field:last-child{
         font-size: 15px;
     }
     :is(.users-list, .chat-box)::-webkit-scrollbar{
-        width: 10px;
+        width: 0px;
     }
     .error-txt{
         padding: 6px 8px;

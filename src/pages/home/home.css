@@ -56,7 +56,7 @@
     height: 50px;
     width: 50px;
 }
-:is(.users, .users-list, .profile) .details{
+:is(.users, .users-list) .details{
     color: #000;
     margin-left: 15px;
 }
@@ -140,7 +140,9 @@
 .users-list .friend .status-dot.offline{
     color: #ccc;
 }
-
+.loading-wrap{
+    text-align: center;
+}
 
 @media only screen and (max-width: 500px){
     .users{

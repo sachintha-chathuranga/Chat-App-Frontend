@@ -1,46 +1,44 @@
-import axios from 'axios';
 import { MoreVert } from "@material-ui/icons";
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom/cjs/react-router-dom.min';
+import React, { useContext, useRef, useState, useCallback } from 'react'
 import { AuthContext } from '../../context/AuthContext';
 import Friend from '../../component/Friend';
 import { logOutCall } from '../../apiCalls';
 import './home.css';
+import { CircularProgress } from '@material-ui/core';
+import useFriend from '../../hooks/useFriend';
+import { Link } from 'react-router-dom';
+import { memo } from "react";
 
-const API_URL = process.env.REACT_APP_API_URL;
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 const imageUrl = process.env.REACT_APP_AWS_URL;
 
-export default function Home() {
-
+const Home = () =>{
     const {user, dispatch} = useContext(AuthContext);
-    const [friends, setFriends] = useState([]);
     const [active, setActive] = useState(false);
     const [searchInput, setSearch] = useState("");
     const inputElement = useRef();
     const [show, setShow] = useState(false);
 
-    useEffect(() => {
-        const searchFriend = async () => {
-            axios.post(`${API_URL}search/${user.user_id}`, {name: searchInput}).then(res =>{
-                setFriends(res.data);
-            }).catch(err => console.log(err));
-        }
-        searchFriend();
-    }, [searchInput, user.user_id]);
-
-    useEffect(() => {
-        const fetchFriend = async () => {
-            axios.get(`${API_URL}friends/` + user.user_id).then(res =>{
-                setFriends(res.data);
-            }).catch(err => console.log(err));
-        }
-        fetchFriend();
-    }, [user.user_id]);
+    const [index, setindex] = useState(1);
+    const { friends, setfriend, isLoading, error, hasMore } = useFriend(index, user.user_id, active, searchInput);
+    
+    const intObserver = useRef();
+    const lastfriendRef = useCallback(friend => {
+        if(isLoading) return
+        if(intObserver.current) intObserver.current.disconnect();
+        intObserver.current = new IntersectionObserver(friends => {
+            if(friends[0].isIntersecting && hasMore){
+                setindex(prev => prev +1);
+            }
+        });
+        if(friend) intObserver.current.observe(friend);
+    },[isLoading, hasMore]);
 
     const activeSearch = () =>{
+        setfriend([]);
         setActive(!active);
         setSearch("");
+        setindex(1);
         inputElement.current.focus();
     }
 
@@ -71,13 +69,22 @@ export default function Home() {
                     <button className={active ? "active" : ""} onClick={activeSearch} ><i className="fas fa-search"></i></button>
                 </div>
                 <div className="users-list">
-                    {friends.map((f) =>(
-                         <Link key={f.user_id} to={"/chat/"+f.user_id} style={{textDecoration:"none"}} >
-                             <Friend key={f.user_id} friend={f} />
-                         </Link>
-                    ))}
+                    {error && <div className="error-txt">{error}</div>}
+
+                    {friends.map((f, i) =>{
+                        if(friends.length === i+1){
+                            return (<div key={f.user_id} ref={lastfriendRef} ><Friend friend={f} /></div>) 
+                        }
+                         return (<Friend key={f.user_id} friend={f} />);
+                    })}
+
+                    {isLoading && <div className="loading-wrap">
+                        <CircularProgress  style={{color: "#c2c2c9", width: "30px", height: "30px"}}/>
+                    </div>}
                 </div>
             </section>
         </div> 
     );
 }
+
+export default memo(Home);

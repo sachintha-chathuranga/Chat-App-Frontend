@@ -5,22 +5,22 @@ import Details from '../../component/Details';
 import Update from '../../component/Update';
 import Warnnig from '../../component/Warnnig';
 import './profile.css';
+import { useCallback } from 'react';
 
 export default function Profile() {
-
     const {dispatch} = useContext(AuthContext);
     const [isUpdate, setIsUpdate] = useState(false);
     const [isWarning, setisWarning] = useState(false);
     
-    const toggleFrame = () =>{
+    const toggleFrame = useCallback(() =>{
         setIsUpdate(!isUpdate);
         clearError(dispatch);
-    }
+    },[isUpdate, dispatch]);
 
-    const toggleWarning = () =>{
+    const toggleWarning = useCallback(() =>{
         setisWarning(!isWarning);
         clearError(dispatch);
-    }
+    },[isWarning, dispatch]);
 
     return (
         <div className="wrapper">

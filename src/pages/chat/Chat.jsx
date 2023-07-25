@@ -1,53 +1,37 @@
+import { CircularProgress } from '@material-ui/core';
 import axios from 'axios';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom/cjs/react-router-dom.min';
+import Header from '../../component/Header';
 import Incoming from '../../component/Incoming';
 import Outgoing from '../../component/Outgoing';
 import { AuthContext } from '../../context/AuthContext';
+import useMessage from '../../hooks/useMessage';
 import './chat.css';
 const API_URL = process.env.REACT_APP_API_URL;
-const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-const imageUrl = process.env.REACT_APP_AWS_URL;
-
 export default function Chat() {
-
     const {user} = useContext(AuthContext);
     const [friend, setFriend] = useState({});
-    const [messages, setMessages] = useState([]);
-    const history = useHistory();
     const params = useParams();
     const [inputMsg, setinputMsg] = useState("");
-    const [active, setActive] = useState(false);
     const chatBox = useRef();
+    const [active, setActive] = useState(false);
 
-    //when cuser point inside the chat area auto scroll bottom is deactivate.
-    const handleMousSeenter = ()=>{
-        setActive(true);
-    }
-    const handleMouseLeave = ()=>{
-        setActive(false);
-    }
+    const scrollToBottom = useCallback(() =>{
+        chatBox.current.scrollTop = chatBox.current.scrollHeight;
+    },[]);
+
+    const { messages, isLoading, error} = useMessage(user.user_id, params.friend_id, active, scrollToBottom);
     
     useEffect(() => {
-        
         const fetchUser = async () => {
             axios.get(`${API_URL}${params.friend_id}`).then(res =>{
                 setFriend(res.data);
+                scrollToBottom();
             }).catch(err => console.log(err));
         }
-        const fetchMessage = async () =>{
-            axios.get(`${API_URL}message?user_id=${user.user_id}&friend_id=${params.friend_id}`).then(res =>{
-                setMessages(res.data);
-            }).catch(err => console.log(err));
-        }
-        const interval = setInterval(() => {
-                !active && scrollToBottom();
-            fetchMessage();
-        }, 500);
         fetchUser();
-        return () => clearInterval(interval);
-    }, [params.friend_id, user.user_id, active]);
+    }, [params.friend_id, scrollToBottom]);
     
     const handleSubmit = (e) =>{
         e.preventDefault();
@@ -63,33 +47,31 @@ export default function Chat() {
             }catch(err){
                 console.log(err);
             }
+            scrollToBottom();
         }
         inputMsg && sendMessage();
-        scrollToBottom();
     }
 
-    const scrollToBottom = () =>{
-        chatBox.current.scrollTop = chatBox.current.scrollHeight;
-    }
+   
  
     return (
         <div className="wrapper">
             <section className="chat-area">
-                <header>
-                    <div className="back-icon" onClick={() => history.goBack() }><i className="fas fa-arrow-left"></i></div>
-                    <img src={friend.profil_pic ? imageUrl+friend.profil_pic : PF+"default.png"} alt="pro" />
-                    <div className="details">
-                        <span>{friend.fname + " " + friend.lname}</span>
-                        <p>{friend.status ? "Online" : "Offline"}</p>
-                    </div>
-                </header>
-                <div className="chat-box" ref={chatBox} onMouseEnter={handleMousSeenter} onMouseLeave={handleMouseLeave} >
+                <Header user={friend} logUserId={user.user_id} isEmpty={Boolean(messages.length)} />
+                
+                <div className="chat-box" ref={chatBox} onMouseEnter={() => setActive(true)} onMouseOut={() => setActive(false)} >
+                    {error && <div className="error-txt">{error}</div>}
                    {messages.length!==0 ? messages.map((msg) => (msg.sender_id===user.user_id ?
                         <Outgoing key={msg.id} msg={msg.message} /> : 
                         <Incoming key={msg.id} msg={msg.message} profil_pic={friend.profil_pic} /> )
                     ) : <div className="empty-chat">
                             No messages are available. Once you send message they will appear here.
                         </div>}
+                        
+                        {isLoading && <div className="loading-wrap">
+                        <CircularProgress  style={{color: "#c2c2c9", width: "30px", height: "30px"}}/>
+                    </div>}
+
                 </div>
                 <form onSubmit={handleSubmit} className="typing-area" autoComplete="off">
                     <input type="text" value={inputMsg} onChange={(e) => setinputMsg(e.target.value)} className="input-field" placeholder="Type a message here..." />

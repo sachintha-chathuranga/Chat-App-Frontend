@@ -1,9 +1,9 @@
-import React, { useRef, useState, useContext } from 'react';
+import React, { useRef, useState, useContext, memo } from 'react';
 import { clearError, userDeleteCall } from '../apiCalls';
 import { AuthContext } from '../context/AuthContext';
 import { CircularProgress } from '@material-ui/core';
 
-export default function Warnnig({toggleWarning}) {
+function Warnnig({toggleWarning}) {
     const password = useRef();
     const [isActive, setisActive] = useState(false);
     const [isNext, setIsNext] = useState(false);
@@ -53,3 +53,5 @@ export default function Warnnig({toggleWarning}) {
         </div>
     )
 }
+
+export default memo(Warnnig);

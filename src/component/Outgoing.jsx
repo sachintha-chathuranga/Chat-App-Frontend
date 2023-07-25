@@ -1,5 +1,6 @@
+import { memo } from "react";
 
-export default function Outgoing({msg}) {
+const Outgoing = ({msg}) => {
     return (
         <div className="chat outgoing">
             <div className="details">
@@ -8,3 +9,5 @@ export default function Outgoing({msg}) {
         </div>
     )
 }
+
+export default memo(Outgoing);

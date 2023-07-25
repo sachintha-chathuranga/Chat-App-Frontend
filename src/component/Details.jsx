@@ -1,9 +1,8 @@
-import React, { useContext } from 'react'
+import React, { useContext, memo } from 'react'
 import { AuthContext } from '../context/AuthContext';
 import Header from './Header'
 
-export default function Details({toggleFrame, toggleWarning}) {
-
+function Details({toggleFrame, toggleWarning}) {
     const {user} = useContext(AuthContext);
     
     return (
@@ -28,3 +27,5 @@ export default function Details({toggleFrame, toggleWarning}) {
         </>
     )
 }
+
+export default memo(Details);

@@ -1,11 +1,10 @@
 import { CircularProgress } from '@material-ui/core';
-import { useState, useRef, useContext, useEffect } from "react";
+import { useState, useRef, useContext } from "react";
 import { Link } from "react-router-dom";
 import { clearError, loginCall } from "../../apiCalls";
 import { AuthContext } from "../../context/AuthContext";
 
 export default function Login() {
-    
     const email = useRef();
     const password = useRef();
     const [isActive, setisActive] = useState(false);

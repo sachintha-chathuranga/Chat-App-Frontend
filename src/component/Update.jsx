@@ -1,14 +1,13 @@
 import { CircularProgress } from '@material-ui/core';
 import { Cancel, PermMedia } from '@material-ui/icons';
-import React, { useContext, useRef, useState, useEffect } from 'react'
+import React, { useContext, useRef, useState, memo } from 'react';
 import { getSignRequest, uploadFile, userUpdateCall, clearError } from '../apiCalls';
 import { AuthContext } from '../context/AuthContext';
 import Header from './Header';
 
 const validFileType = ["image/png", "image/jpg", "image/jpeg"];
 
-export default function Update({toggleFrame, toggleWarning}) {
-
+const Update = ({toggleFrame, toggleWarning}) =>{
     const { user, isFetching, error, dispatch} = useContext(AuthContext);
     const [file, setFile] = useState(null);
     const [signedRequest, setsignedRequest] = useState(null);
@@ -18,11 +17,6 @@ export default function Update({toggleFrame, toggleWarning}) {
     const password = useRef();
     const [isActive, setisActive] = useState(false);
     const [severError, setSeverError] = useState(null);
-    
-
-    useEffect(() => {
-        clearError(dispatch);
-    }, [dispatch]);
 
     const handleSubmit = (e) =>{
         e.preventDefault();
@@ -154,3 +148,5 @@ export default function Update({toggleFrame, toggleWarning}) {
         </>
     )
 }
+
+export default memo(Update);

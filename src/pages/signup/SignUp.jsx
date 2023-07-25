@@ -1,11 +1,10 @@
-import { useState, useRef, useContext, useEffect } from "react"
+import { useState, useRef, useContext} from "react"
 import { Link, useHistory } from "react-router-dom";
 import { clearError, signUpCall } from "../../apiCalls";
 import { AuthContext } from "../../context/AuthContext";
 import { CircularProgress } from "@material-ui/core";
 
 function SignUp() {
-   
     const {isFetching, error, dispatch} = useContext(AuthContext);
     const fname = useRef();
     const lname = useRef();

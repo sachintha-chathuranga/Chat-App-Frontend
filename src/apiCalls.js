@@ -80,3 +80,25 @@ export const uploadFile = async (file, signReq, dispatch) =>{
         return err;
     }
 }
+export const clearMessages = async (friend_id, user_id) =>{
+    axios.delete(`${API_URL}messages/clear/${user_id}?friend_id=${friend_id}`).then(res => {
+        console.log(res.data);
+    }).catch(err =>{
+        console.log(err.response);
+    });
+}
+
+export const fetchFriend = async (index=1, user_id) => {
+    const res = await axios.get(`${API_URL}friends/?index=${index}&user_id=${user_id}`);
+    return res.data;
+}
+
+export const searchFriend = async (index, user_id, searchInput) => {
+    const res = await axios.post(index ? `${API_URL}search/${user_id}?index=${index}` : `${API_URL}search/${user_id}`, {name: searchInput});
+    return res.data;
+}
+export const fetchMessages = async (user_id, friend_id) => {
+    const res = await axios.get(`${API_URL}message?user_id=${user_id}&friend_id=${friend_id}`);
+    return res.data;
+}
+
