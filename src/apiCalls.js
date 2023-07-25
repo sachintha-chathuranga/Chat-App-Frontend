@@ -194,23 +194,5 @@ export const getSignRequest = async (axiosPrivate, file) =>{
         return err.response.data;
     }
 }
-export const uploadFile = async (file, signReq, dispatch) =>{
-    dispatch(UpdateStart());
-    try{
-        const res = await axios.put(signReq, file);
-        dispatch(ClearError());
-        return res.status;
-    }catch(err){
-        if(!err?.response){
-            dispatch(UpdateFailure("No Sever Response"));
-            return 500;
-        }else if(err.response?.data){
-            dispatch(UpdateFailure(err.response.data));
-            return err.response.status;
-        }else{
-            dispatch(UpdateFailure("You are currently offline. Check your internet Connection!"));
-            return 500;
-        };
-    }
-}
+
 

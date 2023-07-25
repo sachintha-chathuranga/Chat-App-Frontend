@@ -1,7 +1,9 @@
 import { CircularProgress } from '@material-ui/core';
 import { Cancel, PermMedia } from '@material-ui/icons';
+import axios from 'axios';
 import React, { useContext, useRef, useState, memo } from 'react';
-import { getSignRequest, uploadFile, userUpdateCall, clearError } from '../apiCalls';
+import { getSignRequest, userUpdateCall, clearError } from '../apiCalls';
+import { UpdateFailure, UpdateStart } from '../context/AuthActions';
 import { AuthContext } from '../context/AuthContext';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
 import Header from './Header';
@@ -12,6 +14,7 @@ const Update = ({toggleFrame, toggleWarning}) =>{
     const { user, isFetching, error, dispatch} = useContext(AuthContext);
     const [file, setFile] = useState(null);
     const [signedRequest, setsignedRequest] = useState(null);
+    const [uploadProgress, setuploadProgress] = useState(0);
     const fname = useRef();
     const lname = useRef();
     const email = useRef();
@@ -20,6 +23,29 @@ const Update = ({toggleFrame, toggleWarning}) =>{
     const [severError, setSeverError] = useState(null);
     const axiosPrivate = useAxiosPrivate();
 
+    const uploadFile = async (file, signReq) =>{
+        dispatch(UpdateStart());
+        try{
+            const res = await axios.put(signReq, file, {
+                onUploadProgress: (progressEvent) =>{
+                    const progress =  Math.round((progressEvent.loaded/progressEvent.total) * 100);
+                    setuploadProgress(progress);
+                }
+            });
+            return res.status;
+        }catch(err){
+            if(!err?.response){
+                dispatch(UpdateFailure("No Sever Response"));
+                return 500;
+            }else if(err.response?.data){
+                dispatch(UpdateFailure("profile picture doesn't upload"));
+                return err.response.status;
+            }else{
+                dispatch(UpdateFailure("You are currently offline. Check your internet Connection!"));
+                return 500;
+            };
+        }
+    }
 
     const handleSubmit = (e) =>{
         e.preventDefault();
@@ -117,6 +143,9 @@ const Update = ({toggleFrame, toggleWarning}) =>{
                         {file && (<div className="uploadPhoto" >
                             <img src={URL.createObjectURL(file)} alt="selectedImg" />
                             <Cancel className="cancelImg" onClick={() => setFile(null)} />
+                        </div>)}
+                        {(file && isFetching) && (<div className="progressBar">
+                            <div className="progress" style={{width: `${uploadProgress}%`}}></div>
                         </div>)}
                     </div>
                 </div>

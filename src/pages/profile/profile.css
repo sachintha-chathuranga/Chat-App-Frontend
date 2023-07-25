@@ -163,6 +163,22 @@
     cursor: pointer;
 }
 
+.profile .progressBar{
+    height: 12px;
+    width: 50%;
+    align-self: center;
+    margin-left: 28px;
+    border-radius: 10px;
+    border: 1px solid #9d9999eb;
+}
+
+.profile .progress{
+    height: 12px;
+    background-color: #58bf73f2;
+    border-radius: 10px;
+    transition: 0.5s;
+}
+
 .profile .msg-wrapper{
     position: absolute;
     top: -200%;
