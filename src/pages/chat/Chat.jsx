@@ -71,7 +71,11 @@ export default function Chat() {
             receiver_id : friend.user_id,
             message : inputMsg
         }
-        
+        if(inputMsg.match(/^[\da-fA-F]{4,5}$/)){
+            let emoji = inputMsg.padStart(5,'O');
+            emoji = String.fromCharCode(parseInt(emoji, 16));
+            msg.message = emoji;
+        }
         const sendMessage = async () =>{
             socket?.current.emit("sendMessage", msg);
             try{
