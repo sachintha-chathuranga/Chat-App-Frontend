@@ -132,9 +132,8 @@ const Update = ({toggleFrame, toggleWarning}) =>{
                 fileInput.current.value=null;
                 return;
             }
-            console.log(newFile.size);
             setFile(newFile);
-            getSignRequest(axiosPrivate, newFile).then(res =>{
+            getSignRequest(axiosPrivate, newFile, dispatch).then(res =>{
                 if(res.status === 200){
                     setsignedRequest(res.data.signedRequest);
                 }else{

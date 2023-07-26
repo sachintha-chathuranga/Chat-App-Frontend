@@ -187,7 +187,7 @@ export const clearError = (dispatch) =>{
     dispatch(ClearError());
 }
 
-export const getSignRequest = async (axiosPrivate, file) =>{
+export const getSignRequest = async (axiosPrivate, file, dispatch) =>{
     try{
         const res = await axiosPrivate.get(`aws/sign-s3?file_name=${encodeURIComponent(file.name)}&file_type=${file.type}`);
         return res;
