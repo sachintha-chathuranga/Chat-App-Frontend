@@ -124,6 +124,15 @@ background: #dbdbdb87;
     margin-bottom: 10px;
     border: 1px solid #a32632;
 }
+.success-txt{
+    color: #0a8a3b;
+    background: #d7f8d9;
+    padding: 8px 10px;
+    text-align: center;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #26a356;
+}
 .wrapper img{
     object-fit: cover;
     border-radius: 50%;

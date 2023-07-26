@@ -12,6 +12,7 @@ instruction.
 
     REACT_APP_PUBLIC_FOLDER=http://localhost:3000/img/
     REACT_APP_API_URL=http://localhost:5000/api/
+    REACT_APP_API_SOCKET_URL=http://localhost:5000/
     REACT_APP_AWS_URL=http://localhost:3000/img/
     
 make sure that chat app server side application running on port 5000. you can get backend code related to this app by [click here.](https://github.com/sachintha-chathuranga/Chat-App-Backend)

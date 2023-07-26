@@ -90,6 +90,7 @@ export const userUpdateCall = async (axiosPrivate, userCredintial, dispatch) =>{
     try{
         const res = await axiosPrivate.put(`users/`, userCredintial);
         dispatch(LoginSuccess(res.data));
+        sessionStorage.setItem("user", JSON.stringify(res.data));
         return res.status;
     }catch(err){
         if(!err?.response){
@@ -189,10 +190,35 @@ export const clearError = (dispatch) =>{
 export const getSignRequest = async (axiosPrivate, file) =>{
     try{
         const res = await axiosPrivate.get(`aws/sign-s3?file_name=${encodeURIComponent(file.name)}&file_type=${file.type}`);
-        return res.data;
+        return res;
     }catch(err){
-        return err.response.data;
+        if(!err?.response){
+            dispatch(UpdateFailure("No Sever Response"));
+            return 500;
+        }else if(err.response?.data){
+            dispatch(UpdateFailure(err.response.data));
+            return err.response;
+        }else{
+            dispatch(UpdateFailure("You are currently offline. Check your internet Connection!"));
+            return 500;
+        }
     }
 }
-
+export const deletPicture = async (axiosPrivate, profile_pic, dispatch) =>{
+    try{
+        const res = await axiosPrivate.delete(`aws/sign-s3/delete?file_name=${profile_pic}`);
+        return res;
+    }catch(err){
+        if(!err?.response){
+            dispatch(UpdateFailure("No Sever Response"));
+            return 500;
+        }else if(err.response?.data){
+            dispatch(UpdateFailure(err.response.data));
+            return err.response;
+        }else{
+            dispatch(UpdateFailure("You are currently offline. Check your internet Connection!"));
+            return 500;
+        }
+    }
+}
 

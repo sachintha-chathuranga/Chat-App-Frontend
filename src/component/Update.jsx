@@ -2,7 +2,7 @@ import { CircularProgress } from '@material-ui/core';
 import { Cancel, PermMedia } from '@material-ui/icons';
 import axios from 'axios';
 import React, { useContext, useRef, useState, memo } from 'react';
-import { getSignRequest, userUpdateCall, clearError } from '../apiCalls';
+import { getSignRequest, userUpdateCall, clearError, deletPicture } from '../apiCalls';
 import { UpdateFailure, UpdateStart } from '../context/AuthActions';
 import { AuthContext } from '../context/AuthContext';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
@@ -13,6 +13,9 @@ const validFileType = ["image/png", "image/jpg", "image/jpeg"];
 const Update = ({toggleFrame, toggleWarning}) =>{
     const { user, isFetching, error, dispatch} = useContext(AuthContext);
     const [file, setFile] = useState(null);
+    const fileInput = useRef(null);
+    const [isLoading, setisLoading] = useState(false);
+    const [success, setsuccess] = useState(null);
     const [signedRequest, setsignedRequest] = useState(null);
     const [uploadProgress, setuploadProgress] = useState(0);
     const fname = useRef();
@@ -22,6 +25,30 @@ const Update = ({toggleFrame, toggleWarning}) =>{
     const [isActive, setisActive] = useState(false);
     const [severError, setSeverError] = useState(null);
     const axiosPrivate = useAxiosPrivate();
+
+    const deleteFile = () =>{
+        setisLoading(true);
+        deletPicture(axiosPrivate, user.profil_pic, dispatch).then(res => {
+            setisLoading(false);
+            const data =  {
+                profil_pic : null
+            }
+            if(res.status===200){
+                setsuccess(res.data);
+                userUpdateCall(axiosPrivate, data, dispatch).then((res) =>{
+                    res===200 ? toggleFrame() :
+                    setTimeout(() =>{
+                        clearError(dispatch);
+                        setsuccess(null);
+                    },5000)
+                });
+            }else{
+                setTimeout(() =>{
+                    clearError(dispatch);
+                },5000);
+            }
+        })
+    }
 
     const uploadFile = async (file, signReq) =>{
         dispatch(UpdateStart());
@@ -59,6 +86,7 @@ const Update = ({toggleFrame, toggleWarning}) =>{
         file && (data.profil_pic = encodeURIComponent(file.name));
 
         if(signedRequest!==null && file!==null){
+            deletPicture(axiosPrivate, user.profil_pic, dispatch);
             uploadFile(file, signedRequest, dispatch).then((res) =>{
                 if(res===200){
                     userUpdateCall(axiosPrivate, data, dispatch).then((res) =>{
@@ -85,23 +113,37 @@ const Update = ({toggleFrame, toggleWarning}) =>{
         }
     }
 
-    const handleFile = (file) =>{
-        if(file){
-            if(!validFileType.find(type => type === file.type)){
+    const handleFile = (newFile) =>{
+        if(newFile){
+            if(!validFileType.find(type => type === newFile.type)){
                 setSeverError("File must be in jpg, png or jpeg format");
                 setTimeout(() =>{
                     setSeverError(null);
                 },5000);
+                setFile(null);
+                fileInput.current.value=null;
                 return;
-            }
-            setFile(file);
-            getSignRequest(axiosPrivate, file).then(res =>{
-                setsignedRequest(res.signedRequest);
-            }).catch(err =>{
-                setSeverError("Sever does not give any response!");
+            }else if(newFile.size > 2000000){
+                setSeverError("File size should be less than 2MB");
                 setTimeout(() =>{
                     setSeverError(null);
                 },5000);
+                setFile(null);
+                fileInput.current.value=null;
+                return;
+            }
+            console.log(newFile.size);
+            setFile(newFile);
+            getSignRequest(axiosPrivate, newFile).then(res =>{
+                if(res.status === 200){
+                    setsignedRequest(res.data.signedRequest);
+                }else{
+                    setFile(null);
+                    setSeverError("Sever does not give any response!");
+                    setTimeout(() =>{
+                        setSeverError(null);
+                    },5000);
+                }
             });
         }
     }
@@ -111,6 +153,7 @@ const Update = ({toggleFrame, toggleWarning}) =>{
             <Header user={user} toggleFrame={toggleFrame} toggleWarning={toggleWarning}/>
             <span><strong>Update Details</strong></span>
             <form onSubmit={handleSubmit} autoComplete="off" >
+                {success && <div className="success-txt">{success}</div>}
                 {error && <div className="error-txt">{error}</div>}
                 {severError && <div className="error-txt">{severError}</div>}
                 <div className="name-details">
@@ -138,16 +181,22 @@ const Update = ({toggleFrame, toggleWarning}) =>{
                         <label className="buttonImg" htmlFor="file" >
                             <PermMedia htmlColor="tomato" className="shareIcon" />
                             <span className="shareOptionText">Photo</span>
-                            <input style={{display:"none"}} type="file" id="file" onChange={(e) => handleFile(e.target.files[0])} />
+                            <input ref={fileInput} style={{display:"none"}} type="file" id="file" onChange={(e) => handleFile(e.target.files[0])} />
                         </label>
                         {file && (<div className="uploadPhoto" >
                             <img src={URL.createObjectURL(file)} alt="selectedImg" />
-                            <Cancel className="cancelImg" onClick={() => setFile(null)} />
+                            <Cancel className="cancelImg" onClick={() =>{ 
+                                setFile(null);
+                                fileInput.current.value=null;
+                                }} />
                         </div>)}
                         {(file && isFetching) && (<div className="progressBar">
                             <div className="progress" style={{width: `${uploadProgress}%`}}></div>
                         </div>)}
                     </div>
+                    { user.profil_pic && <button className="pictureDelBtn" disabled={isLoading} onClick={deleteFile}>
+                                {isLoading ? <CircularProgress style={{color:"black", width: "15px", height: "15px"}}/> : "Remove Profile Picture"}
+                    </button>}
                 </div>
                 <div className="field button">
                     <button type="submit"  className="loginBtn" disabled={isFetching}>

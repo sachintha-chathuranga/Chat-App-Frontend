@@ -178,6 +178,17 @@
     border-radius: 10px;
     transition: 0.5s;
 }
+.profile .pictureDelBtn{
+    margin-top: 10px;
+    height: 31px;
+    border: none;
+    font-size: 15px;
+    font-weight: 400;
+    background: #bd3b3b;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
 .profile .msg-wrapper{
     position: absolute;
