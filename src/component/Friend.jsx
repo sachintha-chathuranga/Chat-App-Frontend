@@ -14,7 +14,7 @@ const Friend = ({friend}) => {
     
     useEffect(() => {
         const getLastMsg = async () =>{
-            axios.get(`${API_URL}msg?user_id=${user.user_id}&friend_id=${friend.user_id}`).then(res =>{
+            axios.get(`${API_URL}messages/msg?user_id=${user.user_id}&friend_id=${friend.user_id}`).then(res =>{
                 setMsg(res.data);
             }).catch(err => console.log(err));
         }

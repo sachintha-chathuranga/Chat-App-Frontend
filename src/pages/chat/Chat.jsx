@@ -25,7 +25,7 @@ export default function Chat() {
     
     useEffect(() => {
         const fetchUser = async () => {
-            axios.get(`${API_URL}${params.friend_id}`).then(res =>{
+            axios.get(`${API_URL}users/${params.friend_id}`).then(res =>{
                 setFriend(res.data);
                 scrollToBottom();
             }).catch(err => console.log(err));
@@ -42,7 +42,7 @@ export default function Chat() {
         }
         const sendMessage = async () =>{
             try{
-                await axios.post(`${API_URL}message`, msg);
+                await axios.post(`${API_URL}messages/message`, msg);
                 setinputMsg("");
             }catch(err){
                 console.log(err);

@@ -19,14 +19,7 @@ export default function Login() {
                     clearError(dispatch);
                 },5000);
             }
-        }).catch(err =>{
-            setSeverError("Sever does not give any response!");
-            setTimeout(() =>{
-                setSeverError(null);
-            },5000);
-            clearError(dispatch);
         });
-        
     }
 
     return (
