@@ -14,12 +14,13 @@ function Warnnig({toggleWarning}) {
         const data =  {
             user_id: user.user_id
         }
-        password.current.value && (data.password = password.current.value);
+        password.current.value && (data.password = password.current.value.trim());
 
-        userDeleteCall(data, dispatch).catch(err =>{
-            alert(err);
-            window.location.reload();
-        });
+        userDeleteCall(data, dispatch).then(res =>{
+            res!==200 && setTimeout(() =>{
+                clearError(dispatch)
+            },5000);
+        }); 
     }
 
     return (

@@ -31,8 +31,16 @@ export const signUpCall = async (userCredintial, dispatch) =>{
         dispatch(LoginSuccess(res.data));
         return res.status;
     }catch(err){
-        dispatch(LoginFailure(err.response.data));
-        return err.response.status;
+        if(!err?.response){
+            dispatch(LoginFailure("No Sever Response"));
+            return 500;
+        }else if(err.response?.data){
+            dispatch(LoginFailure(err.response.data));
+            return err.response.status;
+        }else{
+            dispatch(LoginFailure("You are currently offline. Check your internet Connection!"));
+            return 500;
+        }
     }
 }
 export const userUpdateCall = async (userCredintial, dispatch) =>{
@@ -40,10 +48,18 @@ export const userUpdateCall = async (userCredintial, dispatch) =>{
     try{
         const res = await axios.put(`${API_URL}users/${userCredintial.user_id}`, userCredintial);
         dispatch(LoginSuccess(res.data));
-        return null;
+        return res.status;
     }catch(err){
-        dispatch(UpdateFailure(err.response.data));
-        return err;
+        if(!err?.response){
+            dispatch(UpdateFailure("No Sever Response"));
+            return 500;
+        }else if(err.response?.data){
+            dispatch(UpdateFailure(err.response.data));
+            return err.response.status;
+        }else{
+            dispatch(UpdateFailure("You are currently offline. Check your internet Connection!"));
+            return 500;
+        }
     } 
 }
 
@@ -51,17 +67,37 @@ export const userDeleteCall = async (userCredintial, dispatch) =>{
     dispatch(UpdateStart());
     axios.delete(`${API_URL}users/${userCredintial.user_id}`, {data : userCredintial}).then(res => {
         dispatch(LogOut());
+        return res.status;
     }).catch(err =>{
-        dispatch(UpdateFailure(err.response.data));
+        if(!err?.response){
+            dispatch(UpdateFailure("No Sever Response"));
+            return 500;
+        }else if(err.response?.data){
+            dispatch(UpdateFailure(err.response.data));
+            return err.response.status;
+        }else{
+            dispatch(UpdateFailure("You are currently offline. Check your internet Connection!"));
+            return 500;
+        }
     });
 }
 
 export const logOutCall = async (userCredintial, dispatch) =>{
-        axios.put(`${API_URL}users/${userCredintial.user_id}`, userCredintial).then(() =>{
+        axios.put(`${API_URL}users/${userCredintial.user_id}`, userCredintial).then((res) =>{
             dispatch(LogOut());
             sessionStorage.removeItem("user");
+            return res.status;
         }).catch(err =>{
-            dispatch(UpdateFailure(err.response.data));
+            if(!err?.response){
+                dispatch(UpdateFailure("No Sever Response"));
+                return 500;
+            }else if(err.response?.data){
+                dispatch(UpdateFailure(err.response.data));
+                return err.response.status;
+            }else{
+                dispatch(UpdateFailure("You are currently offline. Check your internet Connection!"));
+                return 500;
+            };
         });
 }
 export const clearError = (dispatch) =>{
@@ -84,7 +120,16 @@ export const uploadFile = async (file, signReq, dispatch) =>{
         dispatch(ClearError());
         return res.status;
     }catch(err){
-        return err;
+        if(!err?.response){
+            dispatch(UpdateFailure("No Sever Response"));
+            return 500;
+        }else if(err.response?.data){
+            dispatch(UpdateFailure(err.response.data));
+            return err.response.status;
+        }else{
+            dispatch(UpdateFailure("You are currently offline. Check your internet Connection!"));
+            return 500;
+        };
     }
 }
 export const clearMessages = async (friend_id, user_id) =>{
@@ -101,7 +146,7 @@ export const fetchFriend = async (index=1, user_id) => {
 }
 
 export const searchFriend = async (index, user_id, searchInput) => {
-    const res = await axios.post(index ? `${API_URL}users/search/${user_id}?index=${index}` : `${API_URL}search/${user_id}`, {name: searchInput});
+    const res = await axios.post(index ? `${API_URL}users/search/${user_id}?index=${index}` : `${API_URL}users/search/${user_id}`, {name: searchInput});
     return res.data;
 }
 export const fetchMessages = async (user_id, friend_id) => {

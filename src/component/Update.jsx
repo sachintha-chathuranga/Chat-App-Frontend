@@ -33,47 +33,25 @@ const Update = ({toggleFrame, toggleWarning}) =>{
             uploadFile(file, signedRequest, dispatch).then((res) =>{
                 if(res===200){
                     userUpdateCall(data, dispatch).then((res) =>{
-                        !res && toggleFrame();
+                        res===200 ? toggleFrame() :
                         setTimeout(() =>{
-                            clearError(dispatch);
-                        },5000);
-                    }).catch(() =>{
-                        setSeverError("Sever does not give any response!");
-                        setTimeout(() =>{
-                            setSeverError(null);
-                        },5000);
-                        clearError(dispatch);
+                            clearError(dispatch)
+                        },5000)
                     });
                 }else{
-                    setSeverError("Image does not upload to the Server!");
                     setTimeout(() =>{
-                        setSeverError(null);
+                        clearError(dispatch);
                     },5000);
-                    clearError(dispatch);
                     setFile(null);
                     setsignedRequest(null);
                 }
-            }).catch(() =>{
-                setSeverError("Sever does not give any response!");
-                setTimeout(() =>{
-                    setSeverError(null);
-                },5000);
-                clearError(dispatch);
-                setFile(null);
-                setsignedRequest(null);
             });
         }else if(data.email || data.password || data.fname || data.lname){
             userUpdateCall(data, dispatch).then((res) =>{
-                !res && toggleFrame();
+                res===200 ? toggleFrame() :
                 setTimeout(() =>{
-                    clearError(dispatch);
-                },5000);
-            }).catch(() =>{
-                setSeverError("Sever does not give any response!");
-                setTimeout(() =>{
-                    setSeverError(null);
-                },5000);
-                clearError(dispatch);
+                    clearError(dispatch)
+                },5000)
             });
         }
     }

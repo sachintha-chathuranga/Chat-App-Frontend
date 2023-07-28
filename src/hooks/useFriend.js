@@ -12,25 +12,35 @@ const useFriend = (index, user_id, active, searchInput) => {
         seterror(null);
         active ? searchFriend(index, user_id, searchInput)
         .then(d =>{
-            console.log("first searrch with index run")
             setfriend(prev => [...prev, ...d]);
             sethasMore(Boolean(d.length));
             setisLoading(false);
         })
         .catch(e => {
+            if(!e?.response){
+                seterror("No Sever Response");
+            }else if(e.response?.data){
+                seterror(e.response.data);
+            }else{
+                seterror("You are currently offline. Check your internet Connection!");
+            };
             setisLoading(false);
-            seterror(e.response);
         }) :
         fetchFriend(index, user_id)
         .then(d => {
-            console.log("loading fetch freind run")
             setfriend(prev => [...prev, ...d]);
             sethasMore(Boolean(d.length === 15));
             setisLoading(false);
         })
         .catch(e => {
+            if(!e?.response){
+                seterror("No Sever Response");
+            }else if(e.response?.data){
+                seterror(e.response.data);
+            }else{
+                seterror("You are currently offline. Check your internet Connection!");
+            };
             setisLoading(false);
-            seterror(e.response);
         });
 
     }, [index]);
@@ -41,12 +51,17 @@ const useFriend = (index, user_id, active, searchInput) => {
         seterror(null);
         active && searchFriend(null, user_id, searchInput)
         .then(d => {
-            console.log("second search with null running")
             setfriend(d);
             setisLoading(false);
         }).catch(e =>{
+            if(!e?.response){
+                seterror("No Sever Response");
+            }else if(e.response?.data){
+                seterror(e.response.data);
+            }else{
+                seterror("You are currently offline. Check your internet Connection!");
+            };
             setisLoading(false);
-            seterror(e.response);
         });    
     }, [searchInput, active, user_id]);
 

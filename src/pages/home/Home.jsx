@@ -2,7 +2,7 @@ import { MoreVert } from "@material-ui/icons";
 import React, { useContext, useRef, useState, useCallback } from 'react'
 import { AuthContext } from '../../context/AuthContext';
 import Friend from '../../component/Friend';
-import { logOutCall } from '../../apiCalls';
+import { clearError, logOutCall } from '../../apiCalls';
 import './home.css';
 import { CircularProgress } from '@material-ui/core';
 import useFriend from '../../hooks/useFriend';
@@ -11,7 +11,6 @@ import { memo } from "react";
 
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 const imageUrl = process.env.REACT_APP_AWS_URL;
-
 const Home = () =>{
     const {user, dispatch} = useContext(AuthContext);
     const [active, setActive] = useState(false);
@@ -59,7 +58,7 @@ const Home = () =>{
                             <Link to={"/profile"}>
                                 <div className="prof">Proflie</div>
                             </Link>
-                            <div onClick={() => logOutCall({user_id: user.user_id, status: false}, dispatch)} className="logout">Logout</div>
+                            <div onClick={() => logOutCall({user_id: user.user_id, status: false}, dispatch).then(res => res!==200 && setTimeout(() =>{ clearError(dispatch);},5000))} className="logout">Logout</div>
                         </div>
                     </div>
                 </header>

@@ -8,7 +8,6 @@ export default function Login() {
     const email = useRef();
     const password = useRef();
     const [isActive, setisActive] = useState(false);
-    const [severError, setSeverError] = useState(null);
     const { isFetching, error, dispatch} = useContext(AuthContext);
     
     const handleSubmit = (e) =>{
@@ -28,8 +27,6 @@ export default function Login() {
                 <header>Bliss Talk</header>
                 <form onSubmit={handleSubmit} autoComplete="off">
                     {error && <div className="error-txt">{error}</div>}
-                    {severError && <div className="error-txt">{severError}</div>}
-                    
                         <div className="field input">
                             <label>Email Address</label>
                             <input type="email" ref={email} placeholder="Enter your email" required/>

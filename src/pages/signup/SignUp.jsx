@@ -12,7 +12,6 @@ function SignUp() {
     const password = useRef();
     const [isActive, setisActive] = useState(false);
     const history = useHistory();
-    const [severError, setSeverError] = useState(null);
 
     const handleSubmit = (e) =>{
         e.preventDefault();
@@ -29,13 +28,7 @@ function SignUp() {
                     clearError(dispatch);
                 },5000);
             }
-        }).catch(err =>{
-            setSeverError("Sever does not give any response!");
-            setTimeout(() =>{
-                setSeverError(null);
-            },5000);
-            clearError(dispatch);
-        });
+        })
     }
 
     return (
@@ -44,7 +37,6 @@ function SignUp() {
                 <header>Bliss Talk</header>
                 <form onSubmit={handleSubmit} autoComplete="off">
                     {error && <div className="error-txt">{error}</div>}
-                    {severError && <div className="error-txt">{severError}</div>}
                     <div className="name-details">
                             <div className="field input">
                                 <label>First Name</label>

@@ -16,7 +16,13 @@ const useMessage = (user_id, friend_id, active, scrolltoBottom) => {
                 !active && scrolltoBottom();
             })
             .catch(e => {
-                seterror(e.response);
+                if(!e?.response){
+                    seterror("No Sever Response");
+                }else if(e.response?.data){
+                    seterror(e.response.data);
+                }else{
+                    seterror("You are currently offline. Check your internet Connection!");
+                };
                 setisLoading(false);
             });
         }, 500);
