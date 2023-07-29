@@ -65,10 +65,12 @@ export const userUpdateCall = async (userCredintial, dispatch) =>{
 
 export const userDeleteCall = async (userCredintial, dispatch) =>{
     dispatch(UpdateStart());
-    axios.delete(`${API_URL}users/${userCredintial.user_id}`, {data : userCredintial}).then(res => {
+    try {
+        const res = axios.delete(`${API_URL}users/${userCredintial.user_id}`, {data : userCredintial});
+        sessionStorage.removeItem("user");
         dispatch(LogOut());
         return res.status;
-    }).catch(err =>{
+    } catch (err) {
         if(!err?.response){
             dispatch(UpdateFailure("No Sever Response"));
             return 500;
@@ -79,7 +81,7 @@ export const userDeleteCall = async (userCredintial, dispatch) =>{
             dispatch(UpdateFailure("You are currently offline. Check your internet Connection!"));
             return 500;
         }
-    });
+    }
 }
 
 export const logOutCall = async (userCredintial, dispatch) =>{

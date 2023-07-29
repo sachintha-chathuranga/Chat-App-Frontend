@@ -2,8 +2,11 @@ import React, { useRef, useState, useContext, memo } from 'react';
 import { clearError, userDeleteCall } from '../apiCalls';
 import { AuthContext } from '../context/AuthContext';
 import { CircularProgress } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 
 function Warnnig({toggleWarning}) {
+
+    const history = useHistory();
     const password = useRef();
     const [isActive, setisActive] = useState(false);
     const [isNext, setIsNext] = useState(false);
@@ -17,7 +20,7 @@ function Warnnig({toggleWarning}) {
         password.current.value && (data.password = password.current.value.trim());
 
         userDeleteCall(data, dispatch).then(res =>{
-            res!==200 && setTimeout(() =>{
+            res===200 ? history.push('/login') : setTimeout(() =>{
                 clearError(dispatch)
             },5000);
         }); 

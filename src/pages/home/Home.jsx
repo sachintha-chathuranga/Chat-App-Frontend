@@ -1,17 +1,18 @@
 import { MoreVert } from "@material-ui/icons";
-import React, { useContext, useRef, useState, useCallback } from 'react'
+import { CircularProgress } from '@material-ui/core';
+import React, { useContext, useRef, useState, useCallback, memo } from 'react'
+import { Link, useHistory } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import Friend from '../../component/Friend';
 import { clearError, logOutCall } from '../../apiCalls';
-import './home.css';
-import { CircularProgress } from '@material-ui/core';
 import useFriend from '../../hooks/useFriend';
-import { Link } from 'react-router-dom';
-import { memo } from "react";
+import './home.css';
 
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 const imageUrl = process.env.REACT_APP_AWS_URL;
 const Home = () =>{
+
+    const history = useHistory();
     const {user, dispatch} = useContext(AuthContext);
     const [active, setActive] = useState(false);
     const [searchInput, setSearch] = useState("");
@@ -44,7 +45,7 @@ const Home = () =>{
     const handleLogout = () => {
         logOutCall({user_id: user.user_id, status: false}, dispatch)
         .then(res => {
-            res!==200 && setTimeout(() =>{
+            res===200 ? history.push('/login') : setTimeout(() =>{
                 clearError(dispatch);
             },5000)
         });
