@@ -3,15 +3,15 @@ import AuthReducer from "./AuthReducer";
 
 
 export const INITIAL_STATE = {
-    user: {
-        user_id: 1,
-        fname: "Sachintha",
-        lname: "Chathuranga",
-        email: "sachintha@gmail.com",
-        profil_pic: null,
-        status: true
-    },
-    // user: JSON.parse(sessionStorage.getItem("user")),
+    // user: {
+    //     user_id: 1,
+    //     fname: "Sachintha",
+    //     lname: "Chathuranga",
+    //     email: "sachintha@gmail.com",
+    //     profil_pic: null,
+    //     status: true
+    // },
+    user: JSON.parse(sessionStorage.getItem("user")),
     isFetching: false,
     error: null
 }
