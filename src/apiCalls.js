@@ -67,8 +67,8 @@ export const userDeleteCall = async (userCredintial, dispatch) =>{
     dispatch(UpdateStart());
     try {
         const res = axios.delete(`${API_URL}users/${userCredintial.user_id}`, {data : userCredintial});
-        sessionStorage.removeItem("user");
         dispatch(LogOut());
+        sessionStorage.removeItem("user");
         return res.status;
     } catch (err) {
         if(!err?.response){
@@ -87,8 +87,8 @@ export const userDeleteCall = async (userCredintial, dispatch) =>{
 export const logOutCall = async (userCredintial, dispatch) =>{
         try {
             const res = await axios.put(`${API_URL}users/${userCredintial.user_id}`, userCredintial);
-            sessionStorage.removeItem("user");
             dispatch(LogOut());
+            sessionStorage.removeItem("user");
             return res.status;
         } catch (err) {
             if(!err?.response){
