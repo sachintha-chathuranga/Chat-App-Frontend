@@ -84,8 +84,8 @@ export const userDeleteCall = async (userCredintial, dispatch) =>{
 
 export const logOutCall = async (userCredintial, dispatch) =>{
         axios.put(`${API_URL}users/${userCredintial.user_id}`, userCredintial).then((res) =>{
-            dispatch(LogOut());
             sessionStorage.removeItem("user");
+            dispatch(LogOut());
             return res.status;
         }).catch(err =>{
             if(!err?.response){
