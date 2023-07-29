@@ -1,9 +1,4 @@
 [[redirects]]
-from = "/login"
-to = "/"
-status = 200
-
-[[redirects]]
 from = "/signUp"
 to = "/"
 status = 200
