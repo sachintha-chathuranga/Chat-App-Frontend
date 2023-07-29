@@ -41,6 +41,15 @@ const Home = () =>{
         inputElement.current.focus();
     }
 
+    const handleLogout = () => {
+        logOutCall({user_id: user.user_id, status: false}, dispatch)
+        .then(res => {
+            res!==200 && setTimeout(() =>{
+                clearError(dispatch);
+            },5000)
+        });
+    }
+
     return (
         <div className="wrapper" >
             <section className="users">
@@ -58,7 +67,7 @@ const Home = () =>{
                             <Link to={"/profile"}>
                                 <div className="prof">Proflie</div>
                             </Link>
-                            <div onClick={() => logOutCall({user_id: user.user_id, status: false}, dispatch).then(res => res!==200 && setTimeout(() =>{ clearError(dispatch);},5000))} className="logout">Logout</div>
+                            <div onClick={handleLogout} className="logout">Logout</div>
                         </div>
                     </div>
                 </header>

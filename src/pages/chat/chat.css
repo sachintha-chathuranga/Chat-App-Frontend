@@ -153,6 +153,8 @@ header .delete:hover{
     }
     .chat-area .typing-area{
         padding: 5px 18px;
+        position:sticky;
+        bottom: 0;
     }
     .typing-area input{
         height: 35px;
