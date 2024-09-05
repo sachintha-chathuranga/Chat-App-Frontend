@@ -1,8 +1,9 @@
-import { CircularProgress } from '@material-ui/core';
+
 import { useState, useRef, useContext } from "react";
-import { Link } from "react-router-dom";
 import { clearError, loginCall } from "../../apiCalls";
 import { AuthContext } from "../../context/AuthContext";
+import { Link } from 'react-router-dom';
+import { CircularProgress } from "@mui/material";
 
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
@@ -45,7 +46,8 @@ export default function Login() {
                             <button type="submit"  className="loginBtn" disabled={isFetching}>
                                 {isFetching ? <CircularProgress style={{color: "white", width: "30px", height: "30px"}} /> : "Login"}
                             </button>
-                        </div>
+                    </div>
+                    
                 </form>
                 <div className="link">Not yet signed up? <Link to="/signUp">Signup </Link>now</div>
             </section>

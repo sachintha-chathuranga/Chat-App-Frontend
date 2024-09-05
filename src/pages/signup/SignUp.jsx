@@ -1,8 +1,9 @@
 import { useState, useRef, useContext} from "react"
-import { Link, useHistory } from "react-router-dom";
 import { clearError, signUpCall } from "../../apiCalls";
 import { AuthContext } from "../../context/AuthContext";
-import { CircularProgress } from "@material-ui/core";
+import { CircularProgress } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+
 
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
@@ -13,8 +14,9 @@ function SignUp() {
     const email = useRef();
     const password = useRef();
     const [isActive, setisActive] = useState(false);
-    const history = useHistory();
-
+    const navigate = useNavigate();
+    
+    
     const handleSubmit = (e) =>{
         e.preventDefault();
         const user =  {
@@ -24,7 +26,7 @@ function SignUp() {
             password: password.current.value.trim()
         }
         signUpCall(user, dispatch).then(res =>{
-            if(res===200){history.push('/login')}
+            if(res===200){navigate('/login')}
             else{
                 setTimeout(() =>{
                     clearError(dispatch);
@@ -65,7 +67,8 @@ function SignUp() {
                         <div className="field button">
                             <button type="submit"  className="loginBtn" disabled={isFetching}>
                                 {isFetching ? <CircularProgress style={{color: "white", width: "30px", height: "30px"}}/> : "Sign UP"}
-                            </button>
+                        </button>
+                        
                         </div>
                 </form>
                 <div className="link">Already signed up? <Link to="/login">Login </Link>now</div>

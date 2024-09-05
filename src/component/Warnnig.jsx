@@ -1,13 +1,13 @@
 import React, { useRef, useState, useContext, memo } from 'react';
 import { clearError, userDeleteCall } from '../apiCalls';
 import { AuthContext } from '../context/AuthContext';
-import { CircularProgress } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
+import { CircularProgress } from "@mui/material";
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import { useNavigate } from 'react-router-dom';
 
 function Warnnig({toggleWarning}) {
 
-    const history = useHistory();
+    const navigate = useNavigate();
     const password = useRef();
     const [isActive, setisActive] = useState(false);
     const [isNext, setIsNext] = useState(false);
@@ -22,7 +22,7 @@ function Warnnig({toggleWarning}) {
         password.current.value && (data.password = password.current.value.trim());
 
         userDeleteCall(axiosPrivate, data, dispatch).then(res =>{
-            res===200 ? history.push('/login') : setTimeout(() =>{
+            res===200 ? navigate('/login') : setTimeout(() =>{
                 clearError(dispatch)
             },5000);
         }); 

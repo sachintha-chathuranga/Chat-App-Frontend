@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import { memo } from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import { Link } from "react-router-dom";
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 const imageUrl = process.env.REACT_APP_AWS_URL;
 

@@ -1,7 +1,6 @@
-import { MoreVert } from "@material-ui/icons";
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress } from "@mui/material";
 import React, { useContext, useEffect, useRef, useState, useCallback, memo } from 'react'
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import Friend from '../../component/Friend';
 import { clearError, fetchAllNotification, logOutCall } from '../../apiCalls';
@@ -9,6 +8,7 @@ import useFriend from '../../hooks/useFriend';
 import io from "socket.io-client";
 import './home.css';
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { MoreVert } from "@mui/icons-material";
 
 const API_URL = process.env.REACT_APP_API_SOCKET_URL;
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
@@ -17,7 +17,7 @@ const Home = () =>{
 
     const axiosPrivate = useAxiosPrivate();
     const socket = useRef(null);
-    const history = useHistory();
+    const navigate = useNavigate();
     const {user, isFetching, dispatch} = useContext(AuthContext);
     const [active, setActive] = useState(false);
     const [searchInput, setSearch] = useState("");
@@ -73,7 +73,7 @@ const Home = () =>{
     const handleLogout = () => {
         logOutCall(dispatch)
         .then(res => {
-            res===200 ? history.push('/login') : setTimeout(() =>{
+            res===200 ? navigate('/login') : setTimeout(() =>{
                 clearError(dispatch);
             },5000)
         });
