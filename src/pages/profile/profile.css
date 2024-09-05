@@ -1,6 +1,7 @@
 .profile{
     position: relative;
     padding: 25px 30px;
+    min-height: 560px;
 }
 .profile header{
     display: flex;
@@ -25,9 +26,11 @@
 }
 .profile header .delete{
     color: #333;
-    font-size: 17px;
-    padding: 7px 15px;
-    background: #fff;
+    font-size: 15px;
+	padding: 11px 15px;
+	background: #fff;
+	white-space: nowrap;
+	line-height: 12px;
     border: 1px solid #333;
     border-radius: 5px;
     cursor: pointer;

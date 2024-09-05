@@ -61,16 +61,6 @@ const Home = () =>{
             socket?.current.disconnect();
         };
     }, [user, isMount, axiosPrivate]);
-   
-
-    useEffect(() => {
-        const updateString = () =>{
-            if(window.innerWidth <= 400 && fullName.length > 14){
-                setFullName(fullName.substring(0, 14)+"...");
-            }
-        }
-        updateString();
-    }, [fullName]);
     
     const activeSearch = () =>{
         setfriend([]);

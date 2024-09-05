@@ -18,12 +18,6 @@ const Header = (props) => {
 
     useEffect(() => {
         props.user.fname && setFullName(`${props.user.fname} ${props.user.lname}`);
-        const updateString = () =>{
-            if(window.innerWidth <= 400 && fullName.length > 11){
-                setFullName(fullName.substring(0, 11)+"...");
-            }
-        }
-        props.user.fname && updateString();
     }, [fullName, props.user.fname, props.user.lname]);
     
     const handleBack = () =>{

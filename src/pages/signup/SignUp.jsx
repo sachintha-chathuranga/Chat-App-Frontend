@@ -54,7 +54,7 @@ function SignUp() {
                         </div>
                         <div className="field input">
                             <label>Email Address</label>
-                            <input type="text" ref={email} placeholder="Enter your email" required />
+                            <input type="email" ref={email} placeholder="Enter your email" required />
                         </div>
                         <div className="field input">
                             <label>Password</label>

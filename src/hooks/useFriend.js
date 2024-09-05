@@ -67,6 +67,7 @@ const useFriend = (index, active, searchInput) => {
         fetchFriend(axiosPrivate, null)
         .then(d => {
             setfriend(d);
+            console.log(d)
             setisLoading(false);
         })
         .catch(e => {
