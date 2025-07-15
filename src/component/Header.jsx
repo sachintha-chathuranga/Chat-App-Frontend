@@ -30,7 +30,9 @@ const Header = (props) => {
 	};
 
 	const handleButton = () => {
+		console.log("button Click")
 		if (props.hasOwnProperty("toggleWarning")) {
+			console.log("Toggle warning")
 			props.toggleWarning();
 		} else {
 			props.isEmpty &&

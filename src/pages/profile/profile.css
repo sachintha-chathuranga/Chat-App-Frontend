@@ -194,17 +194,15 @@
 }
 
 .profile .msg-wrapper{
-    position: absolute;
-    top: -200%;
-    left: 0;
-    right: 0;
+    margin-top: 37%;
     z-index: 10;
     background: #ffffff;
     border-radius: 5px;
     text-align: center;
+    box-shadow: 4px 6px 28px 0 rgba(0, 0, 0, 0.2);
 }
 .profile .msg-wrapper h3{
-    background: #2b2828;
+    background: rgb(248, 111, 111);
     width: 100%;
     border-radius: 5px 5px 0 0;
     padding: 9px;
@@ -221,21 +219,22 @@
     padding: 6px 17px;
     width: 102px;
     margin: 10px;
-    border: 1px solid #333;
+    border: none;
     cursor: pointer;
     border-radius: 3px;
+    background-color: #e7e6e6;
 }
 .profile .msg-wrapper .msg-body #foot{
     padding: 8px;
 }
 .profile .msg-wrapper .msg-body #foot .cancel-btn:hover{
     color: white;
-    background-color: black;
+    background-color: rgb(95, 95, 95);
     border: none;
 }
 .profile .msg-wrapper .msg-body #foot .yes-btn:hover{
     color: white;
-    background-color: rgb(150, 8, 8);
+    background-color: rgb(248, 111, 111);
     border: none;
 }
 
@@ -322,9 +321,6 @@
     
     .profile .shareOptionText{
         font-size: 15px;
-    }
-    .profile .msg-wrapper{
-        top: -321%;
     }
     .profile .msg-wrapper .msg-body{
         padding: 20px 20px 0 20px;
