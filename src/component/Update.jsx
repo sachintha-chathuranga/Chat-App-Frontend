@@ -1,19 +1,19 @@
-import { CircularProgress } from "@mui/material";
-import { Cancel, PermMedia } from "@mui/icons-material";
-import axios from "axios";
-import React, { useContext, useRef, useState, memo } from "react";
+import { Cancel, PermMedia } from '@mui/icons-material';
+import { CircularProgress } from '@mui/material';
+import axios from 'axios';
+import React, { memo, useContext, useRef, useState } from 'react';
 import {
-	getSignRequest,
-	userUpdateCall,
 	clearError,
 	deletPicture,
-} from "../apiCalls";
-import { UpdateFailure, UpdateStart } from "../context/AuthActions";
-import { AuthContext } from "../context/AuthContext";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import Header from "./Header";
+	getSignRequest,
+	userUpdateCall,
+} from '../apiCalls';
+import { UpdateFailure, UpdateStart } from '../context/AuthActions';
+import { AuthContext } from '../context/AuthContext';
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import Header from './Header';
 
-const validFileType = ["image/png", "image/jpg", "image/jpeg"];
+const validFileType = ['image/png', 'image/jpg', 'image/jpeg'];
 
 const Update = ({ toggleFrame, toggleWarning }) => {
 	const { user, isFetching, error, dispatch } = useContext(AuthContext);
@@ -23,6 +23,7 @@ const Update = ({ toggleFrame, toggleWarning }) => {
 	const [success, setsuccess] = useState(null);
 	const [signedRequest, setsignedRequest] = useState(null);
 	const [uploadProgress, setuploadProgress] = useState(0);
+	const [profileUrl, setprofileUrl] = useState(null);
 	const fname = useRef();
 	const lname = useRef();
 	const email = useRef();
@@ -70,7 +71,7 @@ const Update = ({ toggleFrame, toggleWarning }) => {
 			return res.status;
 		} catch (err) {
 			if (!err?.response) {
-				dispatch(UpdateFailure("No Sever Response"));
+				dispatch(UpdateFailure('No Sever Response'));
 				return 500;
 			} else if (err.response?.data) {
 				dispatch(UpdateFailure("profile picture doesn't upload"));
@@ -78,7 +79,7 @@ const Update = ({ toggleFrame, toggleWarning }) => {
 			} else {
 				dispatch(
 					UpdateFailure(
-						"You are currently offline. Check your internet Connection!"
+						'You are currently offline. Check your internet Connection!'
 					)
 				);
 				return 500;
@@ -95,7 +96,7 @@ const Update = ({ toggleFrame, toggleWarning }) => {
 		lname.current.value && (data.lname = lname.current.value.trim());
 		email.current.value && (data.email = email.current.value.trim());
 		password.current.value && (data.password = password.current.value.trim());
-		file && (data.profil_pic = encodeURIComponent(file.name));
+		file && (data.profil_pic = encodeURIComponent(profileUrl));
 
 		if (signedRequest !== null && file !== null) {
 			deletPicture(axiosPrivate, user.profil_pic, dispatch);
@@ -130,7 +131,7 @@ const Update = ({ toggleFrame, toggleWarning }) => {
 	const handleFile = (newFile) => {
 		if (newFile) {
 			if (!validFileType.find((type) => type === newFile.type)) {
-				setSeverError("File must be in jpg, png or jpeg format");
+				setSeverError('File must be in jpg, png or jpeg format');
 				setTimeout(() => {
 					setSeverError(null);
 				}, 5000);
@@ -138,7 +139,7 @@ const Update = ({ toggleFrame, toggleWarning }) => {
 				fileInput.current.value = null;
 				return;
 			} else if (newFile.size > 2000000) {
-				setSeverError("File size should be less than 2MB");
+				setSeverError('File size should be less than 2MB');
 				setTimeout(() => {
 					setSeverError(null);
 				}, 5000);
@@ -149,10 +150,16 @@ const Update = ({ toggleFrame, toggleWarning }) => {
 			setFile(newFile);
 			getSignRequest(axiosPrivate, newFile, dispatch).then((res) => {
 				if (res.status === 200) {
+					const urlObj = new URL(res.data.signedRequest);
+					// Get the pathname part and extract the last segment (filename)
+					const pathSegments = urlObj.pathname.split('/');
+					const fileNameWithExtension =
+						pathSegments[pathSegments.length - 1];
+					setprofileUrl(fileNameWithExtension);
 					setsignedRequest(res.data.signedRequest);
 				} else {
 					setFile(null);
-					setSeverError("Sever does not give any response!");
+					setSeverError('Sever does not give any response!');
 					setTimeout(() => {
 						setSeverError(null);
 					}, 5000);
@@ -208,12 +215,12 @@ const Update = ({ toggleFrame, toggleWarning }) => {
 				<div className="field input">
 					<label>Password</label>
 					<input
-						type={isActive ? "text" : "password"}
+						type={isActive ? 'text' : 'password'}
 						ref={password}
 						placeholder="Enter new password"
 					/>
 					<i
-						className={isActive ? "fas fa-eye active" : "fas fa-eye"}
+						className={isActive ? 'fas fa-eye active' : 'fas fa-eye'}
 						onClick={() => setisActive(!isActive)}
 					></i>
 				</div>
@@ -225,7 +232,7 @@ const Update = ({ toggleFrame, toggleWarning }) => {
 							<span className="shareOptionText">Photo</span>
 							<input
 								ref={fileInput}
-								style={{ display: "none" }}
+								style={{ display: 'none' }}
 								type="file"
 								id="file"
 								onChange={(e) => handleFile(e.target.files[0])}
@@ -264,13 +271,13 @@ const Update = ({ toggleFrame, toggleWarning }) => {
 							{isLoading ? (
 								<CircularProgress
 									style={{
-										color: "black",
-										width: "15px",
-										height: "15px",
+										color: 'black',
+										width: '15px',
+										height: '15px',
 									}}
 								/>
 							) : (
-								"Remove Profile Picture"
+								'Remove Profile Picture'
 							)}
 						</button>
 					)}
@@ -280,13 +287,13 @@ const Update = ({ toggleFrame, toggleWarning }) => {
 						{isFetching ? (
 							<CircularProgress
 								style={{
-									color: "white",
-									width: "26px",
-									height: "26px",
+									color: 'white',
+									width: '26px',
+									height: '26px',
 								}}
 							/>
 						) : (
-							"Save Changes"
+							'Save Changes'
 						)}
 					</button>
 				</div>
