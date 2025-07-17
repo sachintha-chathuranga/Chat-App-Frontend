@@ -64,7 +64,7 @@ export const signUpCall = async (userCredintial, dispatch) =>{
         }
     }
 }
-export const logOutCall = async (dispatch) =>{
+export const logOutCall = async (axiosPrivate, dispatch) =>{
     dispatch(UpdateStart());
     try {
         const res = await axiosPrivate.post(`users/logout`);

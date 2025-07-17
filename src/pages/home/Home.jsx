@@ -71,7 +71,7 @@ const Home = () =>{
     }
 
     const handleLogout = () => {
-        logOutCall(dispatch)
+        logOutCall(axiosPrivate,dispatch)
         .then(res => {
             res===200 ? navigate('/login') : setTimeout(() =>{
                 clearError(dispatch);
