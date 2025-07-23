@@ -1,54 +1,3 @@
-.chat-area header {
-	display: flex;
-	align-items: center;
-	padding: 25px 30px;
-	justify-content: space-between;
-	background-color: white;
-}
-.content {
-	display: flex;
-	align-items: center;
-}
-.chat-area header .back-icon {
-	font-size: 18px;
-	color: #333;
-	cursor: pointer;
-}
-.chat-area header img {
-	height: 50px;
-	width: 50px;
-	margin: 0px 15px;
-}
-header .details span {
-	font-size: 18px;
-	font-weight: 500;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	display: -webkit-box;
-	-webkit-line-clamp: 1;
-	-webkit-box-orient: vertical;
-    word-break: break-all;
-}
-header .delete {
-	color: #333;
-	font-size: 15px;
-	padding: 11px 15px;
-	background: #fff;
-	white-space: nowrap;
-	line-height: 12px;
-	border: 1px solid #333;
-	border-radius: 5px;
-	cursor: pointer;
-}
-header .delete:hover {
-	background-color: rgb(209, 25, 25);
-	border: 1px solid rgb(209, 25, 25);
-	color: #fff;
-}
-.chat-area header span {
-	font-size: 17px;
-	font-weight: 500;
-}
 .skelton {
 	height: 13px;
 	border-radius: 8px;
@@ -68,12 +17,7 @@ header .delete:hover {
 		background-color: #e9e9e9;
 	}
 }
-.chat-area header span.skelton {
-	width: 168px;
-}
-.chat-area header p.skelton {
-	width: 112px;
-}
+
 .chat-box {
 	height: 400px;
 	overflow-y: scroll;
@@ -160,30 +104,8 @@ header .delete:hover {
 	.chat-area {
 		width: 100vw;
 	}
-	.chat-area header {
-		padding: 15px 20px;
-		position: fixed;
-		top: 0;
-		width: 100vw;
-	}
-	.chat-area header .back-icon {
-		font-size: 16px;
-	}
 	.skelton {
 		height: 11px;
-	}
-	.chat-area header span.skelton {
-		width: 121px;
-	}
-	.chat-area header p.skelton {
-		width: 85px;
-	}
-	.chat-area header p {
-		font-size: 15px;
-	}
-	header .delete {
-		font-size: 12px;
-		padding: 7px;
 	}
 	.chat-box {
 		overflow-y: auto;

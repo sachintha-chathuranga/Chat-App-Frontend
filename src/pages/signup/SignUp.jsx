@@ -4,7 +4,6 @@ import { AuthContext } from "../../context/AuthContext";
 import { CircularProgress } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 
-
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
 function SignUp() {

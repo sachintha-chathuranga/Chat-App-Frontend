@@ -3,43 +3,6 @@
     padding: 25px 30px;
     min-height: 560px;
 }
-.profile header{
-    display: flex;
-    align-items: center;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #e6e6e6;
-    justify-content: space-between;
-}
-.profile .content{
-    display: flex;
-    align-items: center;
-}
-.profile header .content img{
-    height: 50px;
-    width: 50px;
-    margin: 0px 15px;
-}
-.profile header .back-icon{
-    font-size: 18px;
-    color: #333;
-    cursor: pointer;
-}
-.profile header .delete{
-    color: #333;
-    font-size: 15px;
-	padding: 11px 15px;
-	background: #fff;
-	white-space: nowrap;
-	line-height: 12px;
-    border: 1px solid #333;
-    border-radius: 5px;
-    cursor: pointer;
-}
-.profile header .delete:hover{
-    background-color: rgb(209, 25, 25);
-    border: 1px solid rgb(209, 25, 25);
-    color: #fff;
-}
 
 .profile span strong{
     display: block;
@@ -47,7 +10,7 @@
     padding: 10px 0 10px 0;
     margin: 0 0 10px 0;
     font-size: large;
-    border-bottom: 1px solid rgb(206, 204, 204);
+    border-bottom: 1px solid var(--base-variant);
 }
 
 .profile form .name-details{
@@ -279,17 +242,8 @@
         width: 100vw;
         min-height: 100vh;
     }
-    .profile header .content img{
-        margin-left: 15px;
-        margin-right: 10px;
-    }
-    .profile header .back-icon{
-        font-size: 16px;
-    }
-    .profile header .delete{
-        font-size: 12px;
-        padding: 7px;
-    }
+
+   
     .profile form .field label{
         margin-bottom: 5px;
         font-size: 15px;

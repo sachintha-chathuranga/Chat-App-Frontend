@@ -11,7 +11,7 @@ import {
 import { UpdateFailure, UpdateStart } from '../context/AuthActions';
 import { AuthContext } from '../context/AuthContext';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
-import Header from './Header';
+import Header from './Header/Header';
 
 const validFileType = ['image/png', 'image/jpg', 'image/jpeg'];
 
@@ -174,6 +174,7 @@ const Update = ({ toggleFrame, toggleWarning }) => {
 				user={user}
 				toggleFrame={toggleFrame}
 				toggleWarning={toggleWarning}
+				headerType={'update'}
 			/>
 			<span>
 				<strong>Update Details</strong>

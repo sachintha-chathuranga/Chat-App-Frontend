@@ -1,21 +1,20 @@
-// import { CircularProgress } from '@mui/material';
 import React, {
 	useCallback,
 	useContext,
 	useEffect,
 	useRef,
 	useState,
-} from "react";
-import { getFriend, readAllMessages } from "../../apiCalls";
-import Header from "../../component/Header";
-import Incoming from "../../component/Incoming";
-import Outgoing from "../../component/Outgoing";
-import { AuthContext } from "../../context/AuthContext";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import useMessage from "../../hooks/useMessage";
-import io from "socket.io-client";
-import "./chat.css";
-import { useParams } from "react-router-dom";
+} from 'react';
+import { useParams } from 'react-router-dom';
+import io from 'socket.io-client';
+import { getFriend, readAllMessages } from '../../apiCalls';
+import Header from '../../component/Header/Header';
+import Incoming from '../../component/Incoming';
+import Outgoing from '../../component/Outgoing';
+import { AuthContext } from '../../context/AuthContext';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import useMessage from '../../hooks/useMessage';
+import './chat.css';
 
 const API_URL = process.env.REACT_APP_API_SOCKET_URL;
 
@@ -23,7 +22,7 @@ export default function Chat() {
 	const { user, dispatch } = useContext(AuthContext);
 	const [friend, setFriend] = useState({});
 	const params = useParams();
-	const [inputMsg, setinputMsg] = useState("");
+	const [inputMsg, setinputMsg] = useState('');
 	const chatBox = useRef(null);
 	const socket = useRef(null);
 	const axiosPrivate = useAxiosPrivate();
@@ -51,23 +50,23 @@ export default function Chat() {
 
 	useEffect(() => {
 		socket.current = io.connect(API_URL);
-		socket?.current.on("connect", () => {
+		socket?.current.on('connect', () => {
 			socket?.current.emit(
-				"joinRoom",
+				'joinRoom',
 				user.user_id + Number(params.friend_id)
 			);
-			socket?.current?.on("getMessage", (data) => {
+			socket?.current?.on('getMessage', (data) => {
 				isMount && setMessages((prev) => [...prev, data]);
 			});
 		});
-		socket?.current.on("error", (error) => {
+		socket?.current.on('error', (error) => {
 			socket.current?.off();
 			socket?.current.disconnect();
 		});
 		return () => {
 			setisMount(false);
 			socket?.current.emit(
-				"leaveRoom",
+				'leaveRoom',
 				user.user_id + Number(params.friend_id)
 			);
 			socket.current?.off();
@@ -92,10 +91,10 @@ export default function Chat() {
 		//     msg.message = emoji;
 		// }
 		const sendMessage = async () => {
-			socket?.current.emit("sendMessage", msg);
+			socket?.current.emit('sendMessage', msg);
 			try {
 				setMessages((prev) => [...prev, msg]);
-				setinputMsg("");
+				setinputMsg('');
 				await axiosPrivate.post(`messages/message`, JSON.stringify(msg));
 			} catch (err) {}
 		};
@@ -110,6 +109,7 @@ export default function Chat() {
 					logUserId={user.user_id}
 					setMessages={setMessages}
 					isEmpty={Boolean(messages.length)}
+					headerType={'chat'}
 				/>
 
 				<div className="chat-box" ref={chatBox}>
