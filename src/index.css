@@ -2,6 +2,7 @@
 
 :root {
 	--background-color: #f7f7f7;
+	--background-variant: #f7f7f7;
 	--hover-color: #ddd;
 	--base-color: #fff;
 	--base-variant: #c7c7c7;
@@ -9,6 +10,7 @@
 	--secondary-text: #8b8b8b;
 	--third-text: #ccc;
 	--primary-color: #333;
+	--primary-hover: #474747;
 	--btn-text-color: #ffffff;
 	--input-bg-color: #fff;
 	--input-border-color: #c7c7c7;
@@ -16,10 +18,13 @@
 	--scrollbar-track: #dbdbdb87;
 	--scrollbar-thumb: #888;
 	--scrollbar-thumb-hover: #555;
+	--incoming-chat: #fff;
+	--warning-color: #f86f6f;
 }
 
 .darkmode {
 	--background-color: #27272d;
+	--background-variant: #101212;
 	--hover-color: #363636;
 	--base-color: #040505;
 	--base-variant: #6f6f6fc2;
@@ -27,6 +32,7 @@
 	--secondary-text: #878787;
 	--third-text: #5f5f5f;
 	--primary-color: #0a899fd4;
+	--primary-hover: #0a899f;
 	--btn-text-color: #ffffff;
 	--input-bg-color: #292929;
 	--input-border-color: #6f6f6f00;
@@ -34,6 +40,8 @@
 	--scrollbar-track: #aaaaaa36;
 	--scrollbar-thumb: #555555be;
 	--scrollbar-thumb-hover: #333333;
+	--incoming-chat: #01a5b7ba;
+	--warning-color: #c10000b8;
 }
 
 * {
@@ -64,7 +72,7 @@ body {
 	top: 20px;
 	right: 25px;
 }
-#theme-switch:hover{
+#theme-switch:hover {
 	background: #00000031 !important;
 	cursor: pointer;
 }

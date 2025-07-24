@@ -29,7 +29,7 @@ function ThemeButton() {
 				}}
 				onClick={() => toggleTheme()}
 			>
-				<span class="material-symbols-outlined">
+				<span className="material-symbols-outlined">
 					{theme ? 'light_mode' : 'dark_mode'}
 				</span>
 			</button>

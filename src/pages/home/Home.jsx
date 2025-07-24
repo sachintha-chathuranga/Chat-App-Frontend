@@ -51,7 +51,7 @@ const Home = () => {
 
 	useEffect(() => {
 		fetchAllNotification(axiosPrivate).then((data) => {
-			isMount && data.length !== 0 && setNotification(data);
+			isMount && data && data.length !== 0 && setNotification(data);
 		});
 		socket.current = io.connect(API_URL);
 		socket?.current.on('connect', () => {

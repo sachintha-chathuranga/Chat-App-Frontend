@@ -58,8 +58,7 @@ const Header = (props) => {
 		});
 	};
 	const handleButton = () => {
-		if (props.headerType === 'profile') {
-			console.log('Toggle warning');
+		if (props.headerType === 'profile' || props.headerType === 'update') {
 			props.toggleWarning();
 		} else {
 			props.isEmpty &&
