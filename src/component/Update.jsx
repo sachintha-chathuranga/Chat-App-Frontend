@@ -1,4 +1,9 @@
-import { Cancel, PermMedia } from '@mui/icons-material';
+import {
+	Cancel,
+	PermMedia,
+	VisibilityOffOutlined,
+	VisibilityOutlined,
+} from '@mui/icons-material';
 import { CircularProgress } from '@mui/material';
 import axios from 'axios';
 import React, { memo, useContext, useRef, useState } from 'react';
@@ -15,7 +20,7 @@ import Header from './Header/Header';
 
 const validFileType = ['image/png', 'image/jpg', 'image/jpeg'];
 
-const Update = ({ toggleFrame, toggleWarning }) => {
+const Update = ({ toggleWarning }) => {
 	const { user, isFetching, error, dispatch } = useContext(AuthContext);
 	const [file, setFile] = useState(null);
 	const fileInput = useRef(null);
@@ -42,12 +47,12 @@ const Update = ({ toggleFrame, toggleWarning }) => {
 			if (res.status === 200) {
 				setsuccess(res.data);
 				userUpdateCall(axiosPrivate, data, dispatch).then((res) => {
-					res === 200
-						? toggleFrame()
-						: setTimeout(() => {
-								clearError(dispatch);
-								setsuccess(null);
-						  }, 5000);
+					if (res !== 200) {
+						setTimeout(() => {
+							clearError(dispatch);
+							setsuccess(null);
+						}, 5000);
+					}
 				});
 			} else {
 				setTimeout(() => {
@@ -103,11 +108,11 @@ const Update = ({ toggleFrame, toggleWarning }) => {
 			uploadFile(file, signedRequest, dispatch).then((res) => {
 				if (res === 200) {
 					userUpdateCall(axiosPrivate, data, dispatch).then((res) => {
-						res === 200
-							? toggleFrame()
-							: setTimeout(() => {
-									clearError(dispatch);
-							  }, 5000);
+						if (res !== 200) {
+							setTimeout(() => {
+								clearError(dispatch);
+							}, 5000);
+						}
 					});
 				} else {
 					setTimeout(() => {
@@ -119,11 +124,11 @@ const Update = ({ toggleFrame, toggleWarning }) => {
 			});
 		} else if (data.email || data.password || data.fname || data.lname) {
 			userUpdateCall(axiosPrivate, data, dispatch).then((res) => {
-				res === 200
-					? toggleFrame()
-					: setTimeout(() => {
-							clearError(dispatch);
-					  }, 5000);
+				if (res !== 200) {
+					setTimeout(() => {
+						clearError(dispatch);
+					}, 5000);
+				}
 			});
 		}
 	};
@@ -172,12 +177,11 @@ const Update = ({ toggleFrame, toggleWarning }) => {
 		<>
 			<Header
 				user={user}
-				toggleFrame={toggleFrame}
 				toggleWarning={toggleWarning}
-				headerType={'update'}
+				headerType={'profile'}
 			/>
 			<span>
-				<strong>Update Details</strong>
+				<strong>Account Details</strong>
 			</span>
 			<form onSubmit={handleSubmit} autoComplete="off">
 				{success && <div className="success-txt">{success}</div>}
@@ -220,10 +224,18 @@ const Update = ({ toggleFrame, toggleWarning }) => {
 						ref={password}
 						placeholder="Enter new password"
 					/>
-					<i
-						className={isActive ? 'fas fa-eye active' : 'fas fa-eye'}
-						onClick={() => setisActive(!isActive)}
-					></i>
+
+					{isActive ? (
+						<VisibilityOffOutlined
+							className={'svg active'}
+							onClick={() => setisActive(!isActive)}
+						/>
+					) : (
+						<VisibilityOutlined
+							className={'svg'}
+							onClick={() => setisActive(!isActive)}
+						/>
+					)}
 				</div>
 				<div className="field image">
 					<label>Change Profile picture</label>

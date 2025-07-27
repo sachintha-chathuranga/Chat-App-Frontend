@@ -1,38 +1,45 @@
-import React, { memo, useEffect, useState } from 'react';
+import {DarkModeOutlined, LightModeOutlined} from '@mui/icons-material';
+import React, {memo, useEffect, useState} from 'react';
 
-function ThemeButton() {
-	const [theme, setTheme] = useState(() => {
-		// Get theme from localStorage or default to 'light'
-		return localStorage.getItem('darkmode') || false;
-	});
+function ThemeButton({setShow,type}) {
+	const [theme, setTheme] = useState(() => localStorage.getItem('darkmode') || false);
+
 	useEffect(() => {
-		// Apply theme class to <body> or <html>
 		document.body.className = theme ? 'darkmode' : '';
-
-		// Store the theme in localStorage
-		localStorage.setItem('darkmode', theme);
 	}, [theme]);
 
 	const toggleTheme = () => {
+		setShow && setShow(false);
 		setTheme((theme) => !theme);
-		localStorage.setItem('darkmode', !theme);
+		if (!theme) {
+			localStorage.setItem('darkmode', !theme);
+		} else {
+			localStorage.removeItem('darkmode');
+		}
+	};
+
+	const darkStyle = {
+		color: 'yellow',
+		background: 'radial-gradient(circle, yellow -32% , transparent 74%)',
+	};
+	const lightStyle = {
+		color: '#4317c3',
+		background: 'radial-gradient(circle, #00000014 100% , transparent 74%)',
+	};
+	const noStyle = {
+		color: 'var(--text-color)',
 	};
 	return (
 		<>
-			<button
+			<div
 				id="theme-switch"
-				style={{
-					color: theme ? 'yellow' : '#4317c3',
-					background: `radial-gradient(circle, ${
-						theme ? 'yellow' : '#00000014'
-					} ${theme ? '-32%' : '100%'}, transparent 74%)`,
-				}}
+				style={type === 'outside' ? (theme ? darkStyle : lightStyle) : noStyle}
+				className={type === 'header' ? 'item' : ''}
 				onClick={() => toggleTheme()}
 			>
-				<span className="material-symbols-outlined">
-					{theme ? 'light_mode' : 'dark_mode'}
-				</span>
-			</button>
+				{theme ? <LightModeOutlined /> : <DarkModeOutlined />}
+				{type === 'header' ? (theme ? 'Light mode' : 'Dark mode') : ''}
+			</div>
 		</>
 	);
 }

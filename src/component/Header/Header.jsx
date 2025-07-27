@@ -1,31 +1,32 @@
 import {
+	ArrowBack,
 	DeleteOutline,
 	DeleteSweepOutlined,
 	ExitToAppOutlined,
+	HomeOutlined,
 	MoreVert,
 } from '@mui/icons-material';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import { CircularProgress } from '@mui/material';
 import { memo, useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { clearError, clearMessages, logOutCall } from '../../apiCalls';
 import { AuthContext } from '../../context/AuthContext';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import ThemeButton from '../ThemeButton';
 import './header.css';
 
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 const imageUrl = process.env.REACT_APP_AWS_URL;
 
 const Header = (props) => {
-	const { isFetching, dispatch } = useContext(AuthContext);
+	const {isFetching, dispatch} = useContext(AuthContext);
 	const navigate = useNavigate();
 	const axiosPrivate = useAxiosPrivate();
 	const [fullName, setFullName] = useState('');
 	const [show, setShow] = useState(false);
 
 	useEffect(() => {
-		props.user.fname &&
-			setFullName(`${props.user.fname} ${props.user.lname}`);
+		props.user.fname && setFullName(`${props.user.fname} ${props.user.lname}`);
 	}, [fullName, props.user.fname, props.user.lname]);
 
 	// For handle outside clicks to close dropdown menu
@@ -45,10 +46,11 @@ const Header = (props) => {
 		if (props.hasOwnProperty('toggleFrame')) {
 			props.toggleFrame();
 		} else {
-			navigate('/');
+			navigate(-1);
 		}
 	};
 	const handleLogout = () => {
+		setShow(false);
 		logOutCall(axiosPrivate, dispatch).then((res) => {
 			res === 200
 				? navigate('/login')
@@ -58,15 +60,14 @@ const Header = (props) => {
 		});
 	};
 	const handleButton = () => {
+		setShow(false);
 		if (props.headerType === 'profile' || props.headerType === 'update') {
 			props.toggleWarning();
 		} else {
 			props.isEmpty &&
-				clearMessages(axiosPrivate, props.user.user_id, dispatch).then(
-					() => {
-						props.setMessages([]);
-					}
-				);
+				clearMessages(axiosPrivate, props.user.user_id, dispatch).then(() => {
+					props.setMessages([]);
+				});
 		}
 	};
 
@@ -75,48 +76,39 @@ const Header = (props) => {
 			<div className="content">
 				{props.headerType !== 'home' ? (
 					<div className="back-icon" onClick={handleBack}>
-						<i className="fas fa-arrow-left"></i>
+						<ArrowBack />
 					</div>
 				) : (
 					<></>
 				)}
-				<img
-					src={
-						props.user?.profil_pic
-							? imageUrl + props.user?.profil_pic
-							: PF + 'default.png'
-					}
-					alt="proPic"
-				/>
+				<img src={props.user?.profil_pic ? imageUrl + props.user?.profil_pic : PF + 'default.png'} alt="proPic" />
 				<div className="details">
 					<span className={isFetching ? 'skelton' : ''}>
-						{!isFetching &&
-							(fullName
-								? fullName
-								: props.user?.fname + ' ' + props.user?.lname)}
+						{!isFetching && (fullName ? fullName : props.user?.fname + ' ' + props.user?.lname)}
 					</span>
-					<p className={isFetching ? 'skelton' : ''}>
-						{!isFetching && (props.user?.status ? 'Online' : 'Offline')}
-					</p>
+					<p className={isFetching ? 'skelton' : ''}>{!isFetching && (props.user?.status ? 'Online' : 'Offline')}</p>
 				</div>
 			</div>
 			<div className="dropdown">
 				<div className="dropbtn">
-					<MoreVert
-						onClick={() => setShow(!show)}
-						style={{ fontSize: '1.8rem' }}
-					/>
+					<MoreVert onClick={() => setShow(!show)} style={{fontSize: '1.8rem'}} />
 				</div>
 
-				<div
-					id="myDropdown"
-					className={show ? 'dropdown-content show' : 'dropdown-content'}
-				>
-					<Link to={'/profile'}>
-						<div className="item">
+				<div id="myDropdown" className={show ? 'dropdown-content show' : 'dropdown-content'}>
+					{props.headerType !== 'home' ? (
+						<Link onClick={() => setShow(false)} className="item" to={'/'}>
+							<HomeOutlined /> Home
+						</Link>
+					) : (
+						''
+					)}
+					{props.headerType !== 'profile' ? (
+						<Link onClick={() => setShow(false)} className="item" to={'/profile'}>
 							<AccountCircleOutlinedIcon /> Account
-						</div>
-					</Link>
+						</Link>
+					) : (
+						''
+					)}
 					{props.headerType !== 'home' ? (
 						<div onClick={handleButton} className="item">
 							{props.headerType === 'chat' ? (
@@ -134,21 +126,14 @@ const Header = (props) => {
 					) : (
 						<></>
 					)}
+				
+
+					<ThemeButton setShow={setShow} type={'header'} />
+					
+
 					<div onClick={handleLogout} className="item">
-						{isFetching ? (
-							<CircularProgress
-								style={{
-									color: '#2740c9',
-									width: '15px',
-									height: '15px',
-								}}
-							/>
-						) : (
-							<>
-								<ExitToAppOutlined />
-								Logout
-							</>
-						)}
+						<ExitToAppOutlined />
+						Logout
 					</div>
 				</div>
 			</div>

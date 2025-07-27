@@ -16,6 +16,7 @@
 	font-size: 18px;
 	color: var(--text-color);
 	cursor: pointer;
+	display: contents;
 }
 
 #header .content {
@@ -81,17 +82,17 @@
 .show {
 	display: block;
 }
-.dropdown-content .item{
+.dropdown-content .item {
 	color: var(--text-color);
 	padding: 7px 15px;
 	display: flex;
 	white-space: nowrap;
 }
 
-.dropdown-content .item:last-child{
+.dropdown-content .item:last-child {
 	margin-bottom: 5px;
 }
-.dropdown-content .item:first-child{
+.dropdown-content .item:first-child {
 	margin-top: 10px;
 	margin-bottom: 0;
 }
@@ -101,7 +102,8 @@
 	background-color: var(--hover-color);
 	cursor: pointer;
 }
-.dropdown-content .item svg{
+
+.dropdown-content .item svg {
 	margin-right: 7px;
 }
 
@@ -137,7 +139,6 @@
 	}
 	.dropdown-content {
 		right: 12px;
-		width: 121px;
 	}
 	.dropbtn {
 		margin-left: 17px;

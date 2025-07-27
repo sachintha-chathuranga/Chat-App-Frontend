@@ -1,3 +1,4 @@
+import { Telegram } from '@mui/icons-material';
 import React, {
 	useCallback,
 	useContext,
@@ -146,7 +147,7 @@ export default function Chat() {
 						placeholder="Type a message here..."
 					/>
 					<button type="submit">
-						<i className="fab fa-telegram-plane"></i>
+						<Telegram />
 					</button>
 				</form>
 			</section>

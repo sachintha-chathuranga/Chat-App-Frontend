@@ -11,7 +11,9 @@
 	--third-text: #ccc;
 	--primary-color: #333;
 	--primary-hover: #474747;
+	--primary-disable: #242424d5;
 	--btn-text-color: #ffffff;
+	--btn-text-color-disable: #ffffff6b;
 	--input-bg-color: #fff;
 	--input-border-color: #c7c7c7;
 	--highlight-text: #027dff;
@@ -20,6 +22,9 @@
 	--scrollbar-thumb-hover: #555;
 	--incoming-chat: #fff;
 	--warning-color: #f86f6f;
+	--error-bg: #f8d7da;
+	--error-text: #a32632;
+	--error-border: #a32632;
 }
 
 .darkmode {
@@ -33,7 +38,9 @@
 	--third-text: #5f5f5f;
 	--primary-color: #0a899fd4;
 	--primary-hover: #0a899f;
+	--primary-disable: #0a899f9e;
 	--btn-text-color: #ffffff;
+	--btn-text-color-disable: #ffffff6b;
 	--input-bg-color: #292929;
 	--input-border-color: #6f6f6f00;
 	--highlight-text: #027dff;
@@ -42,6 +49,9 @@
 	--scrollbar-thumb-hover: #333333;
 	--incoming-chat: #01a5b7ba;
 	--warning-color: #c10000b8;
+	--error-bg: #a32632;
+	--error-text: #ffbcc3f2;
+	--error-border: #a32632;
 }
 
 * {
@@ -58,13 +68,12 @@ body {
 	min-height: 100vh;
 	background: var(--background-color);
 }
-#theme-switch {
+#root > #theme-switch {
 	height: 50px;
 	width: 50px;
 	padding: 0;
 	border: none;
 	border-radius: 50%;
-	/* background-color: var(--base-variant); */
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -72,7 +81,7 @@ body {
 	top: 20px;
 	right: 25px;
 }
-#theme-switch:hover {
+#root > #theme-switch:hover {
 	background: #00000031 !important;
 	cursor: pointer;
 }
@@ -81,8 +90,7 @@ body {
 	background: var(--base-color);
 	width: 450px;
 	border-radius: 16px;
-	box-shadow: 0 0 128px 0 rgba(0, 0, 0, 0.1),
-		0 32px 64px -48px rgba(0, 0, 0, 0.5);
+	box-shadow: 0 0 128px 0 rgba(0, 0, 0, 0.1), 0 32px 64px -48px rgba(0, 0, 0, 0.5);
 	color: var(--text-color);
 }
 .form {
@@ -149,7 +157,8 @@ form .name-details .field:last-child {
 	border-radius: 5px;
 	cursor: pointer;
 }
-.form form .field i {
+
+.form form .field .svg {
 	position: absolute;
 	right: 15px;
 	color: var(--secondary-text);
@@ -157,7 +166,7 @@ form .name-details .field:last-child {
 	transform: translateY(-50%);
 	cursor: pointer;
 }
-.form form .field i.active::before {
+.form form .field .svg.active {
 	color: var(--text-color);
 	content: '\f070';
 }
@@ -184,13 +193,13 @@ form .name-details .field:last-child {
 	background: var(--scrollbar-thumb-hover);
 }
 .error-txt {
-	color: #721c24;
-	background: #f8d7da;
+	color: var(--error-text);
+	background: var(--error-bg);
 	padding: 8px 10px;
 	text-align: center;
 	border-radius: 5px;
 	margin-bottom: 10px;
-	border: 1px solid #a32632;
+	border: 1px solid var(--error-border);
 }
 .success-txt {
 	color: #0a8a3b;

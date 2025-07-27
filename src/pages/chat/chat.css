@@ -99,6 +99,7 @@
 	font-size: 19px;
 	cursor: pointer;
 	border-radius: 0 5px 5px 0;
+	line-height: 0.1;
 }
 
 @media only screen and (max-width: 500px) {
@@ -130,9 +131,9 @@
 		width: 100vw;
 	}
 	.typing-area input {
-		height: 35px;
+		height: 42px;
 		width: 100%;
-		font-size: 14px;
+		font-size: 15px;
 		border-radius: 3px 0 0 3px;
 	}
 	.typing-area button {

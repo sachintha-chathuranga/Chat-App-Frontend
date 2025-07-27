@@ -1,17 +1,11 @@
-import { CircularProgress } from '@mui/material';
-import React, {
-	memo,
-	useCallback,
-	useContext,
-	useEffect,
-	useRef,
-	useState,
-} from 'react';
+import {Close, SearchOutlined} from '@mui/icons-material';
+import {CircularProgress} from '@mui/material';
+import React, {memo, useCallback, useContext, useEffect, useRef, useState} from 'react';
 import io from 'socket.io-client';
-import { fetchAllNotification } from '../../apiCalls';
+import {fetchAllNotification} from '../../apiCalls';
 import Friend from '../../component/Friend';
 import Header from '../../component/Header/Header';
-import { AuthContext } from '../../context/AuthContext';
+import {AuthContext} from '../../context/AuthContext';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useFriend from '../../hooks/useFriend';
 import './home.css';
@@ -20,20 +14,18 @@ const API_URL = process.env.REACT_APP_API_SOCKET_URL;
 const Home = () => {
 	const axiosPrivate = useAxiosPrivate();
 	const socket = useRef(null);
-	const { user } = useContext(AuthContext);
+	const {user} = useContext(AuthContext);
 	const [active, setActive] = useState(false);
+	const [isSearch, setIsSearch] = useState(false);
 	const [searchInput, setSearch] = useState('');
 	const inputElement = useRef();
 	const [show, setShow] = useState(false);
 	const [notification, setNotification] = useState([]);
 	const [isMount, setisMount] = useState(true);
 	const [index, setindex] = useState(1);
-	const { friends, setfriend, isLoading, error, hasMore } = useFriend(
-		index,
-		active,
-		searchInput
-	);
+	const {friends, setfriend, isLoading, error, hasMore} = useFriend(index, active, isSearch, searchInput);
 
+	// For the Pagination
 	const intObserver = useRef();
 	const lastfriendRef = useCallback(
 		(friend) => {
@@ -64,51 +56,78 @@ const Home = () => {
 			socket?.current.disconnect();
 		});
 		return () => {
+			console.log("Home is unmount socket get disconnected")
 			setisMount(false);
 			socket?.current.off();
 			socket?.current.disconnect();
 		};
 	}, [user, isMount, axiosPrivate]);
-
-	const activeSearch = () => {
+	const fetchFriendList = () => {
 		setfriend([]);
-		setActive(!active);
-		setSearch('');
 		setindex(1);
+		setActive(!active);
+	};
+	const searchFriends = () => {
+		if (searchInput) {
+			setIsSearch(true);
+			fetchFriendList();
+		}
 		inputElement.current.focus();
+	};
+	const clearSearch = () => {
+		if (isSearch) {
+			setIsSearch(false);
+			fetchFriendList();
+		}
+		setSearch('');
+		inputElement.current.focus();
+	};
+	const handleInputChange = (text) => {
+		if (!text) {
+			if (isSearch) {
+				setIsSearch(false);
+				fetchFriendList();
+			}
+		}
+		setSearch(text);
 	};
 
 	return (
 		<div className="wrapper">
 			<section className="users" onClick={() => show && setShow(false)}>
 				<Header user={user} logUserId={user.user_id} headerType={'home'} />
-				<div className="search">
-					<span className="text">Select an user to start chat</span>
+				<form
+					className="search"
+					onSubmit={(e) => {
+						e.preventDefault();
+						searchFriends();
+					}}
+				>
 					<input
 						type="text"
 						autoFocus
 						value={searchInput}
-						onChange={(e) => setSearch(e.target.value)}
+						onChange={(e) => handleInputChange(e.target.value)}
 						ref={inputElement}
-						className={active ? 'active' : ''}
 						placeholder="Enter name to search..."
 					/>
-					<button
-						className={active ? 'active' : ''}
-						onClick={activeSearch}
-					>
-						<i className="fas fa-search"></i>
+
+					{searchInput && (
+						<button type="button" className="clear-btn" onClick={clearSearch}>
+							<Close />
+						</button>
+					)}
+
+					<button type="submit" className="search-btn" disabled={!searchInput}>
+						<SearchOutlined />
 					</button>
-				</div>
+				</form>
 				<div className="users-list">
 					{error && <div className="error-txt">{error}</div>}
 
 					{!isLoading &&
 						friends.map((f, i) => {
-							socket?.current.emit(
-								'joinRoom',
-								user.user_id + Number(f.user_id)
-							);
+							socket?.current.emit('joinRoom', user.user_id + Number(f.user_id));
 							if (friends.length === i + 1) {
 								return (
 									<div key={f.user_id} ref={lastfriendRef}>
@@ -116,13 +135,7 @@ const Home = () => {
 									</div>
 								);
 							}
-							return (
-								<Friend
-									key={f.user_id}
-									notifi={notification}
-									friend={f}
-								/>
-							);
+							return <Friend key={f.user_id} notifi={notification} friend={f} />;
 						})}
 
 					{isLoading && (
@@ -142,4 +155,4 @@ const Home = () => {
 	);
 };
 
-export default memo(Home);
+export default Home;

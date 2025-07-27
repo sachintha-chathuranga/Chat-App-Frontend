@@ -1,46 +1,49 @@
-import React, { useEffect, useState } from "react";
-import { memo } from "react";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import { Link } from "react-router-dom";
+import {Circle} from '@mui/icons-material';
+import React, {memo, useEffect, useMemo, useState} from 'react';
+import {Link} from 'react-router-dom';
+import {formatDateTime} from '../utils/dateUtils';
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 const imageUrl = process.env.REACT_APP_AWS_URL;
 
 const Friend = ({notifi, friend}) => {
-    const [msg, setMsg] = useState({});
-    const axiosPrivate = useAxiosPrivate();
-    const [notification, setNotification] = useState([]);
-    const [isMount, setisMount] = useState(true);
+	const [notification, setNotification] = useState([]);
 
-    useEffect(() => {
-        setNotification(notifi.filter(obj => obj.sender_id===friend.user_id));
-    }, [notifi, friend])
-    
-    useEffect(() => {
-        const getLastMsg = async () =>{
-            axiosPrivate.get(`messages/msg?friend_id=${friend.user_id}`).then(res =>{
-                isMount && setMsg(res.data);
-            }).catch(err => console.log(err));
-        }
-        getLastMsg() ;
-        return setisMount(false);
-    }, [friend.user_id, axiosPrivate, isMount]);
+	useEffect(() => {
+		setNotification(notifi.filter((obj) => obj.sender_id === friend.user_id));
+	}, [notifi, friend]);
 
 
-    return (
-        <Link to={"/chat/"+friend.user_id} style={{textDecoration:"none"}} >
-            <div className="friend">
-                <div className="content">
-                    <img src={friend.profil_pic ? imageUrl+friend.profil_pic : PF+"default.png"} alt="proPic" />
-                    {notification.length!==0 && <span className="notification">{notification.length }</span>}
-                    <div className="details">
-                        <span>{friend.fname+ " "+friend.lname}</span>
-                        <p>{notification.length===0 ? msg.message : notification[notification.length - 1].message}</p>
-                    </div>
-                </div>
-                <div className={friend.status ? "status-dot" : "status-dot offline"}><i className="fas fa-circle"></i></div>
-            </div>
-        </Link>
-    )
-}
+
+	const masgDate = useMemo(() =>{ 
+		return formatDateTime(friend.lastMessageTime)
+	}, [friend]);
+
+	return (
+		<Link to={'/chat/' + friend.user_id} style={{textDecoration: 'none'}}>
+			<div className="friend">
+				<div className="content">
+					<img src={friend.profil_pic ? imageUrl + friend.profil_pic : PF + 'default.png'} alt="proPic" />
+					{notification.length !== 0 && <span className="notification">{notification.length}</span>}
+					<div className="details">
+						<span>{friend.fname + ' ' + friend.lname}</span>
+						<p>
+							{notification.length === 0
+								? friend.lastMessage
+									? friend.lastMessage
+									: 'No any messages yet!'
+								: notification[notification.length - 1].message}
+						</p>
+					</div>
+				</div>
+				<div className="right-side">
+					<div className={friend.status ? 'status-dot' : 'status-dot offline'}>
+						<Circle sx={{fontSize: 15}} />
+					</div>
+					<p>{(masgDate ? masgDate : '')}</p>
+				</div>
+			</div>
+		</Link>
+	);
+};
 
 export default memo(Friend);
