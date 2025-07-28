@@ -1,0 +1,39 @@
+.friend-skeleton {
+	padding: 10px 15px 10px 15px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.friend-skeleton .img {
+	width: 50px;
+	height: 50px;
+}
+.friend-skeleton .text-wrapper {
+	margin-left: 15px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 8px;
+}
+.friend-skeleton .text-wrapper .text-1 {
+	width: 200px;
+}
+.friend-skeleton .text-wrapper .text-2 {
+	width: 122px;
+}
+.friend-skeleton .right-side {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: end;
+	gap: 8px;
+}
+.friend-skeleton .right-side .skeleton-dot {
+	width: 14px;
+	height: 14px;
+	border-radius: 50%;
+}
+.friend-skeleton .right-side .text-2 {
+	width: 50px;
+}

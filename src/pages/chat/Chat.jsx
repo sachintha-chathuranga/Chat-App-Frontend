@@ -1,18 +1,12 @@
-import { Telegram } from '@mui/icons-material';
-import React, {
-	useCallback,
-	useContext,
-	useEffect,
-	useRef,
-	useState,
-} from 'react';
-import { useParams } from 'react-router-dom';
+import {Telegram} from '@mui/icons-material';
+import React, {useCallback, useContext, useEffect, useRef, useState} from 'react';
+import {useParams} from 'react-router-dom';
 import io from 'socket.io-client';
-import { getFriend, readAllMessages } from '../../apiCalls';
+import {getFriend, readAllMessages} from '../../apiCalls';
 import Header from '../../component/Header/Header';
 import Incoming from '../../component/Incoming';
 import Outgoing from '../../component/Outgoing';
-import { AuthContext } from '../../context/AuthContext';
+import {AuthContext} from '../../context/AuthContext';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useMessage from '../../hooks/useMessage';
 import './chat.css';
@@ -20,7 +14,7 @@ import './chat.css';
 const API_URL = process.env.REACT_APP_API_SOCKET_URL;
 
 export default function Chat() {
-	const { user, dispatch } = useContext(AuthContext);
+	const {user, dispatch} = useContext(AuthContext);
 	const [friend, setFriend] = useState({});
 	const params = useParams();
 	const [inputMsg, setinputMsg] = useState('');
@@ -28,22 +22,23 @@ export default function Chat() {
 	const socket = useRef(null);
 	const axiosPrivate = useAxiosPrivate();
 	const [isMount, setisMount] = useState(true);
+	const [isFriendFetching, setIsFriendFetching] = useState(false);
+	const skeletonMessages = [1, 2, 1, 1, 2];
 
 	const scrollToBottom = useCallback(() => {
 		chatBox.current.scrollTop = chatBox?.current.scrollHeight;
 	}, []);
 
-	const { messages, setMessages, error } = useMessage(
-		params.friend_id,
-		scrollToBottom
-	);
+	const {messages, setMessages, error, isMessageFetching} = useMessage(params.friend_id, scrollToBottom);
 
 	useEffect(() => {
 		readAllMessages(axiosPrivate, params.friend_id);
 	}, [axiosPrivate, params.friend_id, messages]);
 
 	useEffect(() => {
+		setIsFriendFetching(true);
 		getFriend(axiosPrivate, params.friend_id, dispatch).then((res) => {
+			setIsFriendFetching(false);
 			res && setFriend(res);
 			scrollToBottom();
 		});
@@ -52,10 +47,7 @@ export default function Chat() {
 	useEffect(() => {
 		socket.current = io.connect(API_URL);
 		socket?.current.on('connect', () => {
-			socket?.current.emit(
-				'joinRoom',
-				user.user_id + Number(params.friend_id)
-			);
+			socket?.current.emit('joinRoom', user.user_id + Number(params.friend_id));
 			socket?.current?.on('getMessage', (data) => {
 				isMount && setMessages((prev) => [...prev, data]);
 			});
@@ -66,10 +58,7 @@ export default function Chat() {
 		});
 		return () => {
 			setisMount(false);
-			socket?.current.emit(
-				'leaveRoom',
-				user.user_id + Number(params.friend_id)
-			);
+			socket?.current.emit('leaveRoom', user.user_id + Number(params.friend_id));
 			socket.current?.off();
 			socket?.current.disconnect();
 		};
@@ -111,34 +100,34 @@ export default function Chat() {
 					setMessages={setMessages}
 					isEmpty={Boolean(messages.length)}
 					headerType={'chat'}
+					isFriendFetching={isFriendFetching}
 				/>
 
 				<div className="chat-box" ref={chatBox}>
 					{error && <div className="error-txt">{error}</div>}
-					{messages.length !== 0 ? (
-						messages.map((msg, index) =>
-							msg.sender_id === user.user_id ? (
-								<Outgoing key={index} msg={msg.message} />
-							) : (
-								<Incoming
-									key={index}
-									msg={msg.message}
-									profil_pic={friend.profil_pic}
-								/>
+					{!isMessageFetching ? (
+						messages.length !== 0 ? (
+							messages.map((msg, index) =>
+								msg.sender_id === user.user_id ? (
+									<Outgoing key={index} msg={msg.message} />
+								) : (
+									<Incoming key={index} msg={msg.message} profil_pic={friend.profil_pic} />
+								)
 							)
+						) : (
+							<div className="empty-chat">No messages are available. Once you send message they will appear here.</div>
 						)
 					) : (
-						<div className="empty-chat">
-							No messages are available. Once you send message they will
-							appear here.
-						</div>
+						skeletonMessages.map((msg, index) =>
+							msg === 2 ? (
+								<Outgoing isLoading={isMessageFetching} key={index} />
+							) : (
+								<Incoming isLoading={isMessageFetching} key={index} />
+							)
+						)
 					)}
 				</div>
-				<form
-					onSubmit={handleSubmit}
-					className="typing-area"
-					autoComplete="off"
-				>
+				<form onSubmit={handleSubmit} className="typing-area" autoComplete="off">
 					<input
 						type="text"
 						value={inputMsg}

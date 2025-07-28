@@ -1,10 +1,10 @@
 import {useEffect, useState} from 'react';
-import {fetchFriend, searchFriend} from '../apiCalls';
+import {fetchFriendList, searchFriend} from '../apiCalls';
 import useAxiosPrivate from './useAxiosPrivate';
 
 const useFriend = (index, active, isSearch, searchInput) => {
 	const [friends, setfriend] = useState([]);
-	const [isLoading, setisLoading] = useState(false);
+	const [isFetching, setIsFetching] = useState(false);
 	const [error, seterror] = useState(null);
 	const [hasMore, sethasMore] = useState(true);
 	const axiosPrivate = useAxiosPrivate();
@@ -12,13 +12,13 @@ const useFriend = (index, active, isSearch, searchInput) => {
 	useEffect(() => {
 		//appending to current friendlist
 		if (friends.length >= 15) {
-			setisLoading(true);
+			setIsFetching(true);
 			isSearch
 				? searchFriend(axiosPrivate, index, searchInput)
 						.then((d) => {
 							setfriend((prev) => [...prev, ...d]);
 							sethasMore(Boolean(d.length));
-							setisLoading(false);
+							setIsFetching(false);
 						})
 						.catch((e) => {
 							if (!e?.response) {
@@ -28,13 +28,13 @@ const useFriend = (index, active, isSearch, searchInput) => {
 							} else {
 								seterror('You are currently offline. Check your internet Connection!');
 							}
-							setisLoading(false);
+							setIsFetching(false);
 						})
-				: fetchFriend(axiosPrivate, index)
+				: fetchFriendList(axiosPrivate, index)
 						.then((d) => {
 							setfriend((prev) => [...prev, ...d]);
 							sethasMore(Boolean(d.length === 15));
-							setisLoading(false);
+							setIsFetching(false);
 						})
 						.catch((e) => {
 							if (!e?.response) {
@@ -44,7 +44,7 @@ const useFriend = (index, active, isSearch, searchInput) => {
 							} else {
 								seterror('You are currently offline. Check your internet Connection!');
 							}
-							setisLoading(false);
+							setIsFetching(false);
 						});
 		}
 		// eslint-disable-next-line
@@ -52,12 +52,12 @@ const useFriend = (index, active, isSearch, searchInput) => {
 
 	// search or get recent users
 	useEffect(() => {
-		setisLoading(true);
+		setIsFetching(true);
 		isSearch
 			? searchFriend(axiosPrivate, null, searchInput)
 					.then((d) => {
 						setfriend(d);
-						setisLoading(false);
+						setIsFetching(false);
 					})
 					.catch((e) => {
 						if (!e?.response) {
@@ -67,12 +67,12 @@ const useFriend = (index, active, isSearch, searchInput) => {
 						} else {
 							seterror('You are currently offline. Check your internet Connection!');
 						}
-						setisLoading(false);
+						setIsFetching(false);
 					})
-			: fetchFriend(axiosPrivate, null)
+			: fetchFriendList(axiosPrivate, null)
 					.then((d) => {
 						setfriend(d);
-						setisLoading(false);
+						setIsFetching(false);
 					})
 					.catch((e) => {
 						if (!e?.response) {
@@ -82,12 +82,12 @@ const useFriend = (index, active, isSearch, searchInput) => {
 						} else {
 							seterror('You are currently offline. Check your internet Connection!');
 						}
-						setisLoading(false);
+						setIsFetching(false);
 					});
 		// eslint-disable-next-line
 	}, [active, axiosPrivate]);
 
-	return {friends, setfriend, isLoading, error, hasMore};
+	return {friends, setfriend, isFetching, error, hasMore};
 };
 
 export default useFriend;

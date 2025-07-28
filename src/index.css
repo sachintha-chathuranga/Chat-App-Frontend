@@ -21,10 +21,13 @@
 	--scrollbar-thumb: #888;
 	--scrollbar-thumb-hover: #555;
 	--incoming-chat: #fff;
+	--incoming-chat-skeleton: #b1b1b1;
+	--outgoing-chat-skeleton: var(--skeleton);
 	--warning-color: #f86f6f;
 	--error-bg: #f8d7da;
 	--error-text: #a32632;
 	--error-border: #a32632;
+	--skeleton: #e0e0e0;
 }
 
 .darkmode {
@@ -48,10 +51,13 @@
 	--scrollbar-thumb: #555555be;
 	--scrollbar-thumb-hover: #333333;
 	--incoming-chat: #01a5b7ba;
+	--incoming-chat-skeleton: #00575f94;
+	--outgoing-chat-skeleton: #333;
 	--warning-color: #c10000b8;
 	--error-bg: #a32632;
 	--error-text: #ffbcc3f2;
 	--error-border: #a32632;
+	--skeleton: #3a3a3a;
 }
 
 * {
@@ -213,6 +219,37 @@ form .name-details .field:last-child {
 .wrapper img {
 	object-fit: cover;
 	border-radius: 50%;
+	transition: all 2s linear;
+}
+
+.skeleton {
+	background-color: var(--skeleton);
+	animation: skeleton-loading 1.7s infinite linear;
+}
+
+.skeleton.img {
+	border-radius: 50%;
+}
+
+.skeleton.text-1 {
+	height: 15px;
+	border-radius: 8px;
+}
+.skeleton.text-2 {
+	height: 12px;
+	border-radius: 8px;
+}
+
+@keyframes skeleton-loading {
+	0% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.4;
+	}
+	100% {
+		opacity: 1;
+	}
 }
 
 @media only screen and (max-width: 500px) {

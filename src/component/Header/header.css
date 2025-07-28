@@ -34,6 +34,12 @@
 .profile #header img {
 	margin-left: 15px;
 }
+
+#header .img.skeleton {
+	margin-left: 15px;
+	width: 50px;
+	height: 50px;
+}
 #header .details {
 	color: var(--text-color);
 	margin-left: 15px;
@@ -48,10 +54,11 @@
 	-webkit-box-orient: vertical;
 	word-break: break-all;
 }
-.chat-area #header span.skelton {
+.chat-area #header span.skeleton {
 	width: 168px;
+	margin-bottom: 10px;
 }
-.chat-area #header p.skelton {
+.chat-area #header p.skeleton {
 	width: 112px;
 }
 /* Dropdown Button */

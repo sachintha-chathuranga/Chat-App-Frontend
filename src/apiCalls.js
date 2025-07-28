@@ -132,7 +132,7 @@ export const userDeleteCall = async (axiosPrivate, userCredintial, dispatch) => 
 		}
 	}
 };
-export const fetchFriend = async (axiosPrivate, index) => {
+export const fetchFriendList = async (axiosPrivate, index) => {
 	try {
 		const res = await axiosPrivate.get(index ? `users/friends?index=${index}` : `users/friends`);
 		return res.data;

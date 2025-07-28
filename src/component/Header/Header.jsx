@@ -7,10 +7,10 @@ import {
 	MoreVert,
 } from '@mui/icons-material';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import { memo, useContext, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { clearError, clearMessages, logOutCall } from '../../apiCalls';
-import { AuthContext } from '../../context/AuthContext';
+import {memo, useContext, useEffect, useState} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
+import {clearError, clearMessages, logOutCall} from '../../apiCalls';
+import {AuthContext} from '../../context/AuthContext';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import ThemeButton from '../ThemeButton';
 import './header.css';
@@ -19,7 +19,7 @@ const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 const imageUrl = process.env.REACT_APP_AWS_URL;
 
 const Header = (props) => {
-	const {isFetching, dispatch} = useContext(AuthContext);
+	const {dispatch} = useContext(AuthContext);
 	const navigate = useNavigate();
 	const axiosPrivate = useAxiosPrivate();
 	const [fullName, setFullName] = useState('');
@@ -81,12 +81,18 @@ const Header = (props) => {
 				) : (
 					<></>
 				)}
-				<img src={props.user?.profil_pic ? imageUrl + props.user?.profil_pic : PF + 'default.png'} alt="proPic" />
+				{!props.isFriendFetching ? (
+					<img src={props.user?.profil_pic ? imageUrl + props.user?.profil_pic : PF + 'default.png'} alt="proPic" />
+				) : (
+					<div className="img skeleton"></div>
+				)}
 				<div className="details">
-					<span className={isFetching ? 'skelton' : ''}>
-						{!isFetching && (fullName ? fullName : props.user?.fname + ' ' + props.user?.lname)}
+					<span className={props.isFriendFetching ? 'skeleton text-1' : ''}>
+						{!props.isFriendFetching && (fullName ? fullName : props.user?.fname + ' ' + props.user?.lname)}
 					</span>
-					<p className={isFetching ? 'skelton' : ''}>{!isFetching && (props.user?.status ? 'Online' : 'Offline')}</p>
+					<p className={props.isFriendFetching ? 'skeleton text-2' : ''}>
+						{!props.isFriendFetching && (props.user?.status ? 'Online' : 'Offline')}
+					</p>
 				</div>
 			</div>
 			<div className="dropdown">
@@ -126,10 +132,8 @@ const Header = (props) => {
 					) : (
 						<></>
 					)}
-				
 
 					<ThemeButton setShow={setShow} type={'header'} />
-					
 
 					<div onClick={handleLogout} className="item">
 						<ExitToAppOutlined />
