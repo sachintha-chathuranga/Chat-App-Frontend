@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { clearError, userDeleteCall } from '../apiCalls';
 import { AuthContext } from '../context/AuthContext';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import { VisibilityOffOutlined, VisibilityOutlined } from '@mui/icons-material';
 
 function Warnnig({ toggleWarning }) {
 	const navigate = useNavigate();
@@ -66,10 +67,21 @@ function Warnnig({ toggleWarning }) {
 							placeholder="password"
 							required
 						/>
-						<i
+						{/* <i
 							className={isActive ? 'fas fa-eye active' : 'fas fa-eye'}
 							onClick={() => setisActive(!isActive)}
-						></i>
+						></i> */}
+						{isActive ? (
+							<VisibilityOffOutlined
+								className={'svg active'}
+								onClick={() => setisActive(!isActive)}
+							/>
+						) : (
+							<VisibilityOutlined
+								className={'svg'}
+								onClick={() => setisActive(!isActive)}
+							/>
+						)}
 						<div id="foot">
 							<button
 								onClick={() => {
