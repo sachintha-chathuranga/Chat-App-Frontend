@@ -16,7 +16,10 @@ export const getNewToken = async (dispatch) => {
 	try {
 		const res = await axiosPublic.get(`tokens/update`);
 		dispatch(LoginSuccess(res.data));
-		sessionStorage.setItem('user', JSON.stringify(res.data));
+		let user = JSON.parse(localStorage.getItem('user'));
+		user
+			? localStorage.setItem('user', JSON.stringify(res.data))
+			: sessionStorage.setItem('user', JSON.stringify(res.data));
 		return res.data.access_token;
 	} catch (err) {
 		if (!err?.response) {
@@ -24,6 +27,7 @@ export const getNewToken = async (dispatch) => {
 			return null;
 		} else if (err.response?.data) {
 			dispatch(LogOut());
+			localStorage.removeItem('user');
 			sessionStorage.removeItem('user');
 			return null;
 		} else {
@@ -32,12 +36,15 @@ export const getNewToken = async (dispatch) => {
 		}
 	}
 };
-export const loginCall = async (userCredintial, dispatch) => {
+export const loginCall = async (userCredintial, rememberMe, dispatch) => {
 	dispatch(LoginStart(userCredintial));
 	try {
 		const res = await axiosPublic.post(`users/login`, userCredintial);
 		dispatch(LoginSuccess(res.data));
-		sessionStorage.setItem('user', JSON.stringify(res.data));
+
+		rememberMe
+			? localStorage.setItem('user', JSON.stringify(res.data))
+			: sessionStorage.setItem('user', JSON.stringify(res.data));
 		return res.status;
 	} catch (err) {
 		if (!err?.response) {
@@ -76,8 +83,8 @@ export const logOutCall = async (axiosPrivate, dispatch) => {
 	try {
 		const res = await axiosPrivate.post(`users/logout`);
 		dispatch(LogOut());
+		localStorage.removeItem('user');
 		sessionStorage.removeItem('user');
-		console.log('sucsess');
 		return res.status;
 	} catch (err) {
 		if (!err?.response) {
@@ -97,7 +104,10 @@ export const userUpdateCall = async (axiosPrivate, userCredintial, dispatch) => 
 	try {
 		const res = await axiosPrivate.put(`users/`, userCredintial);
 		dispatch(LoginSuccess(res.data));
-		sessionStorage.setItem('user', JSON.stringify(res.data));
+		let user = JSON.parse(localStorage.getItem('user'));
+		user
+			? localStorage.setItem('user', JSON.stringify(res.data))
+			: sessionStorage.setItem('user', JSON.stringify(res.data));
 		return res.status;
 	} catch (err) {
 		if (!err?.response) {
@@ -117,6 +127,7 @@ export const userDeleteCall = async (axiosPrivate, userCredintial, dispatch) => 
 	try {
 		const res = await axiosPrivate.delete(`users/`, {data: userCredintial});
 		dispatch(LogOut());
+		localStorage.removeItem('user');
 		sessionStorage.removeItem('user');
 		return res.status;
 	} catch (err) {
@@ -208,7 +219,9 @@ export const clearError = (dispatch) => {
 
 export const getSignRequest = async (axiosPrivate, file, dispatch) => {
 	try {
-		const res = await axiosPrivate.get(`aws/sign-s3?file_name=${encodeURIComponent(file.name)}&file_type=${file.type}`);
+		const res = await axiosPrivate.get(
+			`aws/sign-s3?file_name=${encodeURIComponent(file.name)}&file_type=${file.type}`
+		);
 		return res;
 	} catch (err) {
 		if (!err?.response) {

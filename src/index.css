@@ -133,6 +133,18 @@ form .name-details .field:last-child {
 	flex-direction: column;
 	margin-bottom: 10px;
 }
+.form form .checkBoxField {
+	padding: 10px 0 6px 15px;
+	display: flex;
+	align-items: center;
+}
+.form form .checkBoxField #checkBox {
+	margin-right: 10px;
+	width: 15px;
+	height: 15px;
+}
+
+
 .form form .field label {
 	margin-bottom: 3px;
 }

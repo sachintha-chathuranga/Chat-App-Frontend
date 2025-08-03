@@ -1,9 +1,9 @@
-import { VisibilityOffOutlined, VisibilityOutlined } from '@mui/icons-material';
-import { CircularProgress } from '@mui/material';
-import { useContext, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { clearError, loginCall } from '../../apiCalls';
-import { AuthContext } from '../../context/AuthContext';
+import {VisibilityOffOutlined, VisibilityOutlined} from '@mui/icons-material';
+import {CircularProgress} from '@mui/material';
+import {useContext, useRef, useState} from 'react';
+import {Link} from 'react-router-dom';
+import {clearError, loginCall} from '../../apiCalls';
+import {AuthContext} from '../../context/AuthContext';
 
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
@@ -11,7 +11,8 @@ export default function Login() {
 	const email = useRef();
 	const password = useRef();
 	const [isActive, setisActive] = useState(false);
-	const { isFetching, error, dispatch } = useContext(AuthContext);
+	const [rememberMe, setRememberMe] = useState(false);
+	const {isFetching, error, dispatch} = useContext(AuthContext);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -20,6 +21,7 @@ export default function Login() {
 				email: email.current.value.trim(),
 				password: password.current.value.trim(),
 			},
+			rememberMe,
 			dispatch
 		).then((res) => {
 			if (res !== 200) {
@@ -37,43 +39,33 @@ export default function Login() {
 					<img className="logo" src={PF + 'favicon.ico'} alt="Logo" />
 					<h3>Bliss Chat </h3>
 				</header>
-				<form onSubmit={handleSubmit} autoComplete="off">
+				<form onSubmit={handleSubmit} autoComplete="on">
 					{error && <div className="error-txt">{error}</div>}
 					<div className="field input">
-						<label>Email Address</label>
-						<input
-							type="email"
-							ref={email}
-							placeholder="Enter your email"
-							required
-						/>
+						<label htmlFor="email">Email Address</label>
+						<input id="email" type="email" ref={email} placeholder="Enter your email" required />
 					</div>
 					<div className="field input">
-						<label>Password</label>
+						<label htmlFor="password">Password</label>
 						<input
+							id="password"
 							type={isActive ? 'text' : 'password'}
 							ref={password}
 							placeholder="Enter your password"
 							required
 						/>
 						{isActive ? (
-							<VisibilityOffOutlined
-								className={'svg active'}
-								onClick={() => setisActive(!isActive)}
-							/>
+							<VisibilityOffOutlined className={'svg active'} onClick={() => setisActive(!isActive)} />
 						) : (
-							<VisibilityOutlined
-								className={'svg'}
-								onClick={() => setisActive(!isActive)}
-							/>
+							<VisibilityOutlined className={'svg'} onClick={() => setisActive(!isActive)} />
 						)}
 					</div>
+					<div className="checkBoxField">
+						<input type="checkbox" id="checkBox" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
+						<label htmlFor="checkBox">Keep my signIn</label>
+					</div>
 					<div className="field button">
-						<button
-							type="submit"
-							className="loginBtn"
-							disabled={isFetching}
-						>
+						<button type="submit" className="loginBtn" disabled={isFetching}>
 							{isFetching ? (
 								<CircularProgress
 									style={{

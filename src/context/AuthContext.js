@@ -11,7 +11,7 @@ export const INITIAL_STATE = {
     //     profil_pic: null,
     //     status: true
     // },
-    user: JSON.parse(sessionStorage.getItem("user")),
+    user: JSON.parse(localStorage.getItem("user")) || JSON.parse(sessionStorage.getItem("user")),
     isFetching: false,
     error: null
 }
