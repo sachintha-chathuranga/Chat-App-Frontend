@@ -15,8 +15,12 @@ const Friend = ({notifi, friend}) => {
 
 
 	const masgDate = useMemo(() =>{ 
-		return formatDateTime(friend.lastMessageTime)
-	}, [friend]);
+		if (notification.length ===0) {
+			return formatDateTime(friend.lastMessageTime)
+		} else {
+			return formatDateTime(notification[notification.length - 1].createdAt);
+		}
+	}, [notification]);
 
 	return (
 		<Link to={'/chat/' + friend.user_id} style={{textDecoration: 'none'}}>
@@ -39,7 +43,7 @@ const Friend = ({notifi, friend}) => {
 					<div className={friend.status ? 'status-dot' : 'status-dot offline'}>
 						<Circle sx={{fontSize: 15}} />
 					</div>
-					<p>{(masgDate ? masgDate : '')}</p>
+					<p>{masgDate}</p>
 				</div>
 			</div>
 		</Link>

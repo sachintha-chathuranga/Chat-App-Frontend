@@ -1,20 +1,20 @@
 import {Close, SearchOutlined} from '@mui/icons-material';
 import React, {memo, useCallback, useContext, useEffect, useRef, useState} from 'react';
 import io from 'socket.io-client';
-import {fetchAllNotification} from '../../apiCalls';
+import {fetchAllNotification, getFriend} from '../../apiCalls';
 import Friend from '../../component/Friend';
 import Header from '../../component/Header/Header';
+import FriendSkeleton from '../../component/Skeletons/Friend/FriendSkeleton';
 import {AuthContext} from '../../context/AuthContext';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useFriend from '../../hooks/useFriend';
 import './home.css';
-import FriendSkeleton from '../../component/Skeletons/Friend/FriendSkeleton';
 
 const API_URL = process.env.REACT_APP_API_SOCKET_URL;
 const Home = () => {
 	const axiosPrivate = useAxiosPrivate();
 	const socket = useRef(null);
-	const {user} = useContext(AuthContext);
+	const {user, dispatch} = useContext(AuthContext);
 	const [active, setActive] = useState(false);
 	const [isSearch, setIsSearch] = useState(false);
 	const [searchInput, setSearch] = useState('');
@@ -25,6 +25,11 @@ const Home = () => {
 	const [index, setindex] = useState(1);
 	const {friends, setfriend, isFetching, error, hasMore} = useFriend(index, active, isSearch, searchInput);
 	const skeletonFriends = [0, 1, 2, 3, 4];
+	const friendsRef = useRef(friends);
+
+	useEffect(() => {
+		friendsRef.current = friends;
+	}, [friends]);
 
 	// For the Pagination
 	const intObserver = useRef();
@@ -44,25 +49,38 @@ const Home = () => {
 
 	useEffect(() => {
 		fetchAllNotification(axiosPrivate).then((data) => {
-			isMount && data && data.length !== 0 && setNotification(data);
+			data && data.length !== 0 && setNotification(data);
 		});
 		socket.current = io.connect(API_URL);
 		socket?.current.on('connect', () => {
+			console.log('User connect on Home');
+			socket?.current.emit('joinRoom', user.user_id);
+
 			socket?.current?.on('getMessage', (data) => {
-				isMount && setNotification((prev) => [...prev, data]);
+				console.log('getNotification on Home');
+				const sender = friendsRef.current.find((f) => f.user_id == data.sender_id);
+				setNotification((prev) => [...prev, data]);
+				if (!sender) {
+					console.log("fetch friend")
+					getFriend(axiosPrivate, data.sender_id, dispatch).then((friend) => {
+						friend && setfriend(list => [friend, ...list]);
+					});
+				}
 			});
 		});
 		socket?.current.on('error', (error) => {
-			socket.current?.off();
+			console.log('Socket error on Home');
+			socket.current?.off('getMessage');
+			socket?.current.emit('leaveRoom', user.user_id);
 			socket?.current.disconnect();
 		});
 		return () => {
-			console.log('Home is unmount socket get disconnected');
-			setisMount(false);
-			socket?.current.off();
+			console.log('Home is unmount');
+			socket.current?.off('getMessage');
+			socket?.current.emit('leaveRoom', user.user_id);
 			socket?.current.disconnect();
 		};
-	}, [user, isMount, axiosPrivate]);
+	}, []);
 	const fetchFriendList = () => {
 		setfriend([]);
 		setindex(1);
@@ -128,7 +146,6 @@ const Home = () => {
 
 					{!isFetching
 						? friends.map((f, i) => {
-								socket?.current.emit('joinRoom', user.user_id + Number(f.user_id));
 								if (friends.length === i + 1) {
 									return (
 										<div key={f.user_id} ref={lastfriendRef}>

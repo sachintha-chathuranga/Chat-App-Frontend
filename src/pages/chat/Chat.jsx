@@ -21,7 +21,6 @@ export default function Chat() {
 	const chatBox = useRef(null);
 	const socket = useRef(null);
 	const axiosPrivate = useAxiosPrivate();
-	const [isMount, setisMount] = useState(true);
 	const [isFriendFetching, setIsFriendFetching] = useState(false);
 	const skeletonMessages = [1, 2, 1, 1, 2];
 
@@ -47,22 +46,27 @@ export default function Chat() {
 	useEffect(() => {
 		socket.current = io.connect(API_URL);
 		socket?.current.on('connect', () => {
-			socket?.current.emit('joinRoom', user.user_id + Number(params.friend_id));
+			console.log("User connected on Chat")
+			socket?.current.emit('joinRoom', user.user_id);
 			socket?.current?.on('getMessage', (data) => {
-				isMount && setMessages((prev) => [...prev, data]);
+				console.log("User getMessage on Chat")
+				console.log(data)
+				setMessages((prev) => [...prev, data]);
 			});
 		});
 		socket?.current.on('error', (error) => {
-			socket.current?.off();
+			console.log("Socket error on Chat")
+			socket.current?.off('getMessage');
+			socket?.current.emit('leaveRoom', user.user_id);
 			socket?.current.disconnect();
 		});
 		return () => {
-			setisMount(false);
-			socket?.current.emit('leaveRoom', user.user_id + Number(params.friend_id));
-			socket.current?.off();
+			console.log("Chat unmounted")
+			socket.current?.off('getMessage');
+			socket?.current.emit('leaveRoom', user.user_id);
 			socket?.current.disconnect();
 		};
-	}, [user, params.friend_id, isMount, setMessages]);
+	}, []);
 
 	useEffect(() => {
 		scrollToBottom();
@@ -74,6 +78,7 @@ export default function Chat() {
 			sender_id: user.user_id,
 			receiver_id: friend.user_id,
 			message: inputMsg,
+			createdAt: Date.now()
 		};
 		// if(inputMsg.match(/^[\da-fA-F]{4,5}$/)){
 		//     let emoji = inputMsg.padStart(5,'O');
