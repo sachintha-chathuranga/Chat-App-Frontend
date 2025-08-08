@@ -10,10 +10,11 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import {memo, useContext, useEffect, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {clearError, clearMessages, logOutCall} from '../../apiCalls';
-import {AuthContext} from '../../context/AuthContext';
+import {AuthContext} from '../../context/AuthContext/AuthContext';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import ThemeButton from '../ThemeButton';
 import './header.css';
+import { SocketContext } from '../../context/SocketContext/SocketContext';
 
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 const imageUrl = process.env.REACT_APP_AWS_URL;
@@ -52,11 +53,13 @@ const Header = (props) => {
 	const handleLogout = () => {
 		setShow(false);
 		logOutCall(axiosPrivate, dispatch).then((res) => {
-			res === 200
-				? navigate('/login')
-				: setTimeout(() => {
-						clearError(dispatch);
-				  }, 5000);
+			if (res === 200) {
+				navigate('/login');
+			} else {
+				setTimeout(() => {
+					clearError(dispatch);
+				}, 5000);
+			}
 		});
 	};
 	const handleButton = () => {
@@ -82,7 +85,10 @@ const Header = (props) => {
 					<></>
 				)}
 				{!props.isFriendFetching ? (
-					<img src={props.user?.profil_pic ? imageUrl + props.user?.profil_pic : PF + 'default.png'} alt="proPic" />
+					<img
+						src={props.user?.profil_pic ? imageUrl + props.user?.profil_pic : PF + 'default.png'}
+						alt="proPic"
+					/>
 				) : (
 					<div className="img skeleton"></div>
 				)}

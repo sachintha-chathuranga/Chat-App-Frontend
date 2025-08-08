@@ -1,50 +1,46 @@
-import { useContext, useEffect } from "react";
-import { getNewToken } from "../apiCalls";
-import { axiosPublic } from '../axios';
-import { AuthContext } from "../context/AuthContext";
+import {useContext, useEffect} from 'react';
+import {getNewToken} from '../apiCalls';
+import {axiosPublic} from '../axios';
+import {AuthContext} from '../context/AuthContext/AuthContext';
 
 const useAxiosPrivate = () => {
-    const {user, dispatch} = useContext(AuthContext);
-    
-    useEffect(() => {
+	const {user, dispatch} = useContext(AuthContext);
 
-        const requestIntercept = axiosPublic.interceptors.request.use(
-				(config) => {
-					if (!config.headers['Authorization']) {
-						config.headers[
-							'Authorization'
-						] = `Bearer ${user?.access_token}`;
-					}
-					return config;
-				},
-				(error) => Promise.reject(error)
-			);
+	useEffect(() => {
+		const requestIntercept = axiosPublic.interceptors.request.use(
+			(config) => {
+				if (!config.headers['Authorization']) {
+					config.headers['Authorization'] = `Bearer ${user?.access_token}`;
+				}
+				return config;
+			},
+			(error) => Promise.reject(error)
+		);
 
-        const responseIntercept = axiosPublic.interceptors.response.use(
-				(response) => response,
-				async (err) => {
-					const prevRequest = err?.config;
-					if (err?.response?.status === 403 && !prevRequest?.sent) {
-						prevRequest.sent = true;
-						const token = await getNewToken(dispatch);
-						if (token) {
-							prevRequest.headers['Authorization'] = `Bearer ${token}`;
-							return axiosPublic(prevRequest);
-						}
-						return Promise.reject(err);
+		const responseIntercept = axiosPublic.interceptors.response.use(
+			(response) => response,
+			async (err) => {
+				const prevRequest = err?.config;
+				if (err?.response?.status === 403 && !prevRequest?.sent) {
+					prevRequest.sent = true;
+					const token = await getNewToken(dispatch);
+					if (token) {
+						prevRequest.headers['Authorization'] = `Bearer ${token}`;
+						return axiosPublic(prevRequest);
 					}
 					return Promise.reject(err);
 				}
-			);
+				return Promise.reject(err);
+			}
+		);
 
-        return () =>{
-            axiosPublic.interceptors.request.eject(requestIntercept);
-            axiosPublic.interceptors.response.eject(responseIntercept);
-        }
-     
-    }, [user, dispatch]);
+		return () => {
+			axiosPublic.interceptors.request.eject(requestIntercept);
+			axiosPublic.interceptors.response.eject(responseIntercept);
+		};
+	}, [user, dispatch]);
 
-    return axiosPublic;
-}
+	return axiosPublic;
+};
 
 export default useAxiosPrivate;

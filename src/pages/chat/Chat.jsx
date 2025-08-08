@@ -1,12 +1,12 @@
 import {Telegram} from '@mui/icons-material';
 import React, {useCallback, useContext, useEffect, useRef, useState} from 'react';
 import {useParams} from 'react-router-dom';
-import io from 'socket.io-client';
 import {getFriend, readAllMessages} from '../../apiCalls';
 import Header from '../../component/Header/Header';
 import Incoming from '../../component/Incoming';
 import Outgoing from '../../component/Outgoing';
-import {AuthContext} from '../../context/AuthContext';
+import {AuthContext} from '../../context/AuthContext/AuthContext';
+import {SocketContext} from '../../context/SocketContext/SocketContext';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useMessage from '../../hooks/useMessage';
 import './chat.css';
@@ -14,18 +14,20 @@ import './chat.css';
 const API_URL = process.env.REACT_APP_API_SOCKET_URL;
 
 export default function Chat() {
+	console.log("chat render")
+	const {socketMsg, sendSocketMessage, setSocketMsg} = useContext(SocketContext);
 	const {user, dispatch} = useContext(AuthContext);
 	const [friend, setFriend] = useState({});
 	const params = useParams();
 	const [inputMsg, setinputMsg] = useState('');
 	const chatBox = useRef(null);
-	const socket = useRef(null);
+	// const socket = useRef(null);
 	const axiosPrivate = useAxiosPrivate();
 	const [isFriendFetching, setIsFriendFetching] = useState(false);
 	const skeletonMessages = [1, 2, 1, 1, 2];
 
 	const scrollToBottom = useCallback(() => {
-		chatBox.current.scrollTop = chatBox?.current.scrollHeight;
+		chatBox.current.scrollTop = chatBox?.current?.scrollHeight;
 	}, []);
 
 	const {messages, setMessages, error, isMessageFetching} = useMessage(params.friend_id, scrollToBottom);
@@ -44,29 +46,43 @@ export default function Chat() {
 	}, [params.friend_id, scrollToBottom, axiosPrivate, dispatch]);
 
 	useEffect(() => {
-		socket.current = io.connect(API_URL);
-		socket?.current.on('connect', () => {
-			console.log("User connected on Chat")
-			socket?.current.emit('joinRoom', user.user_id);
-			socket?.current?.on('getMessage', (data) => {
-				console.log("User getMessage on Chat")
-				console.log(data)
-				setMessages((prev) => [...prev, data]);
-			});
-		});
-		socket?.current.on('error', (error) => {
-			console.log("Socket error on Chat")
-			socket.current?.off('getMessage');
-			socket?.current.emit('leaveRoom', user.user_id);
-			socket?.current.disconnect();
-		});
-		return () => {
-			console.log("Chat unmounted")
-			socket.current?.off('getMessage');
-			socket?.current.emit('leaveRoom', user.user_id);
-			socket?.current.disconnect();
-		};
+		// socket.current = io.connect(API_URL);
+		// socket?.current.on('connect', () => {
+		// 	console.log('User connected on Chat');
+		// 	socket?.current.emit('joinRoom', user.user_id);
+		// 	socket?.current?.on('getMessage', (data) => {
+		// 		console.log('User getMessage on Chat');
+		// 		console.log(data);
+		// 		if (data.sender_id === friend.user_id) {
+		// 			setMessages((prev) => [...prev, data]);
+		// 		}
+		// 	});
+		// });
+		// socket?.current.on('error', (error) => {
+		// 	console.log('Socket error on Chat');
+		// 	socket.current?.off('getMessage');
+		// 	socket?.current.emit('leaveRoom', user.user_id);
+		// 	socket?.current.disconnect();
+		// });
+		// return () => {
+		// 	console.log('Chat unmounted');
+		// 	socket.current?.off('getMessage');
+		// 	socket?.current.emit('leaveRoom', user.user_id);
+		// 	socket?.current.disconnect();
+		// };
+		// eslint-disable-next-line
 	}, []);
+
+	useEffect(() => {
+		console.log(socketMsg)
+		if (socketMsg?.sender_id === friend?.user_id) {
+			setMessages((prev) => [...prev, socketMsg]);
+		}
+		return ()=> {
+			setSocketMsg(null);
+		}
+		// eslint-disable-next-line
+	}, [socketMsg]);
 
 	useEffect(() => {
 		scrollToBottom();
@@ -78,7 +94,7 @@ export default function Chat() {
 			sender_id: user.user_id,
 			receiver_id: friend.user_id,
 			message: inputMsg,
-			createdAt: Date.now()
+			createdAt: Date.now(),
 		};
 		// if(inputMsg.match(/^[\da-fA-F]{4,5}$/)){
 		//     let emoji = inputMsg.padStart(5,'O');
@@ -86,12 +102,13 @@ export default function Chat() {
 		//     msg.message = emoji;
 		// }
 		const sendMessage = async () => {
-			socket?.current.emit('sendMessage', msg);
+			// socket?.current.emit('sendMessage', msg);
 			try {
+				await axiosPrivate.post(`messages/message`, JSON.stringify(msg));
+				sendSocketMessage(msg);
 				setMessages((prev) => [...prev, msg]);
 				setinputMsg('');
-				await axiosPrivate.post(`messages/message`, JSON.stringify(msg));
-			} catch (err) {}
+			} catch (err) {console.log(err)}
 		};
 		inputMsg && sendMessage();
 	};
@@ -120,7 +137,9 @@ export default function Chat() {
 								)
 							)
 						) : (
-							<div className="empty-chat">No messages are available. Once you send message they will appear here.</div>
+							<div className="empty-chat">
+								No messages are available. Once you send message they will appear here.
+							</div>
 						)
 					) : (
 						skeletonMessages.map((msg, index) =>

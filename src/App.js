@@ -1,7 +1,7 @@
 import {useContext} from 'react';
 import {Navigate, Route, BrowserRouter as Router, Routes} from 'react-router-dom';
 import ThemeButton from './component/ThemeButton';
-import {AuthContext} from './context/AuthContext';
+import {AuthContext} from './context/AuthContext/AuthContext';
 import Chat from './pages/chat/Chat';
 import Home from './pages/home/Home';
 import Login from './pages/login/Login';
@@ -26,6 +26,7 @@ function App() {
 								<>
 									<ThemeButton type={'outside'} />
 									<Login />
+									{/* <VideoCall/> */}
 								</>
 							)
 						}
