@@ -10,6 +10,15 @@ const SocketContextProvider = ({children}) => {
 	const socket = useRef(null);
 	const [socketMsg, setSocketMsg] = useState(null);
 
+
+	
+	const friendVideo = useRef();
+	const connectionRef = useRef();
+	const [me, setMe] = useState('');
+	const [call, setCall] = useState({});
+	const [callAccepted, setCallAccepted] = useState(false);
+	const [callEnded, setCallEnded] = useState(false);
+
 	console.log('Socket Context render');
 	useEffect(() => {
 		if (user && !socket.current) {
@@ -49,7 +58,11 @@ const SocketContextProvider = ({children}) => {
 			value={{
 				socketMsg,
 				sendSocketMessage,
-				setSocketMsg
+				setSocketMsg,
+				callAccepted,
+				friendVideo,
+				callEnded,
+				call,
 			}}
 		>
 			{children}

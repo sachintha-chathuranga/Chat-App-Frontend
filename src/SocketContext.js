@@ -6,8 +6,8 @@ const API_URL = process.env.REACT_APP_API_SOCKET_URL;
 const SocketContext = createContext();
 
 const ContextProvider = ({children}) => {
-	const socket = io(API_URL);
-	console.log("SocketContext get render")
+	// const socket = io(API_URL);
+	// console.log("SocketContext get render")
 	const [stream, setStream] = useState(null);
 	const myVideo = useRef();
 	const userVideo = useRef();
@@ -18,9 +18,7 @@ const ContextProvider = ({children}) => {
 	const [callAccepted, setCallAccepted] = useState(false);
 	const [callEnded, setCallEnded] = useState(false);
 	useEffect(() => {
-		navigator.mediaDevices.enumerateDevices().then((devices) => {
-			console.log('Available devices:', devices);
-		});
+
 		navigator.mediaDevices
 			.getUserMedia({video: true, audio: true})
 			.then((currentStream) => {

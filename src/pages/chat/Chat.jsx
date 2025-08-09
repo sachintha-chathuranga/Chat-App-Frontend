@@ -1,10 +1,11 @@
-import {Telegram} from '@mui/icons-material';
+import {Telegram, VideoCallRounded, Videocam, VideocamOff, VideocamOffRounded, VideocamRounded} from '@mui/icons-material';
 import React, {useCallback, useContext, useEffect, useRef, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {getFriend, readAllMessages} from '../../apiCalls';
 import Header from '../../component/Header/Header';
 import Incoming from '../../component/Incoming';
 import Outgoing from '../../component/Outgoing';
+import VideoPlayer from '../../component/VideoPlayer/VideoPlayer';
 import {AuthContext} from '../../context/AuthContext/AuthContext';
 import {SocketContext} from '../../context/SocketContext/SocketContext';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
@@ -12,7 +13,7 @@ import useMessage from '../../hooks/useMessage';
 import './chat.css';
 
 export default function Chat() {
-	console.log("chat render")
+	console.log('chat render');
 	const {socketMsg, sendSocketMessage, setSocketMsg} = useContext(SocketContext);
 	const {user, dispatch} = useContext(AuthContext);
 	const [friend, setFriend] = useState({});
@@ -23,6 +24,7 @@ export default function Chat() {
 	const axiosPrivate = useAxiosPrivate();
 	const [isFriendFetching, setIsFriendFetching] = useState(false);
 	const skeletonMessages = [1, 2, 1, 1, 2];
+	const [isTurnOnCamera, setIsTurnOnCamera] = useState(false);
 
 	const scrollToBottom = useCallback(() => {
 		chatBox.current.scrollTop = chatBox?.current?.scrollHeight;
@@ -72,13 +74,13 @@ export default function Chat() {
 	}, []);
 
 	useEffect(() => {
-		console.log(socketMsg)
+		console.log(socketMsg);
 		if (socketMsg?.sender_id === friend?.user_id) {
 			setMessages((prev) => [...prev, socketMsg]);
 		}
-		return ()=> {
+		return () => {
 			setSocketMsg(null);
-		}
+		};
 		// eslint-disable-next-line
 	}, [socketMsg]);
 
@@ -106,9 +108,15 @@ export default function Chat() {
 				sendSocketMessage(msg);
 				setMessages((prev) => [...prev, msg]);
 				setinputMsg('');
-			} catch (err) {console.log(err)}
+			} catch (err) {
+				console.log(err);
+			}
 		};
 		inputMsg && sendMessage();
+	};
+
+	const toggleCamera = () => {
+		setIsTurnOnCamera(!isTurnOnCamera);
 	};
 
 	return (
@@ -148,6 +156,7 @@ export default function Chat() {
 							)
 						)
 					)}
+					{isTurnOnCamera && <VideoPlayer />}
 				</div>
 				<form onSubmit={handleSubmit} className="typing-area" autoComplete="off">
 					<input
@@ -160,6 +169,13 @@ export default function Chat() {
 					<button type="submit">
 						<Telegram />
 					</button>
+					<div className="video-call-btn" onClick={toggleCamera}>
+						{isTurnOnCamera ? (
+							<VideocamOffRounded fontSize="large"></VideocamOffRounded>
+						) : (
+							<VideocamRounded fontSize="large"></VideocamRounded>
+						)}
+					</div>
 				</form>
 			</section>
 		</div>
