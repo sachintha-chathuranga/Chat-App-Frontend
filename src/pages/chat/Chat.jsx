@@ -11,8 +11,6 @@ import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useMessage from '../../hooks/useMessage';
 import './chat.css';
 
-const API_URL = process.env.REACT_APP_API_SOCKET_URL;
-
 export default function Chat() {
 	console.log("chat render")
 	const {socketMsg, sendSocketMessage, setSocketMsg} = useContext(SocketContext);

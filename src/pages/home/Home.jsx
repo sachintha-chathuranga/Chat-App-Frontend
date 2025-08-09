@@ -10,11 +10,11 @@ import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useFriend from '../../hooks/useFriend';
 import './home.css';
 
-const API_URL = process.env.REACT_APP_API_SOCKET_URL;
+// const API_URL = process.env.REACT_APP_API_SOCKET_URL;
 const Home = () => {
 	const axiosPrivate = useAxiosPrivate();
 	// const socket = useRef(null);
-	const {socketMsg, sendSocketMessage} = useContext(SocketContext);
+	const {socketMsg} = useContext(SocketContext);
 	const {user, dispatch} = useContext(AuthContext);
 	const [active, setActive] = useState(false);
 	const [isSearch, setIsSearch] = useState(false);
@@ -25,7 +25,7 @@ const Home = () => {
 	const [index, setindex] = useState(1);
 	const {friends, setfriend, isFetching, error, hasMore} = useFriend(index, active, isSearch, searchInput);
 	const skeletonFriends = [0, 1, 2, 3, 4];
-	const friendsRef = useRef(friends);
+	const friendsRef = useRef(null);
 
 	useEffect(() => {
 		friendsRef.current = friends;
@@ -83,10 +83,10 @@ const Home = () => {
 		// eslint-disable-next-line
 	}, []);
 	useEffect(() => {
-		if (socketMsg && friendsRef?.current.length !=0) {
-			console.log("Message: "+socketMsg?.message)
+		if (socketMsg && friendsRef?.current) {
+			console.log('Message: ' + socketMsg?.message);
 			const sender = friendsRef.current.find((f) => parseInt(f.user_id) === parseInt(socketMsg.sender_id));
-			console.log("Sender: "+sender)
+			console.log('Sender: ' + sender);
 			setNotification((prev) => [...prev, socketMsg]);
 			if (!sender) {
 				console.log('fetch friend');
@@ -95,6 +95,7 @@ const Home = () => {
 				});
 			}
 		}
+		// eslint-disable-next-line
 	}, [socketMsg]);
 
 	const fetchFriendList = () => {
