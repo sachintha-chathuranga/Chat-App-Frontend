@@ -4,7 +4,7 @@ import ThemeButton from './component/ThemeButton';
 import {AuthContext} from './context/AuthContext/AuthContext';
 import Chat from './pages/chat/Chat';
 import Home from './pages/home/Home';
-import Login from './pages/login/Login';
+import Login from './pages/login/Login'
 import Profile from './pages/profile/Profile';
 import SignUp from './pages/signup/SignUp';
 
@@ -26,7 +26,7 @@ function App() {
 								<>
 									<ThemeButton type={'outside'} />
 									<Login />
-									{/* <VideoCall/> */}
+									{/* <VideoCall /> */}
 								</>
 							)
 						}

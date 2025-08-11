@@ -11,10 +11,10 @@ import {memo, useContext, useEffect, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {clearError, clearMessages, logOutCall} from '../../apiCalls';
 import {AuthContext} from '../../context/AuthContext/AuthContext';
+import {useSocket} from '../../context/SocketContext/SocketContext';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import ThemeButton from '../ThemeButton';
 import './header.css';
-import { SocketContext } from '../../context/SocketContext/SocketContext';
 
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 const imageUrl = process.env.REACT_APP_AWS_URL;
@@ -25,6 +25,7 @@ const Header = (props) => {
 	const axiosPrivate = useAxiosPrivate();
 	const [fullName, setFullName] = useState('');
 	const [show, setShow] = useState(false);
+	const {disconnectSocket} = useSocket();
 
 	useEffect(() => {
 		props.user.fname && setFullName(`${props.user.fname} ${props.user.lname}`);
@@ -54,6 +55,7 @@ const Header = (props) => {
 		setShow(false);
 		logOutCall(axiosPrivate, dispatch).then((res) => {
 			if (res === 200) {
+				disconnectSocket();
 				navigate('/login');
 			} else {
 				setTimeout(() => {
