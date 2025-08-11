@@ -1,54 +1,26 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
-import {useSocket} from '../../context/SocketContext/SocketContext';
+import {useVideoCall} from '../../context/VideoCallContext/VideoCallContext';
 import './videoPlayer.css';
 
-const VideoPlayer = ({friendId, isTurnOnCamera}) => {
-	const {stream, setStream, callUser, leaveCall} = useSocket();
+const VideoPlayer = ({friendId}) => {
+	const {userVideo, friendVideo, stream, remoteStream} = useVideoCall();
 	const [isUserFullscreen, setIsUserFullscreen] = useState(false);
 	const [isFriendFullscreen, setIsFriendFullscreen] = useState(false);
-
-	const userVideo = useRef();
-	const friendVideo = useRef();
 	useEffect(() => {
-		if (isTurnOnCamera) {
-			navigator.mediaDevices
-				.getUserMedia({video: true, audio: true})
-				.then((currentStream) => {
-					setStream(currentStream);
-					callUser(friendId);
-				})
-				.catch((err) => {
-					navigator.mediaDevices
-						.getUserMedia({video: false, audio: false})
-						.then((currentStream) => {
-							setStream(currentStream);
-						})
-						.catch((err) => {
-							console.warn(err);
-						});
-					if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
-						alert('No camera or microphone found.');
-						// setMediaDeviceError('No camera or microphone found!');
-						console.warn('No camera or microphone found.');
-						// setIsTurnOnCamera(false);
-					} else if (err.name === 'NotAllowedError') {
-						alert('Permissions denied for camera access.');
-						// setMediaDeviceError('Permissions denied for camera access!');
-						console.warn('Permissions denied for camera access.');
-						// setIsTurnOnCamera(false);
-					} else {
-						alert('Permissions denied for camera access.');
-						// setMediaDeviceError('Error accessing media devices!');
-						console.error('Error accessing media devices:', err);
-					}
-				});
-		} else {
-			stream && leaveCall();
+		if (userVideo.current && stream) {
+			console.log('Set srcObject to user');
+			userVideo.current.srcObject = stream;
 		}
 		// eslint-disable-next-line
-	}, [isTurnOnCamera]);
-
+	}, [stream]);
+	useEffect(() => {
+		if (friendVideo.current && remoteStream) {
+			console.log('Set srcObject to friend');
+			friendVideo.current.srcObject = remoteStream;
+		}
+		// eslint-disable-next-line
+	}, [remoteStream]);
 	const toggleUserScreen = () => {
 		setIsUserFullscreen(!isUserFullscreen);
 		setIsFriendFullscreen(false);
@@ -59,7 +31,7 @@ const VideoPlayer = ({friendId, isTurnOnCamera}) => {
 	};
 	return (
 		<div className="video-container">
-			{friendVideo && (
+			{remoteStream && (
 				<div
 					className={`friend-video ${isFriendFullscreen ? 'fullscreen' : ''} ${
 						isUserFullscreen ? 'user-active' : ''
@@ -69,15 +41,15 @@ const VideoPlayer = ({friendId, isTurnOnCamera}) => {
 				</div>
 			)}
 
-			<div
-				className={`user-video ${isUserFullscreen ? 'fullscreen' : ''} ${
-					isFriendFullscreen ? 'friend-active' : ''
-				}`}
-			>
-				{userVideo && isTurnOnCamera && (
+			{stream && (
+				<div
+					className={`user-video ${isUserFullscreen ? 'fullscreen' : ''} ${
+						isFriendFullscreen ? 'friend-active' : ''
+					}`}
+				>
 					<video playsInline muted src="" ref={userVideo} onClick={toggleUserScreen} autoPlay className="video" />
-				)}
-			</div>
+				</div>
+			)}
 		</div>
 	);
 };
