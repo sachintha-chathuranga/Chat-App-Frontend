@@ -134,16 +134,14 @@ export const VideoCallContextProvider = ({children}) => {
 				console.log('stream from callUser');
 				setRemoteStream((prev) => (prev = currentStream));
 			});
-			peer.on('close', () =>{ 
-				console.log('peer close from caller end');
-				leaveCall()});
+			
 			socket.once('callaccepted', ({signal, from}) => {
 				setCall((prev) => ({...prev, signal}));
 				peer.signal(signal);
 			});
 			connectionRef.current = peer;
 		},
-		[socket, getMeadiaStream, user, leaveCall]
+		[socket, getMeadiaStream, user]
 	);
 
 	const answerCall = useCallback(async () => {
@@ -158,14 +156,11 @@ export const VideoCallContextProvider = ({children}) => {
 		peer.on('stream', (currentStream) => {
 			setRemoteStream((prev) => (prev = currentStream));
 		});
-		peer.on('close', () => {
-			console.log("peer close from receiver end")
-			leaveCall()
-		});
+	
 		peer.signal(call.signal);
 
 		connectionRef.current = peer;
-	}, [socket, call, getMeadiaStream, user.user_id]);
+	}, [socket, call, getMeadiaStream, user?.user_id]);
 
 	return (
 		<VideoCallContext.Provider
