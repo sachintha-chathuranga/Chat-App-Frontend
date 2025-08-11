@@ -8,7 +8,7 @@ import {
 	LoginSuccess,
 	UpdateFailure,
 	UpdateStart,
-} from './context/AuthActions';
+} from './context/AuthContext/AuthActions';
 
 const API_URL = process.env.REACT_APP_API_URL;
 

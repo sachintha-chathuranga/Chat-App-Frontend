@@ -20,3 +20,7 @@ make sure that chat app server side application running on port 5000. you can ge
 3.run the command `npm install`. this will install all the dependency.
 
 4.run the command `npm start`.
+
+
+5.To clear the cache
+rm -rf node_modules/.cache

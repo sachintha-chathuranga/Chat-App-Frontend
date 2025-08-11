@@ -1,31 +1,33 @@
-import {Telegram} from '@mui/icons-material';
+import {Call, CallEndRounded, Telegram} from '@mui/icons-material';
 import React, {useCallback, useContext, useEffect, useRef, useState} from 'react';
 import {useParams} from 'react-router-dom';
-import io from 'socket.io-client';
 import {getFriend, readAllMessages} from '../../apiCalls';
 import Header from '../../component/Header/Header';
 import Incoming from '../../component/Incoming';
 import Outgoing from '../../component/Outgoing';
-import {AuthContext} from '../../context/AuthContext';
+import VideoPlayer from '../../component/VideoPlayer/VideoPlayer';
+import {AuthContext} from '../../context/AuthContext/AuthContext';
+import {useSocket} from '../../context/SocketContext/SocketContext';
+import {useVideoCall} from '../../context/VideoCallContext/VideoCallContext';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useMessage from '../../hooks/useMessage';
 import './chat.css';
 
-const API_URL = process.env.REACT_APP_API_SOCKET_URL;
-
 export default function Chat() {
+	console.log('chat render');
 	const {user, dispatch} = useContext(AuthContext);
+	const {socket} = useSocket();
+	const {isInVideoCall, callUser, leaveCall} = useVideoCall();
 	const [friend, setFriend] = useState({});
 	const params = useParams();
 	const [inputMsg, setinputMsg] = useState('');
 	const chatBox = useRef(null);
-	const socket = useRef(null);
 	const axiosPrivate = useAxiosPrivate();
 	const [isFriendFetching, setIsFriendFetching] = useState(false);
 	const skeletonMessages = [1, 2, 1, 1, 2];
 
 	const scrollToBottom = useCallback(() => {
-		chatBox.current.scrollTop = chatBox?.current.scrollHeight;
+		chatBox.current.scrollTop = chatBox?.current?.scrollHeight;
 	}, []);
 
 	const {messages, setMessages, error, isMessageFetching} = useMessage(params.friend_id, scrollToBottom);
@@ -44,29 +46,17 @@ export default function Chat() {
 	}, [params.friend_id, scrollToBottom, axiosPrivate, dispatch]);
 
 	useEffect(() => {
-		socket.current = io.connect(API_URL);
-		socket?.current.on('connect', () => {
-			console.log("User connected on Chat")
-			socket?.current.emit('joinRoom', user.user_id);
-			socket?.current?.on('getMessage', (data) => {
-				console.log("User getMessage on Chat")
-				console.log(data)
+		if (!socket) return;
+		socket.on('getMessage', (data) => {
+			if (data.sender_id === friend.user_id) {
 				setMessages((prev) => [...prev, data]);
-			});
+			}
 		});
-		socket?.current.on('error', (error) => {
-			console.log("Socket error on Chat")
-			socket.current?.off('getMessage');
-			socket?.current.emit('leaveRoom', user.user_id);
-			socket?.current.disconnect();
-		});
+
 		return () => {
-			console.log("Chat unmounted")
-			socket.current?.off('getMessage');
-			socket?.current.emit('leaveRoom', user.user_id);
-			socket?.current.disconnect();
+			socket.off('getMessage');
 		};
-	}, []);
+	}, [socket, setMessages, friend.user_id]);
 
 	useEffect(() => {
 		scrollToBottom();
@@ -78,7 +68,7 @@ export default function Chat() {
 			sender_id: user.user_id,
 			receiver_id: friend.user_id,
 			message: inputMsg,
-			createdAt: Date.now()
+			createdAt: Date.now(),
 		};
 		// if(inputMsg.match(/^[\da-fA-F]{4,5}$/)){
 		//     let emoji = inputMsg.padStart(5,'O');
@@ -86,12 +76,14 @@ export default function Chat() {
 		//     msg.message = emoji;
 		// }
 		const sendMessage = async () => {
-			socket?.current.emit('sendMessage', msg);
 			try {
+				await axiosPrivate.post(`messages/message`, JSON.stringify(msg));
+				socket?.emit('sendMessage', msg);
 				setMessages((prev) => [...prev, msg]);
 				setinputMsg('');
-				await axiosPrivate.post(`messages/message`, JSON.stringify(msg));
-			} catch (err) {}
+			} catch (err) {
+				console.log(err);
+			}
 		};
 		inputMsg && sendMessage();
 	};
@@ -120,7 +112,9 @@ export default function Chat() {
 								)
 							)
 						) : (
-							<div className="empty-chat">No messages are available. Once you send message they will appear here.</div>
+							<div className="empty-chat">
+								No messages are available. Once you send message they will appear here.
+							</div>
 						)
 					) : (
 						skeletonMessages.map((msg, index) =>
@@ -131,6 +125,7 @@ export default function Chat() {
 							)
 						)
 					)}
+					{isInVideoCall && <VideoPlayer friendId={friend.user_id} />}
 				</div>
 				<form onSubmit={handleSubmit} className="typing-area" autoComplete="off">
 					<input
@@ -143,6 +138,16 @@ export default function Chat() {
 					<button type="submit">
 						<Telegram />
 					</button>
+					{friend.status &&
+						(isInVideoCall ? (
+							<div className="video-call-btn" onClick={() => leaveCall()}>
+								<CallEndRounded fontSize="large"></CallEndRounded>
+							</div>
+						) : (
+							<div className="video-call-btn" onClick={() => callUser(friend)}>
+								<Call fontSize="large"></Call>
+							</div>
+						))}
 				</form>
 			</section>
 		</div>

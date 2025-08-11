@@ -1,27 +1,17 @@
-import {
-	Cancel,
-	PermMedia,
-	VisibilityOffOutlined,
-	VisibilityOutlined,
-} from '@mui/icons-material';
-import { CircularProgress } from '@mui/material';
+import {Cancel, PermMedia, VisibilityOffOutlined, VisibilityOutlined} from '@mui/icons-material';
+import {CircularProgress} from '@mui/material';
 import axios from 'axios';
-import React, { memo, useContext, useRef, useState } from 'react';
-import {
-	clearError,
-	deletPicture,
-	getSignRequest,
-	userUpdateCall,
-} from '../apiCalls';
-import { UpdateFailure, UpdateStart } from '../context/AuthActions';
-import { AuthContext } from '../context/AuthContext';
+import React, {memo, useContext, useRef, useState} from 'react';
+import {clearError, deletPicture, getSignRequest, userUpdateCall} from '../apiCalls';
+import {AuthContext} from '../context/AuthContext/AuthContext';
+import {UpdateFailure, UpdateStart} from '../context/AuthContext/AuthActions';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
 import Header from './Header/Header';
 
 const validFileType = ['image/png', 'image/jpg', 'image/jpeg'];
 
-const Update = ({ toggleWarning }) => {
-	const { user, isFetching, error, dispatch } = useContext(AuthContext);
+const Update = ({toggleWarning}) => {
+	const {user, isFetching, error, dispatch} = useContext(AuthContext);
 	const [file, setFile] = useState(null);
 	const fileInput = useRef(null);
 	const [isLoading, setisLoading] = useState(false);
@@ -67,9 +57,7 @@ const Update = ({ toggleWarning }) => {
 		try {
 			const res = await axios.put(signReq, file, {
 				onUploadProgress: (progressEvent) => {
-					const progress = Math.round(
-						(progressEvent.loaded / progressEvent.total) * 100
-					);
+					const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
 					setuploadProgress(progress);
 				},
 			});
@@ -82,11 +70,7 @@ const Update = ({ toggleWarning }) => {
 				dispatch(UpdateFailure("profile picture doesn't upload"));
 				return err.response.status;
 			} else {
-				dispatch(
-					UpdateFailure(
-						'You are currently offline. Check your internet Connection!'
-					)
-				);
+				dispatch(UpdateFailure('You are currently offline. Check your internet Connection!'));
 				return 500;
 			}
 		}
@@ -158,8 +142,7 @@ const Update = ({ toggleWarning }) => {
 					const urlObj = new URL(res.data.signedRequest);
 					// Get the pathname part and extract the last segment (filename)
 					const pathSegments = urlObj.pathname.split('/');
-					const fileNameWithExtension =
-						pathSegments[pathSegments.length - 1];
+					const fileNameWithExtension = pathSegments[pathSegments.length - 1];
 					setprofileUrl(fileNameWithExtension);
 					setsignedRequest(res.data.signedRequest);
 				} else {
@@ -175,11 +158,7 @@ const Update = ({ toggleWarning }) => {
 
 	return (
 		<>
-			<Header
-				user={user}
-				toggleWarning={toggleWarning}
-				headerType={'profile'}
-			/>
+			<Header user={user} toggleWarning={toggleWarning} headerType={'profile'} />
 			<span>
 				<strong>Account Details</strong>
 			</span>
@@ -219,22 +198,12 @@ const Update = ({ toggleWarning }) => {
 				</div>
 				<div className="field input">
 					<label>Password</label>
-					<input
-						type={isActive ? 'text' : 'password'}
-						ref={password}
-						placeholder="Enter new password"
-					/>
+					<input type={isActive ? 'text' : 'password'} ref={password} placeholder="Enter new password" />
 
 					{isActive ? (
-						<VisibilityOffOutlined
-							className={'svg active'}
-							onClick={() => setisActive(!isActive)}
-						/>
+						<VisibilityOffOutlined className={'svg active'} onClick={() => setisActive(!isActive)} />
 					) : (
-						<VisibilityOutlined
-							className={'svg'}
-							onClick={() => setisActive(!isActive)}
-						/>
+						<VisibilityOutlined className={'svg'} onClick={() => setisActive(!isActive)} />
 					)}
 				</div>
 				<div className="field image">
@@ -245,7 +214,7 @@ const Update = ({ toggleWarning }) => {
 							<span className="shareOptionText">Photo</span>
 							<input
 								ref={fileInput}
-								style={{ display: 'none' }}
+								style={{display: 'none'}}
 								type="file"
 								id="file"
 								onChange={(e) => handleFile(e.target.files[0])}
@@ -253,10 +222,7 @@ const Update = ({ toggleWarning }) => {
 						</label>
 						{file && (
 							<div className="uploadPhoto">
-								<img
-									src={URL.createObjectURL(file)}
-									alt="selectedImg"
-								/>
+								<img src={URL.createObjectURL(file)} alt="selectedImg" />
 								<Cancel
 									className="cancelImg"
 									onClick={() => {
@@ -268,19 +234,12 @@ const Update = ({ toggleWarning }) => {
 						)}
 						{file && isFetching && (
 							<div className="progressBar">
-								<div
-									className="progress"
-									style={{ width: `${uploadProgress}%` }}
-								></div>
+								<div className="progress" style={{width: `${uploadProgress}%`}}></div>
 							</div>
 						)}
 					</div>
 					{user.profil_pic && (
-						<button
-							className="pictureDelBtn"
-							disabled={isLoading}
-							onClick={deleteFile}
-						>
+						<button className="pictureDelBtn" disabled={isLoading} onClick={deleteFile}>
 							{isLoading ? (
 								<CircularProgress
 									style={{

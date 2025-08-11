@@ -1,7 +1,7 @@
 import {useContext} from 'react';
 import {Navigate, Route, BrowserRouter as Router, Routes} from 'react-router-dom';
 import ThemeButton from './component/ThemeButton';
-import {AuthContext} from './context/AuthContext';
+import {AuthContext} from './context/AuthContext/AuthContext';
 import Chat from './pages/chat/Chat';
 import Home from './pages/home/Home';
 import Login from './pages/login/Login';
@@ -15,7 +15,19 @@ function App() {
 		<>
 			<Router>
 				<Routes>
-					<Route exact path="/" element={user ? <Home /> : <Navigate to="/login" />} />
+					<Route
+						exact
+						path="/"
+						element={
+							user ? (
+								<>
+									<Home />
+								</>
+							) : (
+								<Navigate to="/login" />
+							)
+						}
+					/>
 
 					<Route
 						path="/login"
@@ -26,6 +38,7 @@ function App() {
 								<>
 									<ThemeButton type={'outside'} />
 									<Login />
+									{/* <VideoCall /> */}
 								</>
 							)
 						}
@@ -45,9 +58,31 @@ function App() {
 						}
 					/>
 
-					<Route path="/profile" element={user ? <Profile /> : <Navigate to="/login" />} />
+					<Route
+						path="/profile"
+						element={
+							user ? (
+								<>
+									<Profile />
+								</>
+							) : (
+								<Navigate to="/login" />
+							)
+						}
+					/>
 
-					<Route path="/chat/:friend_id" element={user ? <Chat /> : <Navigate to="/login" />} />
+					<Route
+						path="/chat/:friend_id"
+						element={
+							user ? (
+								<>
+									<Chat />
+								</>
+							) : (
+								<Navigate to="/login" />
+							)
+						}
+					/>
 				</Routes>
 			</Router>
 		</>

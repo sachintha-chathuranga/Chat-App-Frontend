@@ -20,7 +20,7 @@ const Friend = ({notifi, friend}) => {
 		} else {
 			return formatDateTime(notification[notification.length - 1].createdAt);
 		}
-	}, [notification]);
+	}, [notification, friend]);
 
 	return (
 		<Link to={'/chat/' + friend.user_id} style={{textDecoration: 'none'}}>

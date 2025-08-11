@@ -3,7 +3,7 @@ import {CircularProgress} from '@mui/material';
 import {useContext, useRef, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {clearError, signUpCall} from '../../apiCalls';
-import {AuthContext} from '../../context/AuthContext';
+import {AuthContext} from '../../context/AuthContext/AuthContext';
 
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
@@ -78,7 +78,12 @@ function SignUp() {
 					</div>
 					<div className="field input">
 						<label>Password</label>
-						<input type={isActive ? 'text' : 'password'} ref={password} placeholder="Enter new password" required />
+						<input
+							type={isActive ? 'text' : 'password'}
+							ref={password}
+							placeholder="Enter new password"
+							required
+						/>
 						{isActive ? (
 							<VisibilityOffOutlined className={'svg active'} onClick={() => setisActive(!isActive)} />
 						) : (

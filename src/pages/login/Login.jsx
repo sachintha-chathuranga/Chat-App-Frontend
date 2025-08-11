@@ -3,7 +3,7 @@ import {CircularProgress} from '@mui/material';
 import {useContext, useRef, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {clearError, loginCall} from '../../apiCalls';
-import {AuthContext} from '../../context/AuthContext';
+import {AuthContext} from '../../context/AuthContext/AuthContext';
 
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
@@ -61,7 +61,12 @@ export default function Login() {
 						)}
 					</div>
 					<div className="checkBoxField">
-						<input type="checkbox" id="checkBox" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
+						<input
+							type="checkbox"
+							id="checkBox"
+							checked={rememberMe}
+							onChange={(e) => setRememberMe(e.target.checked)}
+						/>
 						<label htmlFor="checkBox">Keep my signIn</label>
 					</div>
 					<div className="field button">

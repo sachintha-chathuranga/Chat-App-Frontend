@@ -1,12 +1,12 @@
-import React, { useCallback, useContext, useState } from 'react';
-import { clearError } from '../../apiCalls';
+import React, {useCallback, useContext, useState} from 'react';
+import {clearError} from '../../apiCalls';
 import Update from '../../component/Update';
 import Warnnig from '../../component/Warnnig';
-import { AuthContext } from '../../context/AuthContext';
+import {AuthContext} from '../../context/AuthContext/AuthContext';
 import './profile.css';
 
 export default function Profile() {
-	const { dispatch } = useContext(AuthContext);
+	const {dispatch} = useContext(AuthContext);
 	const [isWarning, setisWarning] = useState(false);
 
 	const toggleWarning = useCallback(() => {
@@ -18,11 +18,7 @@ export default function Profile() {
 	return (
 		<div className="wrapper">
 			<section className="profile">
-				{!isWarning ? (
-					<Update toggleWarning={toggleWarning} />
-				) : (
-					<Warnnig toggleWarning={toggleWarning} />
-				)}
+				{!isWarning ? <Update toggleWarning={toggleWarning} /> : <Warnnig toggleWarning={toggleWarning} />}
 			</section>
 		</div>
 	);
