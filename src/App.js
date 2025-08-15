@@ -1,15 +1,15 @@
-import {useContext} from 'react';
 import {Navigate, Route, BrowserRouter as Router, Routes} from 'react-router-dom';
 import ThemeButton from './component/ThemeButton';
-import {AuthContext} from './context/AuthContext/AuthContext';
 import Chat from './pages/chat/Chat';
 import Home from './pages/home/Home';
 import Login from './pages/login/Login';
 import Profile from './pages/profile/Profile';
 import SignUp from './pages/signup/SignUp';
+import { useAuth } from './context/AuthContext/AuthContext';
+import VideoCall from './pages/video-call/VideoCall';
 
 function App() {
-	const {user} = useContext(AuthContext);
+	const {user} = useAuth();
 
 	return (
 		<>
@@ -77,6 +77,18 @@ function App() {
 							user ? (
 								<>
 									<Chat />
+								</>
+							) : (
+								<Navigate to="/login" />
+							)
+						}
+					/>
+					<Route
+						path="/video-call/:friend_id"
+						element={
+							user ? (
+								<>
+									<VideoCall />
 								</>
 							) : (
 								<Navigate to="/login" />

@@ -1,10 +1,10 @@
-import {useContext, useEffect} from 'react';
+import {useEffect} from 'react';
 import {getNewToken} from '../apiCalls';
 import {axiosPublic} from '../axios';
-import {AuthContext} from '../context/AuthContext/AuthContext';
+import {useAuth} from '../context/AuthContext/AuthContext';
 
 const useAxiosPrivate = () => {
-	const {user, dispatch} = useContext(AuthContext);
+	const {user, dispatch} = useAuth();
 
 	useEffect(() => {
 		const requestIntercept = axiosPublic.interceptors.request.use(

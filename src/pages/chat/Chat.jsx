@@ -1,12 +1,12 @@
-import {Call, CallEndRounded, Telegram} from '@mui/icons-material';
-import React, {useCallback, useContext, useEffect, useRef, useState} from 'react';
-import {useParams} from 'react-router-dom';
+import {Telegram, VideocamOutlined} from '@mui/icons-material';
+import {IconButton} from '@mui/material';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
 import {getFriend, readAllMessages} from '../../apiCalls';
 import Header from '../../component/Header/Header';
 import Incoming from '../../component/Incoming';
 import Outgoing from '../../component/Outgoing';
-import VideoPlayer from '../../component/VideoPlayer/VideoPlayer';
-import {AuthContext} from '../../context/AuthContext/AuthContext';
+import {useAuth} from '../../context/AuthContext/AuthContext';
 import {useSocket} from '../../context/SocketContext/SocketContext';
 import {useVideoCall} from '../../context/VideoCallContext/VideoCallContext';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
@@ -15,9 +15,11 @@ import './chat.css';
 
 export default function Chat() {
 	console.log('chat render');
-	const {user, dispatch} = useContext(AuthContext);
+	const {user, dispatch} = useAuth();
 	const {socket} = useSocket();
-	const {isInVideoCall, callUser, leaveCall} = useVideoCall();
+	const navigate = useNavigate();
+	const {isInVideoCall, callUser, incomingCall, outgoingCall} = useVideoCall();
+
 	const [friend, setFriend] = useState({});
 	const params = useParams();
 	const [inputMsg, setinputMsg] = useState('');
@@ -27,7 +29,9 @@ export default function Chat() {
 	const skeletonMessages = [1, 2, 1, 1, 2];
 
 	const scrollToBottom = useCallback(() => {
-		chatBox.current.scrollTop = chatBox?.current?.scrollHeight;
+		if (chatBox.current) {
+			chatBox.current.scrollTop = chatBox?.current?.scrollHeight;
+		}
 	}, []);
 
 	const {messages, setMessages, error, isMessageFetching} = useMessage(params.friend_id, scrollToBottom);
@@ -88,6 +92,11 @@ export default function Chat() {
 		inputMsg && sendMessage();
 	};
 
+	const handleVideoCall = useCallback(async () => {
+		callUser(friend, navigate);
+		// eslint-disable-next-line
+	}, [callUser, friend]);
+
 	return (
 		<div className="wrapper">
 			<section className="chat-area">
@@ -125,7 +134,6 @@ export default function Chat() {
 							)
 						)
 					)}
-					{isInVideoCall && <VideoPlayer friendId={friend.user_id} />}
 				</div>
 				<form onSubmit={handleSubmit} className="typing-area" autoComplete="off">
 					<input
@@ -135,19 +143,18 @@ export default function Chat() {
 						className="input-field"
 						placeholder="Type a message here..."
 					/>
-					<button type="submit">
+					<button className="message-btn" type="submit">
 						<Telegram />
 					</button>
-					{friend.status &&
-						(isInVideoCall ? (
-							<div className="video-call-btn" onClick={() => leaveCall()}>
-								<CallEndRounded fontSize="large"></CallEndRounded>
-							</div>
-						) : (
-							<div className="video-call-btn" onClick={() => callUser(friend)}>
-								<Call fontSize="large"></Call>
-							</div>
-						))}
+					{friend.status && (
+						<IconButton
+							disabled={isInVideoCall || incomingCall || outgoingCall}
+							className="video-call-btn"
+							onClick={() => handleVideoCall()}
+						>
+							<VideocamOutlined fontSize="large" />
+						</IconButton>
+					)}
 				</form>
 			</section>
 		</div>

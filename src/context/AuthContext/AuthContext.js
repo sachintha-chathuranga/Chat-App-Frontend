@@ -1,34 +1,37 @@
-import { createContext, useReducer } from "react"
-import AuthReducer from "./AuthReducer";
-
+import {createContext, memo, useContext, useMemo, useReducer} from 'react';
+import AuthReducer from './AuthReducer';
 
 export const INITIAL_STATE = {
-    // user: {
-    //     user_id: 1,
-    //     fname: "Sachintha",
-    //     lname: "Chathuranga",
-    //     email: "sachintha@gmail.com",
-    //     profil_pic: null,
-    //     status: true
-    // },
-    user: JSON.parse(localStorage.getItem("user")) || JSON.parse(sessionStorage.getItem("user")),
-    isFetching: false,
-    error: null
-}
+	// user: {
+	//     user_id: 1,
+	//     fname: "Sachintha",
+	//     lname: "Chathuranga",
+	//     email: "sachintha@gmail.com",
+	//     profil_pic: null,
+	//     status: true
+	// },
+	user: JSON.parse(localStorage.getItem('user')) || JSON.parse(sessionStorage.getItem('user')),
+	isFetching: false,
+	error: null,
+};
 
-export const AuthContext = createContext(INITIAL_STATE);
+const AuthContext = createContext(INITIAL_STATE);
 
-export const  AuthContextProvider = ({children}) =>{
-    const [state, dispatch] = useReducer(AuthReducer, INITIAL_STATE);
-    return (
-        <AuthContext.Provider 
-            value={{
-                user: state.user,
-                isFetching: state.isFetching, 
-                error: state.error,
-                dispatch
-            }}>
-            {children}
-        </AuthContext.Provider>
-    );
-}
+const AuthContextProvider = ({children}) => {
+	const [state, dispatch] = useReducer(AuthReducer, INITIAL_STATE);
+
+	const values = useMemo(
+		() => ({
+			user: state.user,
+			isFetching: state.isFetching,
+			error: state.error,
+			dispatch,
+		}),
+		[state.user, state.isFetching, state.error, dispatch]
+	);
+	return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
+};
+
+export const useAuth = () => useContext(AuthContext);
+
+export const AuthProvider = memo(AuthContextProvider);

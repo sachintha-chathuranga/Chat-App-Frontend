@@ -1,0 +1,30 @@
+.video-call-wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+	height: 100vh;
+	background-color: black;
+}
+.call-options {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	background-color: #11375159;
+	width: 100%;
+	padding: 10px;
+}
+.button-group {
+	background-color: #1064bb3b;
+	border-radius: 20px;
+	padding-right: 13px;
+	padding-left: 6px;
+}
+.border {
+	border-left: 1px solid #00a2ff5c;
+	border-right: 1px solid #00a2ff5c;
+	margin: 0 10px 0 5px;
+	padding: 0 5px;
+}

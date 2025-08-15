@@ -1,14 +1,14 @@
 import {VisibilityOffOutlined, VisibilityOutlined} from '@mui/icons-material';
 import {CircularProgress} from '@mui/material';
-import {useContext, useRef, useState} from 'react';
+import {useRef, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {clearError, signUpCall} from '../../apiCalls';
-import {AuthContext} from '../../context/AuthContext/AuthContext';
+import {useAuth} from '../../context/AuthContext/AuthContext';
 
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
 function SignUp() {
-	const {isFetching, error, dispatch} = useContext(AuthContext);
+	const {isFetching, error, dispatch} = useAuth();
 	const fname = useRef();
 	const lname = useRef();
 	const email = useRef();

@@ -1,9 +1,9 @@
 import {VisibilityOffOutlined, VisibilityOutlined} from '@mui/icons-material';
 import {CircularProgress} from '@mui/material';
-import {useContext, useRef, useState} from 'react';
+import {useRef, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {clearError, loginCall} from '../../apiCalls';
-import {AuthContext} from '../../context/AuthContext/AuthContext';
+import {useAuth} from '../../context/AuthContext/AuthContext';
 
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
@@ -12,7 +12,7 @@ export default function Login() {
 	const password = useRef();
 	const [isActive, setisActive] = useState(false);
 	const [rememberMe, setRememberMe] = useState(false);
-	const {isFetching, error, dispatch} = useContext(AuthContext);
+	const {isFetching, error, dispatch} = useAuth();
 
 	const handleSubmit = (e) => {
 		e.preventDefault();

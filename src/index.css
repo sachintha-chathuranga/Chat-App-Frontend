@@ -28,6 +28,7 @@
 	--error-text: #a32632;
 	--error-border: #a32632;
 	--skeleton: #e0e0e0;
+	--notification-bg: #b6ecc8cf;
 }
 
 .darkmode {
@@ -58,6 +59,7 @@
 	--error-text: #ffbcc3f2;
 	--error-border: #a32632;
 	--skeleton: #3a3a3a;
+	--notification-bg: #164742c9;
 }
 
 * {

@@ -1,23 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import {AuthContextProvider} from './context/AuthContext/AuthContext';
-import {SocketContextProvider} from './context/SocketContext/SocketContext';
-import {VideoCallContextProvider} from './context/VideoCallContext/VideoCallContext';
+import {AuthProvider} from './context/AuthContext/AuthContext';
+import {SocketProvider} from './context/SocketContext/SocketContext';
+import {VideoCallProvider} from './context/VideoCallContext/VideoCallContext';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import process from 'process';
+window.process = process;
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	// <React.StrictMode>
-	<AuthContextProvider>
-		<SocketContextProvider>
-			<VideoCallContextProvider>
-				<App />
-			</VideoCallContextProvider>
-		</SocketContextProvider>
-	</AuthContextProvider>
-	// </React.StrictMode>,
+		<AuthProvider>
+			<SocketProvider>
+				<VideoCallProvider>
+					<App />
+				</VideoCallProvider>
+			</SocketProvider>
+		</AuthProvider>
+	// </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
