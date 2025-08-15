@@ -1,10 +1,10 @@
 import {Close, SearchOutlined} from '@mui/icons-material';
-import React, {memo, useCallback, useContext, useEffect, useRef, useState} from 'react';
+import React, {memo, useCallback, useEffect, useRef, useState} from 'react';
 import {fetchAllNotification, getFriend} from '../../apiCalls';
 import Friend from '../../component/Friend';
 import Header from '../../component/Header/Header';
 import FriendSkeleton from '../../component/Skeletons/Friend/FriendSkeleton';
-import {AuthContext} from '../../context/AuthContext/AuthContext';
+import {useAuth} from '../../context/AuthContext/AuthContext';
 import {useSocket} from '../../context/SocketContext/SocketContext';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useFriend from '../../hooks/useFriend';
@@ -14,7 +14,7 @@ const Home = () => {
 	const axiosPrivate = useAxiosPrivate();
 
 	const {socket} = useSocket();
-	const {user, dispatch} = useContext(AuthContext);
+	const {user, dispatch} = useAuth();
 	const [active, setActive] = useState(false);
 	const [isSearch, setIsSearch] = useState(false);
 	const [searchInput, setSearch] = useState('');

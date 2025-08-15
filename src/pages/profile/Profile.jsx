@@ -1,12 +1,12 @@
-import React, {useCallback, useContext, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {clearError} from '../../apiCalls';
 import Update from '../../component/Update';
 import Warnnig from '../../component/Warnnig';
-import {AuthContext} from '../../context/AuthContext/AuthContext';
+import {useAuth} from '../../context/AuthContext/AuthContext';
 import './profile.css';
 
 export default function Profile() {
-	const {dispatch} = useContext(AuthContext);
+	const {dispatch} = useAuth();
 	const [isWarning, setisWarning] = useState(false);
 
 	const toggleWarning = useCallback(() => {

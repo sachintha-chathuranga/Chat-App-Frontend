@@ -1,18 +1,19 @@
-import {createContext, useCallback, useContext, useEffect, useState} from 'react';
+import {createContext, memo, useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {io} from 'socket.io-client';
-import {AuthContext} from '../AuthContext/AuthContext';
+import {useAuth} from '../AuthContext/AuthContext';
 const API_URL = process.env.REACT_APP_API_SOCKET_URL;
 
 const SocketContext = createContext();
 
-export const SocketContextProvider = ({children}) => {
+const SocketContextProvider = ({children}) => {
 	console.log('Socket Context render');
-	const {user} = useContext(AuthContext);
+	const {user} = useAuth();
 	const [socket, setSocket] = useState(null);
 
 	const connectSocket = useCallback(
 		(userId) => {
 			if (!socket) {
+				console.log(socket);
 				const newSocket = io(API_URL);
 				newSocket.on('connect', () => {
 					console.log('Socket Connected');
@@ -46,17 +47,17 @@ export const SocketContextProvider = ({children}) => {
 		}
 	}, [user?.user_id, connectSocket]);
 
-	return (
-		<SocketContext.Provider
-			value={{
-				socket,
-				connectSocket,
-				disconnectSocket,
-			}}
-		>
-			{children}
-		</SocketContext.Provider>
+	const values = useMemo(
+		() => ({
+			socket,
+			connectSocket,
+			disconnectSocket,
+		}),
+		[socket, connectSocket, disconnectSocket]
 	);
+	return <SocketContext.Provider value={values}>{children}</SocketContext.Provider>;
 };
 
 export const useSocket = () => useContext(SocketContext);
+
+export const SocketProvider = memo(SocketContextProvider);

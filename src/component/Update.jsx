@@ -1,17 +1,17 @@
 import {Cancel, PermMedia, VisibilityOffOutlined, VisibilityOutlined} from '@mui/icons-material';
 import {CircularProgress} from '@mui/material';
 import axios from 'axios';
-import React, {memo, useContext, useRef, useState} from 'react';
+import React, {memo, useRef, useState} from 'react';
 import {clearError, deletPicture, getSignRequest, userUpdateCall} from '../apiCalls';
-import {AuthContext} from '../context/AuthContext/AuthContext';
 import {UpdateFailure, UpdateStart} from '../context/AuthContext/AuthActions';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
 import Header from './Header/Header';
+import { useAuth } from '../context/AuthContext/AuthContext';
 
 const validFileType = ['image/png', 'image/jpg', 'image/jpeg'];
 
 const Update = ({toggleWarning}) => {
-	const {user, isFetching, error, dispatch} = useContext(AuthContext);
+	const {user, isFetching, error, dispatch} = useAuth();
 	const [file, setFile] = useState(null);
 	const fileInput = useRef(null);
 	const [isLoading, setisLoading] = useState(false);

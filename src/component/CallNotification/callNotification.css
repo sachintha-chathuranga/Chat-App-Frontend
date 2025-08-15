@@ -1,19 +1,79 @@
+.notification {
+	position: relative;
+	top: 10px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	z-index: 1;
+}
+.notification-wrapper {
+	position: absolute;
+	padding: 10px 15px 10px 15px;
+	border: none;
+	border-radius: 35px;
+	transition: all 0.3s ease;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	cursor: default;
+	background-color: var(--notification-bg);
+	gap: 10px;
+}
+.notification-wrapper.error {
+	background-color: rgba(211, 35, 35, 0.829);
+	
+}
+.notification-wrapper::before {
+	content: '';
+	position: absolute;
+	background-color: var(--notification-bg);
+	border-radius: 35px;
+	transform: scale(1);
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	animation: ripple 2s infinite;
+}
+.notification-wrapper.error::before {
+	background-color: transparent;
+	animation: none;
+}
 
-.content {
+@keyframes ripple {
+	0% {
+		transform: scale(1);
+		opacity: 1;
+	}
+	30% {
+		/* ripple finishes in first 10% of time */
+		transform: scale(1.2);
+		opacity: 0;
+	}
+	100% {
+		/* wait for rest of animation time */
+		transform: scale(1.2);
+		opacity: 0;
+	}
+}
+.notification-wrapper .content {
 	position: relative;
 	display: flex;
 	align-items: center;
 }
 
-.details {
+.notification-wrapper .details {
 	color: var(--text-color);
 	margin-left: 15px;
-	max-width: 200px;
+	max-width: 180px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 }
-.details span {
+.notification-wrapper.error .details {
+	color: aliceblue;
+}
+.notification-wrapper .details span {
 	font-size: 16px;
 	font-weight: 500;
 	overflow: hidden;
@@ -25,40 +85,12 @@
 	line-height: 1.3;
 }
 
-.friend {
-	page-break-after: 10px;
-	padding: 10px 15px 10px 15px;
-	border: none;
-	border-radius: 4px;
-	transition: all 0.3s ease;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-}
-.friend:hover {
-	background-color: var(--hover-color);
-}
-
-.friend .content img {
+.notification-wrapper .content img {
 	height: 45px;
 	width: 45px;
 }
-.friend .content .notification {
-	position: absolute;
-	top: 0;
-	left: 30px;
-	background: #08af08;
-	width: 16px;
-	height: 16px;
-	border-radius: 50%;
-	color: white;
-	font-size: 12px;
-	text-align: center;
-	line-height: 1.4;
-	align-items: center;
-	justify-content: cee;
-}
-.friend .content p {
+
+.notification-wrapper .content p {
 	color: var(--secondary-text);
 	font-size: 15px;
 	overflow: hidden;
@@ -69,35 +101,28 @@
 	word-break: break-all;
 	line-height: 1.3;
 }
-.friend .right-side {
+.notification-wrapper.error .content p {
+	color: rgb(214, 221, 226);
+}
+.notification-wrapper .right-side {
 	display: flex;
-	flex-direction: column;
+	gap: 10px;
 }
-.friend .right-side .status-dot {
-	color: #34cd4e;
-	text-align: end;
-}
-.friend .right-side .status-dot.offline {
-	color: var(--third-text);
-}
-.friend .right-side p {
+
+.notification-wrapper .right-side p {
 	font-size: 13px;
 	color: var(--secondary-text);
 }
-.loading-wrap {
-	text-align: center;
-}
 
 @media only screen and (max-width: 500px) {
-	.details span {
+	.notification-wrapper .details span {
 		font-size: 15px;
 	}
-	.details p {
+	.notification-wrapper .details p {
 		font-size: 15px;
 	}
 
-	.friend {
+	.notification-wrapper {
 		padding-bottom: 15px;
 	}
-
 }

@@ -86,7 +86,7 @@
 	outline: none;
 	padding-left: 12px;
 }
-.typing-area button {
+.typing-area button.message-btn {
 	width: 55px;
 	border: none;
 	outline: none;
@@ -105,6 +105,11 @@
 	color: var(--text-color);
 	margin-left: 5px;
 	opacity: 0.9;
+	padding: 0;
+}
+.typing-area .video-call-btn:disabled {
+	color: var(--text-color);
+		opacity: 0.2;
 }
 .typing-area .video-call-btn:hover {
 	cursor: pointer;
@@ -144,7 +149,7 @@
 		font-size: 15px;
 		border-radius: 3px 0 0 3px;
 	}
-	.typing-area button {
+	.typing-area button.message-btn {
 		font-size: 17px;
 		border-radius: 0 3px 3px 0;
 	}

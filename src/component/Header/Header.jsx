@@ -7,21 +7,21 @@ import {
 	MoreVert,
 } from '@mui/icons-material';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import {memo, useContext, useEffect, useState} from 'react';
+import {memo, useEffect, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {clearError, clearMessages, logOutCall} from '../../apiCalls';
-import {AuthContext} from '../../context/AuthContext/AuthContext';
+import {useAuth} from '../../context/AuthContext/AuthContext';
 import {useSocket} from '../../context/SocketContext/SocketContext';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import CallNotification from '../CallNotification/CallNotification';
 import ThemeButton from '../ThemeButton';
 import './header.css';
-import CallNotification from '../CallNotification/CallNotification';
 
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 const imageUrl = process.env.REACT_APP_AWS_URL;
 
 const Header = (props) => {
-	const {dispatch} = useContext(AuthContext);
+	const {dispatch} = useAuth();
 	const navigate = useNavigate();
 	const axiosPrivate = useAxiosPrivate();
 	const [fullName, setFullName] = useState('');
@@ -46,11 +46,7 @@ const Header = (props) => {
 	}, []);
 
 	const handleBack = () => {
-		if (props.hasOwnProperty('toggleFrame')) {
-			props.toggleFrame();
-		} else {
-			navigate(-1);
-		}
+		navigate(-1);
 	};
 	const handleLogout = () => {
 		setShow(false);

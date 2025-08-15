@@ -1,17 +1,17 @@
 import {VisibilityOffOutlined, VisibilityOutlined} from '@mui/icons-material';
 import {CircularProgress} from '@mui/material';
-import React, {memo, useContext, useRef, useState} from 'react';
+import React, {memo, useRef, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {clearError, userDeleteCall} from '../apiCalls';
-import {AuthContext} from '../context/AuthContext/AuthContext';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import { useAuth } from '../context/AuthContext/AuthContext';
 
 function Warnnig({toggleWarning}) {
 	const navigate = useNavigate();
 	const password = useRef();
 	const [isActive, setisActive] = useState(false);
 	const [isNext, setIsNext] = useState(false);
-	const {user, isFetching, error, dispatch} = useContext(AuthContext);
+	const {user, isFetching, error, dispatch} = useAuth();
 	const axiosPrivate = useAxiosPrivate();
 
 	const handleDelete = (e) => {
