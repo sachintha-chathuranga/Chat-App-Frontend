@@ -37,3 +37,25 @@
 .friend-skeleton .right-side .text-2 {
 	width: 50px;
 }
+@media only screen and (max-width: 400px) {
+	.friend-skeleton {
+		padding: 8px 5px 8px 5px;
+	}
+
+	.friend-skeleton .img {
+		width: 45px;
+		height: 45px;
+	}
+	.friend-skeleton .text-wrapper {
+		margin-left: 12px;
+	}
+	.friend-skeleton .text-wrapper .text-1 {
+		width: 180px;
+	}
+	.friend-skeleton .text-wrapper .text-2 {
+		width: 110px;
+	}
+	.friend-skeleton .right-side .text-2 {
+		width: 50px;
+	}
+}

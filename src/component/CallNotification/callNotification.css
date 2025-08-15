@@ -4,7 +4,7 @@
 	width: 100%;
 	display: flex;
 	justify-content: center;
-	z-index: 1;
+	z-index: 4;
 }
 .notification-wrapper {
 	position: absolute;
@@ -21,7 +21,6 @@
 }
 .notification-wrapper.error {
 	background-color: rgba(211, 35, 35, 0.829);
-	
 }
 .notification-wrapper::before {
 	content: '';
@@ -115,14 +114,17 @@
 }
 
 @media only screen and (max-width: 500px) {
+	.notification {
+		top: 56px;
+	}
+	.notification-wrapper .details {
+		margin-left: 10px;
+		max-width: 155px;
+	}
 	.notification-wrapper .details span {
 		font-size: 15px;
 	}
 	.notification-wrapper .details p {
 		font-size: 15px;
-	}
-
-	.notification-wrapper {
-		padding-bottom: 15px;
 	}
 }

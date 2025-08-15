@@ -146,7 +146,6 @@ form .name-details .field:last-child {
 	height: 15px;
 }
 
-
 .form form .field label {
 	margin-bottom: 3px;
 }
@@ -321,5 +320,8 @@ form .name-details .field:last-child {
 	.error-txt {
 		padding: 6px 8px;
 		border-radius: 3px;
+	}
+	.skeleton.text-1 {
+		height: 12px;
 	}
 }
