@@ -17,3 +17,8 @@ status = 200
 from = "/chat/:friend_id"
 to = "/"
 status = 200
+
+[[redirects]]
+from = "/video-call/:friend_id"
+to = "/"
+status = 200
