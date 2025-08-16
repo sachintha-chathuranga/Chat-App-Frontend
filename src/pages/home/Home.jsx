@@ -113,7 +113,6 @@ const Home = () => {
 				>
 					<input
 						type="text"
-						autoFocus
 						value={searchInput}
 						onChange={(e) => handleInputChange(e.target.value)}
 						ref={inputElement}

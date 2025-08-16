@@ -114,8 +114,15 @@
 }
 
 @media only screen and (max-width: 500px) {
-	.notification {
-		top: 56px;
+	.users .notification {
+		top: 67px;
+	}
+	.profile .notification {
+		top: 12px;
+	}
+	.chat-area .notification {
+		position: fixed;
+		top: 85px;
 	}
 	.notification-wrapper::before {
 		animation: none;
