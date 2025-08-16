@@ -117,6 +117,9 @@
 	.notification {
 		top: 56px;
 	}
+	.notification-wrapper::before {
+		animation: none;
+	}
 	.notification-wrapper .details {
 		margin-left: 10px;
 		max-width: 155px;

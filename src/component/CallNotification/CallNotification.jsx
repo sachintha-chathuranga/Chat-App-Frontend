@@ -25,7 +25,7 @@ const CallNotification = () => {
 
 	return (
 		<>
-			{(incomingCall || outgoingCall || errorMessage) && (
+			{(!incomingCall || outgoingCall || errorMessage) && (
 				<div className="notification">
 					<div className={`notification-wrapper ${errorMessage && 'error'}`}>
 						<div className="content">
@@ -65,7 +65,7 @@ const CallNotification = () => {
 									<CallEnd />
 								</IconButton>
 							)}
-							{incomingCall && (
+							{!incomingCall && (
 								<IconButton
 									sx={{
 										backgroundColor: '#13b413',
