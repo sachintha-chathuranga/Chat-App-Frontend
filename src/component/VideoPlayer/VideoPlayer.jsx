@@ -33,7 +33,6 @@ const VideoPlayer = () => {
 
 	return (
 		<div className="video-wrapper">
-			{/* {remoteStream && ( */}
 			<div
 				onClick={() => toggleUserScreen(false)}
 				className={`video-container ${!isUserFullscreen ? 'main-screen' : 'sub-screen'}`}
@@ -46,10 +45,6 @@ const VideoPlayer = () => {
 			>
 				<video playsInline muted src="" ref={userVideo} autoPlay />
 			</div>
-			{/* )} */}
-
-			{/* {stream && ( */}
-			{/* )} */}
 		</div>
 	);
 };

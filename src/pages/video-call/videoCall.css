@@ -1,8 +1,5 @@
 .video-call-wrapper {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+	display: block;
 	width: 100vw;
 	height: 100vh;
 	background-color: black;
@@ -15,6 +12,8 @@
 	background-color: #11375159;
 	width: 100%;
 	padding: 10px;
+	position: fixed;
+	bottom: 0;
 }
 .button-group {
 	background-color: #1064bb3b;
@@ -29,11 +28,5 @@
 	padding: 0 5px;
 }
 @media only screen and (max-width: 500px) {
-	.call-options {
-		position: fixed;
-		bottom: 0;
-	}
-	.video-call-wrapper {
-		display: block;
-	}
+
 }

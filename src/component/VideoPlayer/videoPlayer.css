@@ -1,6 +1,6 @@
 .video-wrapper {
 	position: relative;
-	flex: 1;
+	height: calc(100vh - 71px);
 }
 .video-container {
 	overflow: hidden;
@@ -19,27 +19,20 @@
 
 .sub-screen {
 	width: 220px;
-	position: absolute;
+	position: fixed;
+	bottom: 85px;
 	aspect-ratio: 16 / 9;
 	border-radius: 5px;
 	cursor: pointer;
 	z-index: 10;
 	right: 18px;
-	bottom: 16px;
 	box-shadow: 0 0 8px rgba(0, 153, 255, 0.6), 0 0 15px rgba(0, 153, 255, 0.4);
 	background-color: black;
 }
-
 
 @media only screen and (max-width: 500px) {
 	.sub-screen {
 		width: 100px;
 		aspect-ratio: 9 / 13;
-		position: fixed;
-		bottom: 85px;
-	}
-	.video-wrapper {
-		flex: none;
-		height: calc(100vh - 71px);
 	}
 }
