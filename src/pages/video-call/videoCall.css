@@ -33,4 +33,7 @@
 		position: fixed;
 		bottom: 0;
 	}
+	.video-call-wrapper {
+		display: block;
+	}
 }

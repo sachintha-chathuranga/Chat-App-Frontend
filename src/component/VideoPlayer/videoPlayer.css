@@ -30,15 +30,16 @@
 	background-color: black;
 }
 
-@media screen and (max-width: 600px) {
+
+@media only screen and (max-width: 500px) {
 	.sub-screen {
 		width: 100px;
 		aspect-ratio: 9 / 13;
+		position: fixed;
+		bottom: 85px;
 	}
-}
-@media only screen and (max-width: 500px) {
 	.video-wrapper {
 		flex: none;
-		height: calc(100vh - 140px);
+		height: calc(100vh - 71px);
 	}
 }
