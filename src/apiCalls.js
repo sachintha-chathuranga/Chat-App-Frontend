@@ -14,7 +14,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 export const getNewToken = async (dispatch) => {
 	try {
-		const res = await axiosPublic.get(`tokens/update`);
+		const res = await axiosPublic.put(`auth/update-token`);
 		dispatch(LoginSuccess(res.data));
 		let user = JSON.parse(localStorage.getItem('user'));
 		user
@@ -36,10 +36,11 @@ export const getNewToken = async (dispatch) => {
 		}
 	}
 };
+
 export const loginCall = async (userCredintial, rememberMe, dispatch) => {
 	dispatch(LoginStart(userCredintial));
 	try {
-		const res = await axiosPublic.post(`users/login`, userCredintial);
+		const res = await axiosPublic.post(`auth/sign-in`, userCredintial);
 		dispatch(LoginSuccess(res.data));
 
 		rememberMe
@@ -62,7 +63,7 @@ export const loginCall = async (userCredintial, rememberMe, dispatch) => {
 export const signUpCall = async (userCredintial, dispatch) => {
 	dispatch(LoginStart());
 	try {
-		const res = await axios.post(`${API_URL}users/signUp`, userCredintial);
+		const res = await axios.post(`${API_URL}auth/sign-up`, userCredintial);
 		dispatch(LoginSuccess(res.data));
 		return res.status;
 	} catch (err) {
@@ -81,7 +82,7 @@ export const signUpCall = async (userCredintial, dispatch) => {
 export const logOutCall = async (axiosPrivate, dispatch) => {
 	dispatch(UpdateStart());
 	try {
-		const res = await axiosPrivate.post(`users/logout`);
+		const res = await axiosPrivate.post(`auth/sign-out`);
 		dispatch(LogOut());
 		localStorage.removeItem('user');
 		sessionStorage.removeItem('user');
@@ -145,7 +146,7 @@ export const userDeleteCall = async (axiosPrivate, userCredintial, dispatch) => 
 };
 export const fetchFriendList = async (axiosPrivate, index) => {
 	try {
-		const res = await axiosPrivate.get(index ? `users/friends?index=${index}` : `users/friends`);
+		const res = await axiosPrivate.get(index ? `users/recentFriends?index=${index}` : `users/recentFriends`);
 		return res.data;
 	} catch (error) {
 		console.log(error);
@@ -182,7 +183,7 @@ export const searchFriend = async (axiosPrivate, index, searchInput) => {
 };
 
 export const fetchMessages = async (axiosPrivate, friend_id) => {
-	const res = await axiosPrivate.get(`messages/message?friend_id=${friend_id}`);
+	const res = await axiosPrivate.get(`messages/message?friend_id=${friend_id}&order_by=ASC`);
 	return res.data;
 };
 export const clearMessages = async (axiosPrivate, friend_id, dispatch) => {
