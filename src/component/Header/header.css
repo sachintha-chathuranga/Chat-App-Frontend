@@ -90,6 +90,7 @@
 	display: block;
 }
 .dropdown-content .item {
+	align-items: center;
 	color: var(--text-color);
 	padding: 7px 15px;
 	display: flex;

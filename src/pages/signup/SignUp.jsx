@@ -34,7 +34,7 @@ function SignUp() {
 			}
 		});
 	};
-
+	
 	return (
 		<div className="wrapper">
 			<section className="form signup">

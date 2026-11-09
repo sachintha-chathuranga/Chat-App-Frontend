@@ -198,6 +198,6 @@
 		border-radius: 0 3px 3px 0;
 	}
 	.users-list {
-		height: calc(100vh - 160px);
+		height: calc(100vh - 170px);
 	}
 }

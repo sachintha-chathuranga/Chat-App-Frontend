@@ -237,6 +237,7 @@ export const getSignRequest = async (axiosPrivate, file, dispatch) => {
 		}
 	}
 };
+
 export const deletPicture = async (axiosPrivate, profile_pic, dispatch) => {
 	try {
 		const res = await axiosPrivate.delete(`aws/sign-s3/delete?file_name=${profile_pic}`);

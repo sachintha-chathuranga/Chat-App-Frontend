@@ -88,7 +88,9 @@ const Update = ({toggleWarning}) => {
 		file && (data.profil_pic = encodeURIComponent(profileUrl));
 
 		if (signedRequest !== null && file !== null) {
-			deletPicture(axiosPrivate, user.profil_pic, dispatch);
+			if (user.profil_pic) {
+				deletPicture(axiosPrivate, user.profil_pic, dispatch);
+			}
 			uploadFile(file, signedRequest, dispatch).then((res) => {
 				if (res === 200) {
 					userUpdateCall(axiosPrivate, data, dispatch).then((res) => {

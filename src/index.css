@@ -268,7 +268,7 @@ form .name-details .field:last-child {
 @media only screen and (max-width: 500px) {
 	.wrapper {
 		width: 100vw;
-		min-height: 100vh;
+		/* min-height: 100vh;  */
 		border-radius: 0;
 		justify-content: center;
 		align-items: center;
@@ -277,7 +277,9 @@ form .name-details .field:last-child {
 	}
 	.form {
 		padding: 15px 18px;
+		width: 100%;
 	}
+
 	.form form {
 		margin: 15px 0;
 	}
