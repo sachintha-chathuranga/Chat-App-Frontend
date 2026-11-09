@@ -13,10 +13,18 @@ import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useMessage from '../../hooks/useMessage';
 import './chat.css';
 
+const skeletonMessages = [
+	{type: 1, id: 1},
+	{type: 2, id: 2},
+	{type: 1, id: 3},
+	{type: 1, id: 4},
+	{type: 2, id: 5},
+];
+
 export default function Chat() {
 	console.log('chat render');
 	const {user, dispatch} = useAuth();
-	const {socket} = useSocket();
+	const {socket, isConnected} = useSocket();
 	const navigate = useNavigate();
 	const {isInVideoCall, callUser, incomingCall, outgoingCall} = useVideoCall();
 
@@ -26,7 +34,6 @@ export default function Chat() {
 	const chatBox = useRef(null);
 	const axiosPrivate = useAxiosPrivate();
 	const [isFriendFetching, setIsFriendFetching] = useState(false);
-	const skeletonMessages = [1, 2, 1, 1, 2];
 
 	const scrollToBottom = useCallback(() => {
 		if (chatBox.current) {
@@ -50,17 +57,21 @@ export default function Chat() {
 	}, [params.friend_id, scrollToBottom, axiosPrivate, dispatch]);
 
 	useEffect(() => {
-		if (!socket) return;
-		socket.on('getMessage', (data) => {
+		if (!socket || !isConnected) return;
+		const handleMessage = (data) => {
 			if (data.sender_id === friend.user_id) {
 				setMessages((prev) => [...prev, data]);
 			}
-		});
+		};
+		console.log('ChatScreen listning for messages...');
+		socket.on('getMessage', handleMessage);
 
 		return () => {
-			socket.off('getMessage');
+			console.log('ChatScreen listener Off');
+			socket.off('getMessage', handleMessage);
 		};
-	}, [socket, setMessages, friend.user_id]);
+		// eslint-disable-next-line
+	}, [socket, friend.user_id, isConnected]);
 
 	useEffect(() => {
 		scrollToBottom();
@@ -81,9 +92,9 @@ export default function Chat() {
 		// }
 		const sendMessage = async () => {
 			try {
-				await axiosPrivate.post(`messages/message`, JSON.stringify(msg));
-				socket?.emit('sendMessage', msg);
-				setMessages((prev) => [...prev, msg]);
+				const res = await axiosPrivate.post(`messages/message`, JSON.stringify(msg));
+				socket?.emit('sendMessage', res.data);
+				setMessages((prev) => [...prev, res.data]);
 				setinputMsg('');
 			} catch (err) {
 				console.log(err);
@@ -115,9 +126,9 @@ export default function Chat() {
 						messages.length !== 0 ? (
 							messages.map((msg, index) =>
 								msg.sender_id === user.user_id ? (
-									<Outgoing key={index} msg={msg.message} />
+									<Outgoing key={msg.id} msg={msg.message} />
 								) : (
-									<Incoming key={index} msg={msg.message} profil_pic={friend.profil_pic} />
+									<Incoming key={msg.id} msg={msg.message} profil_pic={friend.profil_pic} />
 								)
 							)
 						) : (
@@ -127,10 +138,10 @@ export default function Chat() {
 						)
 					) : (
 						skeletonMessages.map((msg, index) =>
-							msg === 2 ? (
-								<Outgoing isLoading={isMessageFetching} key={index} />
+							msg.type === 2 ? (
+								<Outgoing isLoading={isMessageFetching} key={msg.id} />
 							) : (
-								<Incoming isLoading={isMessageFetching} key={index} />
+								<Incoming isLoading={isMessageFetching} key={msg.id} />
 							)
 						)
 					)}

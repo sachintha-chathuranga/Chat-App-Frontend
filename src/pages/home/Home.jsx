@@ -13,7 +13,7 @@ import './home.css';
 const Home = () => {
 	const axiosPrivate = useAxiosPrivate();
 
-	const {socket} = useSocket();
+	const {socket, isConnected} = useSocket();
 	const {user, dispatch} = useAuth();
 	const [active, setActive] = useState(false);
 	const [isSearch, setIsSearch] = useState(false);
@@ -52,8 +52,11 @@ const Home = () => {
 	);
 
 	useEffect(() => {
-		if (!socket) return;
-		socket.on('getMessage', (data) => {
+		console.log('Socket At Home: ' + socket);
+		if (!socket || !isConnected) return;
+		console.log('HomeScreen getMessage listening...');
+		const handleMessage = (data) => {
+			console.log('Message Comming Background');
 			const sender = friendsRef.current.find((f) => parseInt(f.user_id) === parseInt(data.sender_id));
 			setNotification((prev) => [...prev, data]);
 			if (!sender) {
@@ -62,13 +65,15 @@ const Home = () => {
 					friend && setfriend((list) => [friend, ...list]);
 				});
 			}
-		});
+		};
+		socket.on('getMessage', handleMessage);
 
 		return () => {
-			socket?.off('getMessage');
+			console.log('Home getMessage listner Off');
+			socket?.off('getMessage', handleMessage);
 		};
 		// eslint-disable-next-line
-	}, [socket]);
+	}, [socket, isConnected]);
 
 	const fetchFriendList = () => {
 		setfriend([]);

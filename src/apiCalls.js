@@ -79,10 +79,10 @@ export const signUpCall = async (userCredintial, dispatch) => {
 		}
 	}
 };
-export const logOutCall = async (axiosPrivate, dispatch) => {
+export const logOutCall = async (axiosPrivate, dispatch, userId) => {
 	dispatch(UpdateStart());
 	try {
-		const res = await axiosPrivate.post(`auth/sign-out`);
+		const res = await axiosPrivate.post(`auth/sign-out`, {userId});
 		dispatch(LogOut());
 		localStorage.removeItem('user');
 		sessionStorage.removeItem('user');

@@ -21,7 +21,7 @@ const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 const imageUrl = process.env.REACT_APP_AWS_URL;
 
 const Header = (props) => {
-	const {dispatch} = useAuth();
+	const {user, dispatch} = useAuth();
 	const navigate = useNavigate();
 	const axiosPrivate = useAxiosPrivate();
 	const [fullName, setFullName] = useState('');
@@ -50,7 +50,7 @@ const Header = (props) => {
 	};
 	const handleLogout = () => {
 		setShow(false);
-		logOutCall(axiosPrivate, dispatch).then((res) => {
+		logOutCall(axiosPrivate, dispatch, user.user_id).then((res) => {
 			if (res === 200) {
 				disconnectSocket();
 				navigate('/login');

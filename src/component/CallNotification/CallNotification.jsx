@@ -7,8 +7,8 @@ import './callNotification.css';
 const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 const imageUrl = process.env.REACT_APP_AWS_URL;
 const CallNotification = () => {
-	console.log('Call Notification render');
 	const {answerCall, call, incomingCall, outgoingCall, rejectIncommingCall, leaveCall, errorMessage} = useVideoCall();
+	
 	const navigate = useNavigate();
 
 	const takeCall = () => {

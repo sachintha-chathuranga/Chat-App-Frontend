@@ -1,4 +1,4 @@
-import {createContext, memo, useContext, useMemo, useReducer} from 'react';
+import {createContext, useContext, useReducer} from 'react';
 import AuthReducer from './AuthReducer';
 
 export const INITIAL_STATE = {
@@ -20,18 +20,20 @@ const AuthContext = createContext(INITIAL_STATE);
 const AuthContextProvider = ({children}) => {
 	const [state, dispatch] = useReducer(AuthReducer, INITIAL_STATE);
 
-	const values = useMemo(
-		() => ({
-			user: state.user,
-			isFetching: state.isFetching,
-			error: state.error,
-			dispatch,
-		}),
-		[state.user, state.isFetching, state.error, dispatch]
+	return (
+		<AuthContext.Provider
+			value={{
+				user: state.user,
+				isFetching: state.isFetching,
+				error: state.error,
+				dispatch,
+			}}
+		>
+			{children}
+		</AuthContext.Provider>
 	);
-	return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => useContext(AuthContext);
 
-export const AuthProvider = memo(AuthContextProvider);
+export const AuthProvider = AuthContextProvider;

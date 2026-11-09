@@ -13,8 +13,6 @@ const VideoCallContext = createContext();
 // ];
 
 const VideoCallContextProvider = ({children}) => {
-	console.log('VideoCall Context render');
-
 	const {user} = useAuth();
 	const {socket} = useSocket();
 

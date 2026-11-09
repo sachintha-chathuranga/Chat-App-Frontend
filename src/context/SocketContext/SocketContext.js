@@ -1,63 +1,90 @@
-import {createContext, memo, useCallback, useContext, useEffect, useMemo, useState} from 'react';
+import {createContext, useCallback, useContext, useEffect, useRef, useState} from 'react';
 import {io} from 'socket.io-client';
 import {useAuth} from '../AuthContext/AuthContext';
-const API_URL = process.env.REACT_APP_API_SOCKET_URL;
+const SOCKET_URL = process.env.REACT_APP_API_SOCKET_URL;
 
 const SocketContext = createContext();
 
 const SocketContextProvider = ({children}) => {
-	console.log('Socket Context render');
 	const {user} = useAuth();
 	const [socket, setSocket] = useState(null);
+	const [isConnected, setIsConnected] = useState(false);
 
-	const connectSocket = useCallback(
-		(userId) => {
-			if (!socket) {
-				console.log(socket);
-				const newSocket = io(API_URL);
-				newSocket.on('connect', () => {
-					console.log('Socket Connected');
-					newSocket?.emit('joinRoom', userId);
+	// Keep the latest token available to the socket
+	const tokenRef = useRef(user?.access_token);
+
+	tokenRef.current = user?.access_token;
+
+	const connectSocket = useCallback(() => {
+		if (!user?.access_token) return;
+		// Prevent duplicate connections
+		if (socket?.connected) return;
+		console.log('ConnectSocket Called');
+
+		// Disconnect an old socket if necessary
+		socket?.disconnect();
+		socket?.removeAllListeners();
+
+		const newSocket = io(SOCKET_URL, {
+			autoConnect: false,
+			auth: (callback) => {
+				callback({
+					token: tokenRef.current,
 				});
-				newSocket.on('disconnect', () => {
-					console.log('Socket disconnected');
-				});
-				newSocket.on('error', (error) => {
-					console.error('Socket error:', error);
-				});
-				setSocket(newSocket);
-			}
-			// eslint-disable-next-line
-		},
-		[socket]
-	);
+			},
+			transports: ['websocket'],
+			reconnection: true,
+			reconnectionAttempts: 2,
+			reconnectionDelay: 1000,
+			reconnectionDelayMax: 5000,
+		});
+
+		newSocket.on('connect', () => {
+			console.log('Socket connected:', newSocket.id);
+			setIsConnected(true);
+		});
+		newSocket.on('disconnect', (reason) => {
+			console.log('Socket disconnected:', reason);
+			setIsConnected(false);
+		});
+		newSocket.on('connect_error', (error) => {
+			console.log('Socket connection error:', error.message);
+			setIsConnected(false);
+		});
+		setSocket(newSocket);
+		newSocket.connect();
+		// eslint-disable-next-line
+	}, [user, user?.access_token]);
 
 	const disconnectSocket = useCallback(() => {
-		if (socket) {
-			socket.emit('leaveRoom', user?.user_id);
-			socket.disconnect();
-			setSocket(null);
+		if (!socket) return;
+		console.log('DisconnectSocket Called');
+
+		socket.disconnect();
+		socket.removeAllListeners();
+		setSocket(null);
+		setIsConnected(false);
+
+		// eslint-disable-next-line
+	}, [socket]);
+
+	// Connect when authenticated
+	useEffect(() => {
+		if (user?.access_token) {
+			connectSocket();
+		} else {
+			disconnectSocket();
 		}
 		// eslint-disable-next-line
-	}, [socket, user?.user_id]);
+	}, [user,user?.accessToken]);
 
-	useEffect(() => {
-		if (user?.user_id) {
-			connectSocket(user?.user_id);
-		}
-	}, [user?.user_id, connectSocket]);
-
-	const values = useMemo(
-		() => ({
-			socket,
-			connectSocket,
-			disconnectSocket,
-		}),
-		[socket, connectSocket, disconnectSocket]
+	return (
+		<SocketContext.Provider value={{socket, isConnected, connectSocket, disconnectSocket}}>
+			{children}
+		</SocketContext.Provider>
 	);
-	return <SocketContext.Provider value={values}>{children}</SocketContext.Provider>;
 };
 
 export const useSocket = () => useContext(SocketContext);
 
-export const SocketProvider = memo(SocketContextProvider);
+export const SocketProvider = SocketContextProvider;

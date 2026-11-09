@@ -5,7 +5,6 @@ const useRigingTone = () => {
 	const outgoingAudioRef = useRef(null);
 
 	useEffect(() => {
-		console.log('Create new Audio');
 		// Create audio object once
 		incommingAudioRef.current = new Audio('/sounds/Sony-Xperia.mp3'); // place ringtone in public/sounds
 		incommingAudioRef.current.loop = true; // make it loop until stopped
@@ -18,8 +17,8 @@ const useRigingTone = () => {
 			}
 		};
 	}, []);
+	
 	useEffect(() => {
-		console.log('Create new Audio');
 		// Create audio object once
 		outgoingAudioRef.current = new Audio('/sounds/hangouts_outgoing.mp3'); // place ringtone in public/sounds
 		outgoingAudioRef.current.loop = true; // make it loop until stopped
