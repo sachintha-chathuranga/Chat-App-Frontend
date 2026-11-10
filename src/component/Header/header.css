@@ -117,20 +117,41 @@
 #moreVert {
 	font-size: 1.8rem;
 }
+.header-icons{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+.header-icons .video-call-btn {
+	text-align: center;
+	align-items: center;
+	justify-content: center;
+	display: flex;
+	color: var(--text-color);
+	opacity: 0.9;
+	padding: 0;
+}
+.video-call-btn:disabled {
+	color: var(--text-color);
+	opacity: 0.2;
+}
+.video-call-btn:hover {
+	cursor: pointer;
+}
 
 @media only screen and (max-width: 500px) {
-
+	.home #header{
+		position: fixed;
+		right: 0;
+		left: 0;
+		top: 0;
+	}
 	:is(.home, .profile) #header {
 		padding: 12px 15px 10px 15px;
-		padding-top: 12px;
 		border-bottom: none;
-		padding-bottom: 10px;
 	}
 	.chat-area #header {
-		padding: 15px 20px;
-		position: fixed;
-		top: 0;
-		width: 100vw;
+		padding: 15px;
 	}
 	.chat-area #header .back-icon {
 		font-size: 16px;

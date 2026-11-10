@@ -47,7 +47,7 @@
 	--btn-text-color-disable: #ffffff6b;
 	--input-bg-color: #292929;
 	--input-border-color: #6f6f6f00;
-	--highlight-text: #027dff;
+	--highlight-text: #56c909;
 	--scrollbar-track: #aaaaaa36;
 	--scrollbar-thumb: #555555be;
 	--scrollbar-thumb-hover: #333333;
@@ -88,6 +88,7 @@ body {
 	position: fixed;
 	top: 20px;
 	right: 25px;
+	z-index: 5;
 }
 #root > #theme-switch:hover {
 	background: #00000031 !important;
@@ -196,6 +197,7 @@ form .name-details .field:last-child {
 }
 .form .link a {
 	color: var(--highlight-text);
+	font-weight: bold;
 }
 
 :is(.users-list, .chat-box)::-webkit-scrollbar {
@@ -284,11 +286,12 @@ form .name-details .field:last-child {
 		align-items: center;
 		display: flex;
 		flex-direction: column;
+		overflow: scroll;
 	}
 	.form {
 		padding: 15px 18px;
 		width: 100%;
-		margin-bottom: 100px;
+		margin-bottom: 50px;
 	}
 
 	.form form {
@@ -319,7 +322,7 @@ form .name-details .field:last-child {
 		border-radius: 5px;
 	}
 	.form form button.loginBtn {
-		margin-top: 6px;
+		margin-top: 10px;
 		height: 40px;
 		font-size: 15px;
 		border-radius: 5px;

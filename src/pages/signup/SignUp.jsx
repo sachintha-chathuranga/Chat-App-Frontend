@@ -4,8 +4,7 @@ import {useRef, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {clearError, signUpCall} from '../../apiCalls';
 import {useAuth} from '../../context/AuthContext/AuthContext';
-
-const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+import { PF } from '../../constant/env';
 
 function SignUp() {
 	const {isFetching, error, dispatch} = useAuth();

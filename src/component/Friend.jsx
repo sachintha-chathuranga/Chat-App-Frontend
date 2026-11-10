@@ -2,8 +2,7 @@ import {Circle} from '@mui/icons-material';
 import React, {memo, useEffect, useMemo, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {formatDateTime} from '../utils/dateUtils';
-const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-const imageUrl = process.env.REACT_APP_AWS_URL;
+import { PF, imageUrl } from '../constant/env';
 
 const Friend = ({notifi, friend}) => {
 	const [notification, setNotification] = useState([]);

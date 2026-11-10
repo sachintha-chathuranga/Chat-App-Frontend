@@ -98,7 +98,7 @@
 }
 .users-list {
 	height: 350px;
-	overflow-y: auto;
+	overflow-y: scroll;
 }
 .users-list .friend {
 	page-break-after: 10px;
@@ -167,10 +167,12 @@
 	.home {
 		padding: 0;
 		width: 100%;
-		height: 100%;
+		min-height: 100%;
+		overflow-y: scroll;
 	}
 	.users-list {
-		height: 100%;
+		margin-top: 125px;
+		height: fit-content;
 	}
 	.users-list .details span {
 		font-size: 15px;
@@ -183,12 +185,13 @@
 		padding-bottom: 15px;
 	}
 	.home .search {
-		margin: 0;
-		padding: 0 15px;
+		z-index: 2;
+		position: fixed;
+		top: 72px;
+		margin: 0 15px;
 	}
 	.home .search button.clear-btn {
-	
-		right: 65px;
+		right: 55px;
 	}
 	.home .search .text {
 		margin-left: 7px;
@@ -198,11 +201,13 @@
 		width: calc(100% - 40px);
 		font-size: 15px;
 		border-radius: 3px 0 0 3px;
+		opacity: 1;
 	}
 	.home .search button {
 		width: 35px;
 		height: 32px;
 		font-size: 15px;
 		border-radius: 0 3px 3px 0;
+		z-index: 4;
 	}
 }

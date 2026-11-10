@@ -17,7 +17,7 @@ const useFriend = (index, active, isSearch, searchInput) => {
 				? searchFriend(privateApi, index, searchInput)
 						.then((d) => {
 							setfriend((prev) => [...prev, ...d]);
-							sethasMore(Boolean(d.length));
+							sethasMore(Boolean(d.length === 15));
 							setIsFetching(false);
 						})
 						.catch((e) => {
@@ -87,7 +87,7 @@ const useFriend = (index, active, isSearch, searchInput) => {
 		// eslint-disable-next-line
 	}, [active, privateApi]);
 
-	return {friends, setfriend, isFetching, error, hasMore};
+	return {friends, setfriend, isFetching, error, sethasMore, hasMore};
 };
 
 export default useFriend;

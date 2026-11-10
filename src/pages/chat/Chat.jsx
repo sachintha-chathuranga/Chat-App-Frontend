@@ -1,14 +1,12 @@
-import {Telegram, VideocamOutlined} from '@mui/icons-material';
-import {IconButton} from '@mui/material';
+import {FlashOnRounded, Telegram} from '@mui/icons-material';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import {getFriend, readAllMessages} from '../../apiCalls';
 import Header from '../../component/Header/Header';
 import Incoming from '../../component/Incoming';
 import Outgoing from '../../component/Outgoing';
 import {useAuth} from '../../context/AuthContext/AuthContext';
 import {useSocket} from '../../context/SocketContext/SocketContext';
-import {useVideoCall} from '../../context/VideoCallContext/VideoCallContext';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useMessage from '../../hooks/useMessage';
 import './chat.css';
@@ -25,15 +23,12 @@ export default function Chat() {
 	console.log('chat render');
 	const {user} = useAuth();
 	const {socket, isConnected} = useSocket();
-	const navigate = useNavigate();
-	const {isInVideoCall, callUser, incomingCall, outgoingCall} = useVideoCall();
-
 	const [friend, setFriend] = useState({});
 	const params = useParams();
 	const [inputMsg, setinputMsg] = useState('');
 	const chatBox = useRef(null);
 	const privateApi = useAxiosPrivate();
-	const [isFriendFetching, setIsFriendFetching] = useState(false);
+	const [isFriendFetching, setIsFriendFetching] = useState(FlashOnRounded);
 
 	const scrollToBottom = useCallback(() => {
 		if (chatBox.current) {
@@ -104,11 +99,6 @@ export default function Chat() {
 		inputMsg && sendMessage();
 	};
 
-	const handleVideoCall = useCallback(async () => {
-		callUser(friend, navigate);
-		// eslint-disable-next-line
-	}, [callUser, friend]);
-
 	return (
 		<div className="wrapper">
 			<section className="chat-area">
@@ -158,15 +148,6 @@ export default function Chat() {
 					<button className="message-btn" type="submit">
 						<Telegram />
 					</button>
-					{friend.status && (
-						<IconButton
-							disabled={isInVideoCall || incomingCall || outgoingCall}
-							className="video-call-btn"
-							onClick={() => handleVideoCall()}
-						>
-							<VideocamOutlined fontSize="large" />
-						</IconButton>
-					)}
 				</form>
 			</section>
 		</div>

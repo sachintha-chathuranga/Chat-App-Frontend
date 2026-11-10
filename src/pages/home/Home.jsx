@@ -22,7 +22,7 @@ const Home = () => {
 	const [show, setShow] = useState(false);
 	const [notification, setNotification] = useState([]);
 	const [index, setindex] = useState(1);
-	const {friends, setfriend, isFetching, error, hasMore} = useFriend(index, active, isSearch, searchInput);
+	const {friends, setfriend, isFetching, error, sethasMore, hasMore} = useFriend(index, active, isSearch, searchInput);
 	const skeletonFriends = [0, 1, 2, 3, 4];
 	const friendsRef = useRef(null);
 	useEffect(() => {
@@ -40,13 +40,24 @@ const Home = () => {
 	const lastfriendRef = useCallback(
 		(friend) => {
 			if (isFetching) return;
-			if (intObserver.current) intObserver.current.disconnect();
-			intObserver.current = new IntersectionObserver((friends) => {
-				if (friends[0].isIntersecting && hasMore) {
-					setindex((prev) => prev + 1);
+			if (intObserver.current) {
+				intObserver.current.disconnect();
+			}
+			intObserver.current = new IntersectionObserver(
+				(entries) => {
+					if (entries[0].isIntersecting && hasMore && !isFetching) {
+						setindex((prev) => prev + 1);
+					}
+				},
+				{
+					root: null,
+					rootMargin: '100px',
+					threshold: 0,
 				}
-			});
-			if (friend) intObserver.current.observe(friend);
+			);
+			if (friend) {
+				intObserver.current.observe(friend);
+			}
 		},
 		[isFetching, hasMore]
 	);
@@ -77,6 +88,7 @@ const Home = () => {
 
 	const fetchFriendList = () => {
 		setfriend([]);
+		sethasMore(true);
 		setindex(1);
 		setActive(!active);
 	};
@@ -93,7 +105,6 @@ const Home = () => {
 			fetchFriendList();
 		}
 		setSearch('');
-		inputElement.current.focus();
 	};
 	const handleInputChange = (text) => {
 		if (!text) {
@@ -139,13 +150,6 @@ const Home = () => {
 
 					{!isFetching
 						? friends.map((f, i) => {
-								if (i === 0) {
-									return (
-										<div style={{marginTop: 10}}>
-											<Friend notifi={notification} friend={f} />
-										</div>
-									);
-								}
 								if (friends.length === i + 1) {
 									return (
 										<div key={f.user_id} ref={lastfriendRef}>

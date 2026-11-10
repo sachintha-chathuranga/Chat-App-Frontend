@@ -4,8 +4,8 @@ import React, {memo} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useVideoCall} from '../../context/VideoCallContext/VideoCallContext';
 import './callNotification.css';
-const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-const imageUrl = process.env.REACT_APP_AWS_URL;
+import { PF, imageUrl } from '../../constant/env';
+
 const CallNotification = () => {
 	const {answerCall, call, incomingCall, outgoingCall, rejectIncommingCall, leaveCall, errorMessage} = useVideoCall();
 	

@@ -4,8 +4,7 @@ import {useRef, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {clearError, loginCall} from '../../apiCalls';
 import {useAuth} from '../../context/AuthContext/AuthContext';
-
-const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+import { PF } from '../../constant/env';
 
 export default function Login() {
 	const email = useRef();

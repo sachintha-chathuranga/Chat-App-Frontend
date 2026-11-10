@@ -5,20 +5,21 @@ import {
 	ExitToAppOutlined,
 	HomeOutlined,
 	MoreVert,
+	VideocamOutlined,
 } from '@mui/icons-material';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import {memo, useEffect, useState} from 'react';
+import {IconButton} from '@mui/material';
+import {memo, useCallback, useEffect, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {clearError, clearMessages, logOutCall} from '../../apiCalls';
+import {PF, imageUrl} from '../../constant/env';
 import {useAuth} from '../../context/AuthContext/AuthContext';
 import {useSocket} from '../../context/SocketContext/SocketContext';
+import {useVideoCall} from '../../context/VideoCallContext/VideoCallContext';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import CallNotification from '../CallNotification/CallNotification';
 import ThemeButton from '../ThemeButton';
 import './header.css';
-
-const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-const imageUrl = process.env.REACT_APP_AWS_URL;
 
 const Header = (props) => {
 	const {user, dispatch} = useAuth();
@@ -27,6 +28,7 @@ const Header = (props) => {
 	const [fullName, setFullName] = useState('');
 	const [show, setShow] = useState(false);
 	const {disconnectSocket} = useSocket();
+	const {isInVideoCall, callUser, incomingCall, outgoingCall} = useVideoCall();
 
 	useEffect(() => {
 		props.user.fname && setFullName(`${props.user.fname} ${props.user.lname}`);
@@ -72,6 +74,10 @@ const Header = (props) => {
 				});
 		}
 	};
+	const handleVideoCall = useCallback(async () => {
+		callUser(props.user, navigate);
+		// eslint-disable-next-line
+	}, [callUser, props.user]);
 
 	return (
 		<>
@@ -101,50 +107,61 @@ const Header = (props) => {
 						</p>
 					</div>
 				</div>
-				<div className="dropdown">
-					<div className="dropbtn">
-						<MoreVert onClick={() => setShow(!show)} id="moreVert" />
-						{/* <MoreVert onClick={() => setShow(!show)} style={{fontSize: '1.8rem'}} /> */}
-					</div>
+				<div className="header-icons">
+					{props.headerType === 'chat' && (
+						<IconButton
+							disabled={!props.user.status || isInVideoCall || incomingCall || outgoingCall}
+							className="video-call-btn"
+							onClick={() => handleVideoCall()}
+						>
+							<VideocamOutlined fontSize="large" />
+						</IconButton>
+					)}
+					<div className="dropdown">
+						<div className="dropbtn">
+							<MoreVert onClick={() => setShow(!show)} id="moreVert" />
+							{/* <MoreVert onClick={() => setShow(!show)} style={{fontSize: '1.8rem'}} /> */}
+						</div>
 
-					<div id="myDropdown" className={show ? 'dropdown-content show' : 'dropdown-content'}>
-						{props.headerType !== 'home' ? (
-							<Link onClick={() => setShow(false)} className="item" to={'/'}>
-								<HomeOutlined /> Home
-							</Link>
-						) : (
-							''
-						)}
-						{props.headerType !== 'profile' ? (
-							<Link onClick={() => setShow(false)} className="item" to={'/profile'}>
-								<AccountCircleOutlinedIcon /> Account
-							</Link>
-						) : (
-							''
-						)}
-						{props.headerType !== 'home' ? (
-							<div onClick={handleButton} className="item">
-								{props.headerType === 'chat' ? (
-									<>
-										<DeleteSweepOutlined />
-										Clear chat
-									</>
-								) : (
-									<>
-										<DeleteOutline />
-										Delete Account
-									</>
-								)}
+						<div id="myDropdown" className={show ? 'dropdown-content show' : 'dropdown-content'}>
+							{props.headerType !== 'home' ? (
+								<Link onClick={() => setShow(false)} className="item" to={'/'}>
+									<HomeOutlined /> Home
+								</Link>
+							) : (
+								''
+							)}
+							{props.headerType !== 'profile' ? (
+								<Link onClick={() => setShow(false)} className="item" to={'/profile'}>
+									<AccountCircleOutlinedIcon /> Account
+								</Link>
+							) : (
+								''
+							)}
+							{props.headerType !== 'home' ? (
+								<div onClick={handleButton} className="item">
+									{props.headerType === 'chat' ? (
+										<>
+											<DeleteSweepOutlined />
+											Clear chat
+										</>
+									) : (
+										<>
+											<DeleteOutline />
+											Delete Account
+										</>
+									)}
+								</div>
+							) : (
+								<></>
+							)}
+
+							<ThemeButton setShow={setShow} type={'header'} />
+
+							<div onClick={handleLogout} className="item">
+								<ExitToAppOutlined />
+								Logout
 							</div>
-						) : (
-							<></>
-						)}
-
-						<ThemeButton setShow={setShow} type={'header'} />
-
-						<div onClick={handleLogout} className="item">
-							<ExitToAppOutlined />
-							Logout
 						</div>
 					</div>
 				</div>

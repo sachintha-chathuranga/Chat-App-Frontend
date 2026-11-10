@@ -3,10 +3,11 @@ import {CircularProgress} from '@mui/material';
 import axios from 'axios';
 import React, {memo, useRef, useState} from 'react';
 import {clearError, deletPicture, getSignRequest, userUpdateCall} from '../apiCalls';
+import {PF, imageUrl} from '../constant/env';
 import {UpdateFailure, UpdateStart} from '../context/AuthContext/AuthActions';
+import {useAuth} from '../context/AuthContext/AuthContext';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
 import Header from './Header/Header';
-import { useAuth } from '../context/AuthContext/AuthContext';
 
 const validFileType = ['image/png', 'image/jpg', 'image/jpeg'];
 
@@ -101,6 +102,7 @@ const Update = ({toggleWarning}) => {
 						}
 					});
 				} else {
+					fileInput.current.value = null;
 					setTimeout(() => {
 						clearError(dispatch);
 					}, 5000);
@@ -161,117 +163,123 @@ const Update = ({toggleWarning}) => {
 	return (
 		<>
 			<Header user={user} toggleWarning={toggleWarning} headerType={'profile'} />
-			<span>
-				<strong>Account Details</strong>
-			</span>
-			<form onSubmit={handleSubmit} autoComplete="off">
-				{success && <div className="success-txt">{success}</div>}
-				{error && <div className="error-txt">{error}</div>}
-				{severError && <div className="error-txt">{severError}</div>}
-				<div className="name-details">
-					<div className="field input">
-						<label>First Name</label>
-						<input
-							type="text"
-							ref={fname}
-							placeholder={user.fname}
-							minLength="3"
-							maxLength="15"
-							pattern="[A-Za-z]+"
-							title="Please enter only alphabetic characters!"
-						/>
-					</div>
-					<div className="field input">
-						<label>Last Name</label>
-						<input
-							type="text"
-							ref={lname}
-							placeholder={user.lname}
-							minLength="3"
-							maxLength="15"
-							pattern="[A-Za-z]+"
-							title="Please enter only alphabetic characters!"
-						/>
-					</div>
+			<div id="profile-body">
+				<div className="img-container">
+					<img
+						id="current-img"
+						src={user?.profil_pic ? imageUrl + user?.profil_pic : PF + 'default.png'}
+						alt="proPic"
+					/>
 				</div>
-				<div className="field input">
-					<label>Email Address</label>
-					<input type="email" ref={email} placeholder={user.email} />
-				</div>
-				<div className="field input">
-					<label>Password</label>
-					<input type={isActive ? 'text' : 'password'} ref={password} placeholder="Enter new password" />
-
-					{isActive ? (
-						<VisibilityOffOutlined className={'svg active'} onClick={() => setisActive(!isActive)} />
-					) : (
-						<VisibilityOutlined className={'svg'} onClick={() => setisActive(!isActive)} />
-					)}
-				</div>
-				<div className="field image">
-					<label>Change Profile picture</label>
-					<div className="shareOption">
-						<label className="buttonImg" htmlFor="file">
-							<PermMedia htmlColor="tomato" className="shareIcon" />
-							<span className="shareOptionText">Photo</span>
+				<form onSubmit={handleSubmit} autoComplete="off">
+					{success && <div className="success-txt">{success}</div>}
+					{error && <div className="error-txt">{error}</div>}
+					{severError && <div className="error-txt">{severError}</div>}
+					<div className="name-details">
+						<div className="field input">
+							<label>First Name</label>
 							<input
-								ref={fileInput}
-								style={{display: 'none'}}
-								type="file"
-								id="file"
-								onChange={(e) => handleFile(e.target.files[0])}
+								type="text"
+								ref={fname}
+								placeholder={user.fname}
+								minLength="3"
+								maxLength="15"
+								pattern="[A-Za-z]+"
+								title="Please enter only alphabetic characters!"
 							/>
-						</label>
-						{file && (
-							<div className="uploadPhoto">
-								<img src={URL.createObjectURL(file)} alt="selectedImg" />
-								<Cancel
-									className="cancelImg"
-									onClick={() => {
-										setFile(null);
-										fileInput.current.value = null;
-									}}
-								/>
-							</div>
-						)}
-						{file && isFetching && (
-							<div className="progressBar">
-								<div className="progress" style={{width: `${uploadProgress}%`}}></div>
-							</div>
+						</div>
+						<div className="field input">
+							<label>Last Name</label>
+							<input
+								type="text"
+								ref={lname}
+								placeholder={user.lname}
+								minLength="3"
+								maxLength="15"
+								pattern="[A-Za-z]+"
+								title="Please enter only alphabetic characters!"
+							/>
+						</div>
+					</div>
+					<div className="field input">
+						<label>Email Address</label>
+						<input type="email" ref={email} placeholder={user.email} />
+					</div>
+					<div className="field input">
+						<label>Password</label>
+						<input type={isActive ? 'text' : 'password'} ref={password} placeholder="Enter new password" />
+
+						{isActive ? (
+							<VisibilityOffOutlined className={'svg active'} onClick={() => setisActive(!isActive)} />
+						) : (
+							<VisibilityOutlined className={'svg'} onClick={() => setisActive(!isActive)} />
 						)}
 					</div>
-					{user.profil_pic && (
-						<button className="pictureDelBtn" disabled={isLoading} onClick={deleteFile}>
-							{isLoading ? (
+					<div className="field image">
+						<label>Change Profile picture</label>
+						<div className="shareOption">
+							<label className="buttonImg" htmlFor="file">
+								<PermMedia htmlColor="tomato" className="shareIcon" />
+								<span className="shareOptionText">Photo</span>
+								<input
+									ref={fileInput}
+									style={{display: 'none'}}
+									type="file"
+									id="file"
+									onChange={(e) => handleFile(e.target.files[0])}
+								/>
+							</label>
+							{file && (
+								<div className="uploadPhoto">
+									<img id="selected-img" src={URL.createObjectURL(file)} alt="selectedImg" />
+									<Cancel
+										className="cancelImg"
+										onClick={() => {
+											setFile(null);
+											fileInput.current.value = null;
+										}}
+									/>
+								</div>
+							)}
+							{file && isFetching && (
+								<div className="progressBar">
+									<div className="progress" style={{width: `${uploadProgress}%`}}></div>
+								</div>
+							)}
+						</div>
+						{user.profil_pic && (
+							<button className="pictureDelBtn" disabled={isLoading} onClick={deleteFile}>
+								{isLoading ? (
+									<CircularProgress
+										style={{
+											color: 'black',
+											width: '15px',
+											height: '15px',
+										}}
+									/>
+								) : (
+									'Remove Profile Picture'
+								)}
+							</button>
+						)}
+					</div>
+					<div className="field button">
+						<button type="submit" className="loginBtn" disabled={isFetching}>
+							{isFetching ? (
 								<CircularProgress
 									style={{
-										color: 'black',
-										width: '15px',
-										height: '15px',
+										color: 'white',
+										width: '26px',
+										height: '26px',
 									}}
 								/>
 							) : (
-								'Remove Profile Picture'
+								'Save Changes'
 							)}
 						</button>
-					)}
-				</div>
-				<div className="field button">
-					<button type="submit" className="loginBtn" disabled={isFetching}>
-						{isFetching ? (
-							<CircularProgress
-								style={{
-									color: 'white',
-									width: '26px',
-									height: '26px',
-								}}
-							/>
-						) : (
-							'Save Changes'
-						)}
-					</button>
-				</div>
-			</form>
+					</div>
+				</form>
+			</div>
 		</>
 	);
 };

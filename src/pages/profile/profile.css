@@ -4,13 +4,15 @@
 	min-height: 560px;
 }
 
-.profile span strong {
-	display: block;
-	text-align: center;
-	padding: 10px 0 10px 0;
-	margin: 0 0 10px 0;
-	font-size: large;
-	border-bottom: 1px solid var(--base-variant);
+.img-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding-bottom: 20px;
+}
+#profile-body #current-img {
+	height: 120px;
+	width: 120px;
 }
 
 .profile form .name-details {
@@ -119,7 +121,7 @@
 	position: relative;
 	transition: 0.4s;
 }
-.profile .uploadPhoto img {
+.profile #selected-img {
 	width: 50px;
 	border-radius: 1px;
 }
@@ -246,23 +248,22 @@
 
 @media only screen and (max-width: 500px) {
 	.profile {
-		padding: 18px 20px;
-		width: 100vw;
-		min-height: 100vh;
+		padding: 0;
+		min-height: 100%;
 	}
-
+	#profile-body {
+		padding: 10px 16px;
+	}
 	.profile form .field label {
 		margin-bottom: 5px;
 		font-size: 15px;
 	}
 	.profile form .input input {
-		height: 33px;
-		font-size: 14px;
 		border-radius: 3px;
 	}
 	.profile form .button button {
-		margin-top: 6px;
-		height: 35px;
+		margin-top: 30px;
+		height: 40px;
 		font-size: 15px;
 		border-radius: 3px;
 	}
@@ -275,6 +276,11 @@
 
 	.profile footer .change-btn {
 		border-radius: 3px;
+	}
+
+
+	.profile #selected-img {
+		width: 50px;
 	}
 	.profile .shareIcon {
 		font-size: 23px;
