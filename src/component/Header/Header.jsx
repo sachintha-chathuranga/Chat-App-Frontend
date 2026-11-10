@@ -23,7 +23,7 @@ const imageUrl = process.env.REACT_APP_AWS_URL;
 const Header = (props) => {
 	const {user, dispatch} = useAuth();
 	const navigate = useNavigate();
-	const axiosPrivate = useAxiosPrivate();
+	const privateApi = useAxiosPrivate();
 	const [fullName, setFullName] = useState('');
 	const [show, setShow] = useState(false);
 	const {disconnectSocket} = useSocket();
@@ -50,7 +50,7 @@ const Header = (props) => {
 	};
 	const handleLogout = () => {
 		setShow(false);
-		logOutCall(axiosPrivate, dispatch, user.user_id).then((res) => {
+		logOutCall(privateApi, dispatch, user.user_id).then((res) => {
 			if (res === 200) {
 				disconnectSocket();
 				navigate('/login');
@@ -67,7 +67,7 @@ const Header = (props) => {
 			props.toggleWarning();
 		} else {
 			props.isEmpty &&
-				clearMessages(axiosPrivate, props.user.user_id, dispatch).then(() => {
+				clearMessages(privateApi, props.user.user_id, dispatch).then(() => {
 					props.setMessages([]);
 				});
 		}
@@ -103,7 +103,8 @@ const Header = (props) => {
 				</div>
 				<div className="dropdown">
 					<div className="dropbtn">
-						<MoreVert onClick={() => setShow(!show)} style={{fontSize: '1.8rem'}} />
+						<MoreVert onClick={() => setShow(!show)} id="moreVert" />
+						{/* <MoreVert onClick={() => setShow(!show)} style={{fontSize: '1.8rem'}} /> */}
 					</div>
 
 					<div id="myDropdown" className={show ? 'dropdown-content show' : 'dropdown-content'}>

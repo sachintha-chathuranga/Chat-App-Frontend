@@ -23,8 +23,9 @@ const VideoCall = () => {
 
 	useEffect(() => {
 		if (!isInVideoCall) {
-			navigate(-1)
+			navigate(-1);
 		}
+		// eslint-disable-next-line
 	}, [isInVideoCall]);
 
 	const toggleCamera = useCallback(() => {

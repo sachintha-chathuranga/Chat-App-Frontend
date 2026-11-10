@@ -23,7 +23,7 @@ const skeletonMessages = [
 
 export default function Chat() {
 	console.log('chat render');
-	const {user, dispatch} = useAuth();
+	const {user} = useAuth();
 	const {socket, isConnected} = useSocket();
 	const navigate = useNavigate();
 	const {isInVideoCall, callUser, incomingCall, outgoingCall} = useVideoCall();
@@ -32,7 +32,7 @@ export default function Chat() {
 	const params = useParams();
 	const [inputMsg, setinputMsg] = useState('');
 	const chatBox = useRef(null);
-	const axiosPrivate = useAxiosPrivate();
+	const privateApi = useAxiosPrivate();
 	const [isFriendFetching, setIsFriendFetching] = useState(false);
 
 	const scrollToBottom = useCallback(() => {
@@ -44,17 +44,18 @@ export default function Chat() {
 	const {messages, setMessages, error, isMessageFetching} = useMessage(params.friend_id, scrollToBottom);
 
 	useEffect(() => {
-		readAllMessages(axiosPrivate, params.friend_id);
-	}, [axiosPrivate, params.friend_id, messages]);
+		readAllMessages(privateApi, params.friend_id);
+	}, [privateApi, params.friend_id, messages]);
 
 	useEffect(() => {
 		setIsFriendFetching(true);
-		getFriend(axiosPrivate, params.friend_id, dispatch).then((res) => {
+		getFriend(privateApi, params.friend_id).then((res) => {
 			setIsFriendFetching(false);
 			res && setFriend(res);
 			scrollToBottom();
 		});
-	}, [params.friend_id, scrollToBottom, axiosPrivate, dispatch]);
+		// eslint-disable-next-line
+	}, [params.friend_id, scrollToBottom]);
 
 	useEffect(() => {
 		if (!socket || !isConnected) return;
@@ -92,7 +93,7 @@ export default function Chat() {
 		// }
 		const sendMessage = async () => {
 			try {
-				const res = await axiosPrivate.post(`messages/message`, JSON.stringify(msg));
+				const res = await privateApi.post(`messages/message`, JSON.stringify(msg));
 				socket?.emit('sendMessage', res.data);
 				setMessages((prev) => [...prev, res.data]);
 				setinputMsg('');

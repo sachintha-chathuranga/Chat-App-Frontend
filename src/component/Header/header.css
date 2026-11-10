@@ -5,7 +5,7 @@
 	align-items: center;
 	justify-content: space-between;
 }
-:is(.users, .profile) #header {
+:is(.home, .profile) #header {
 	padding-bottom: 15px;
 	border-bottom: 1px solid var(--base-variant);
 }
@@ -114,12 +114,17 @@
 .dropdown-content .item svg {
 	margin-right: 7px;
 }
+#moreVert {
+	font-size: 1.8rem;
+}
 
 @media only screen and (max-width: 500px) {
-	.users #header {
-		position: sticky;
-		top: 0;
-		padding-bottom: 15px;
+
+	:is(.home, .profile) #header {
+		padding: 12px 15px 10px 15px;
+		padding-top: 12px;
+		border-bottom: none;
+		padding-bottom: 10px;
 	}
 	.chat-area #header {
 		padding: 15px 20px;
@@ -150,5 +155,8 @@
 	}
 	.dropbtn {
 		margin-left: 17px;
+	}
+	#moreVert {
+		font-size: 25px;
 	}
 }

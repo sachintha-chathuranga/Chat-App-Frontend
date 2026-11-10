@@ -12,7 +12,7 @@ function Warnnig({toggleWarning}) {
 	const [isActive, setisActive] = useState(false);
 	const [isNext, setIsNext] = useState(false);
 	const {user, isFetching, error, dispatch} = useAuth();
-	const axiosPrivate = useAxiosPrivate();
+	const privateApi = useAxiosPrivate();
 
 	const handleDelete = (e) => {
 		e.preventDefault();
@@ -21,7 +21,7 @@ function Warnnig({toggleWarning}) {
 		};
 		password.current.value && (data.password = password.current.value.trim());
 
-		userDeleteCall(axiosPrivate, data, dispatch).then((res) => {
+		userDeleteCall(privateApi, data, dispatch).then((res) => {
 			res === 200
 				? navigate('/login')
 				: setTimeout(() => {

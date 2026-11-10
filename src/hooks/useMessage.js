@@ -7,11 +7,11 @@ const useMessage = (friend_id, scrolltoBottom) => {
 	const [messages, setMessages] = useState([]);
 	const [error, seterror] = useState(null);
 	const [isMessageFetching, setIsMessageFeting] = useState(false);
-	const axiosPrivate = useAxiosPrivate();
+	const privateApi = useAxiosPrivate();
 
 	useEffect(() => {
 		setIsMessageFeting(true);
-		fetchMessages(axiosPrivate, friend_id)
+		fetchMessages(privateApi, friend_id)
 			.then((d) => {
 				setIsMessageFeting(false);
 				isMount && setMessages(d);
@@ -32,7 +32,7 @@ const useMessage = (friend_id, scrolltoBottom) => {
 		return () => {
 			setisMount(false);
 		};
-	}, [friend_id, scrolltoBottom, axiosPrivate, isMount]);
+	}, [friend_id, scrolltoBottom, privateApi, isMount]);
 
 	return {messages, setMessages, error, isMessageFetching};
 };

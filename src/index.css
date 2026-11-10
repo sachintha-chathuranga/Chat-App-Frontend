@@ -266,9 +266,19 @@ form .name-details .field:last-child {
 }
 
 @media only screen and (max-width: 500px) {
+	body {
+		min-height: 100%;
+	}
+	#root {
+		min-height: 100%;
+	}
 	.wrapper {
 		width: 100vw;
-		/* min-height: 100vh;  */
+		position: fixed;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
 		border-radius: 0;
 		justify-content: center;
 		align-items: center;
@@ -278,6 +288,7 @@ form .name-details .field:last-child {
 	.form {
 		padding: 15px 18px;
 		width: 100%;
+		margin-bottom: 100px;
 	}
 
 	.form form {
@@ -287,9 +298,10 @@ form .name-details .field:last-child {
 		font-size: 20px;
 		text-align: center;
 		flex-direction: column;
+		border-bottom: none;
 	}
 	.form header .logo {
-		margin-bottom: 16px;
+		margin-bottom: 4px;
 	}
 	form .name-details .field:first-child {
 		margin-right: 6px;
@@ -302,15 +314,15 @@ form .name-details .field:last-child {
 		font-size: 15px;
 	}
 	.form form .input input {
-		height: 33px;
+		height: 40px;
 		font-size: 14px;
-		border-radius: 3px;
+		border-radius: 5px;
 	}
 	.form form button.loginBtn {
 		margin-top: 6px;
-		height: 35px;
+		height: 40px;
 		font-size: 15px;
-		border-radius: 3px;
+		border-radius: 5px;
 	}
 	.form .link {
 		margin: 6px 0;

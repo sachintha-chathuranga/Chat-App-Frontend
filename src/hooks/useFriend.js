@@ -7,14 +7,14 @@ const useFriend = (index, active, isSearch, searchInput) => {
 	const [isFetching, setIsFetching] = useState(false);
 	const [error, seterror] = useState(null);
 	const [hasMore, sethasMore] = useState(true);
-	const axiosPrivate = useAxiosPrivate();
+	const privateApi = useAxiosPrivate();
 
 	useEffect(() => {
 		//appending to current friendlist
 		if (friends.length >= 15) {
 			setIsFetching(true);
 			isSearch
-				? searchFriend(axiosPrivate, index, searchInput)
+				? searchFriend(privateApi, index, searchInput)
 						.then((d) => {
 							setfriend((prev) => [...prev, ...d]);
 							sethasMore(Boolean(d.length));
@@ -30,7 +30,7 @@ const useFriend = (index, active, isSearch, searchInput) => {
 							}
 							setIsFetching(false);
 						})
-				: fetchFriendList(axiosPrivate, index)
+				: fetchFriendList(privateApi, index)
 						.then((d) => {
 							setfriend((prev) => [...prev, ...d]);
 							sethasMore(Boolean(d.length === 15));
@@ -54,7 +54,7 @@ const useFriend = (index, active, isSearch, searchInput) => {
 	useEffect(() => {
 		setIsFetching(true);
 		isSearch
-			? searchFriend(axiosPrivate, null, searchInput)
+			? searchFriend(privateApi, null, searchInput)
 					.then((d) => {
 						setfriend(d);
 						setIsFetching(false);
@@ -69,7 +69,7 @@ const useFriend = (index, active, isSearch, searchInput) => {
 						}
 						setIsFetching(false);
 					})
-			: fetchFriendList(axiosPrivate, null)
+			: fetchFriendList(privateApi, null)
 					.then((d) => {
 						setfriend(d);
 						setIsFetching(false);
@@ -85,7 +85,7 @@ const useFriend = (index, active, isSearch, searchInput) => {
 						setIsFetching(false);
 					});
 		// eslint-disable-next-line
-	}, [active, axiosPrivate]);
+	}, [active, privateApi]);
 
 	return {friends, setfriend, isFetching, error, hasMore};
 };

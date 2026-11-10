@@ -25,18 +25,18 @@ const Update = ({toggleWarning}) => {
 	const password = useRef();
 	const [isActive, setisActive] = useState(false);
 	const [severError, setSeverError] = useState(null);
-	const axiosPrivate = useAxiosPrivate();
+	const privateApi = useAxiosPrivate();
 
 	const deleteFile = () => {
 		setisLoading(true);
-		deletPicture(axiosPrivate, user.profil_pic, dispatch).then((res) => {
+		deletPicture(privateApi, user.profil_pic).then((res) => {
 			setisLoading(false);
 			const data = {
 				profil_pic: null,
 			};
 			if (res.status === 200) {
 				setsuccess(res.data);
-				userUpdateCall(axiosPrivate, data, dispatch).then((res) => {
+				userUpdateCall(privateApi, data, dispatch).then((res) => {
 					if (res !== 200) {
 						setTimeout(() => {
 							clearError(dispatch);
@@ -89,11 +89,11 @@ const Update = ({toggleWarning}) => {
 
 		if (signedRequest !== null && file !== null) {
 			if (user.profil_pic) {
-				deletPicture(axiosPrivate, user.profil_pic, dispatch);
+				deletPicture(privateApi, user.profil_pic);
 			}
 			uploadFile(file, signedRequest, dispatch).then((res) => {
 				if (res === 200) {
-					userUpdateCall(axiosPrivate, data, dispatch).then((res) => {
+					userUpdateCall(privateApi, data, dispatch).then((res) => {
 						if (res !== 200) {
 							setTimeout(() => {
 								clearError(dispatch);
@@ -109,7 +109,7 @@ const Update = ({toggleWarning}) => {
 				}
 			});
 		} else if (data.email || data.password || data.fname || data.lname) {
-			userUpdateCall(axiosPrivate, data, dispatch).then((res) => {
+			userUpdateCall(privateApi, data, dispatch).then((res) => {
 				if (res !== 200) {
 					setTimeout(() => {
 						clearError(dispatch);
@@ -139,7 +139,7 @@ const Update = ({toggleWarning}) => {
 				return;
 			}
 			setFile(newFile);
-			getSignRequest(axiosPrivate, newFile, dispatch).then((res) => {
+			getSignRequest(privateApi, newFile, dispatch).then((res) => {
 				if (res.status === 200) {
 					const urlObj = new URL(res.data.signedRequest);
 					// Get the pathname part and extract the last segment (filename)

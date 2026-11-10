@@ -11,10 +11,10 @@ import useFriend from '../../hooks/useFriend';
 import './home.css';
 
 const Home = () => {
-	const axiosPrivate = useAxiosPrivate();
+	const privateApi = useAxiosPrivate();
 
 	const {socket, isConnected} = useSocket();
-	const {user, dispatch} = useAuth();
+	const {user} = useAuth();
 	const [active, setActive] = useState(false);
 	const [isSearch, setIsSearch] = useState(false);
 	const [searchInput, setSearch] = useState('');
@@ -26,10 +26,10 @@ const Home = () => {
 	const skeletonFriends = [0, 1, 2, 3, 4];
 	const friendsRef = useRef(null);
 	useEffect(() => {
-		fetchAllNotification(axiosPrivate).then((data) => {
+		fetchAllNotification(privateApi).then((data) => {
 			data && data.length !== 0 && setNotification(data);
 		});
-	}, [axiosPrivate]);
+	}, [privateApi]);
 
 	useEffect(() => {
 		friendsRef.current = friends;
@@ -61,7 +61,7 @@ const Home = () => {
 			setNotification((prev) => [...prev, data]);
 			if (!sender) {
 				console.log('fetch friend');
-				getFriend(axiosPrivate, data.sender_id, dispatch).then((friend) => {
+				getFriend(privateApi, data.sender_id).then((friend) => {
 					friend && setfriend((list) => [friend, ...list]);
 				});
 			}
@@ -107,7 +107,7 @@ const Home = () => {
 
 	return (
 		<div className="wrapper">
-			<section className="users" onClick={() => show && setShow(false)}>
+			<section className="home" onClick={() => show && setShow(false)}>
 				<Header user={user} logUserId={user.user_id} headerType={'home'} />
 				<form
 					className="search"
@@ -139,6 +139,13 @@ const Home = () => {
 
 					{!isFetching
 						? friends.map((f, i) => {
+								if (i === 0) {
+									return (
+										<div style={{marginTop: 10}}>
+											<Friend notifi={notification} friend={f} />
+										</div>
+									);
+								}
 								if (friends.length === i + 1) {
 									return (
 										<div key={f.user_id} ref={lastfriendRef}>
