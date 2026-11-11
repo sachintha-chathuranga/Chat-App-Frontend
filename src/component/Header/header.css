@@ -140,12 +140,6 @@
 }
 
 @media only screen and (max-width: 500px) {
-	.home #header{
-		position: fixed;
-		right: 0;
-		left: 0;
-		top: 0;
-	}
 	:is(.home, .profile) #header {
 		padding: 12px 15px 10px 15px;
 		border-bottom: none;

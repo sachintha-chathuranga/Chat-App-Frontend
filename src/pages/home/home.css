@@ -167,12 +167,13 @@
 	.home {
 		padding: 0;
 		width: 100%;
-		min-height: 100%;
-		overflow-y: scroll;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
 	}
 	.users-list {
-		margin-top: 125px;
-		height: fit-content;
+		margin-top: 5px;
+		flex: 1;
 	}
 	.users-list .details span {
 		font-size: 15px;
@@ -185,9 +186,6 @@
 		padding-bottom: 15px;
 	}
 	.home .search {
-		z-index: 2;
-		position: fixed;
-		top: 72px;
 		margin: 0 15px;
 	}
 	.home .search button.clear-btn {
